@@ -1,0 +1,9 @@
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/logos/rentool-splash-logo-white-512h.png
+
+  android_12:
+    color: "#FFFFFF"
+    image: assets/logos/rentool-splash-logo-white-512h.png
+  
+  web: false
