@@ -16,6 +16,7 @@ dependencies:
   
   # Utility
   flutter_native_splash: ^2.4.0
+  auto_route: ^8.0.0
 
   # Icons
   cupertino_icons: ^1.0.6
@@ -26,6 +27,8 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^3.0.0
+  auto_route_generator: ^8.0.0
+  build_runner:
 
 
 flutter:
