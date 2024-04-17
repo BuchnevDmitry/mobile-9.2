@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'base_container.dart';
 
 class ToolCard extends StatelessWidget {
-  const ToolCard({super.key});
+  ToolCard({super.key, required this.imageUrl});
+
+  String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +29,7 @@ class ToolCard extends StatelessWidget {
                 GestureDetector(
                   child: BaseContainer(
                     child: ClipRect(
-                      child: Image.asset(
-                          'assets/logos/rentool-splash-logo-white-512h.png'),
+                      child: Image.asset(imageUrl),
                     ),
                   ),
                 ),

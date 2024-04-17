@@ -36,7 +36,9 @@ class AdsFeedScreen extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemCount: 3,
               separatorBuilder: (context, index) => const SizedBox(width: 16),
-              itemBuilder: (context, index) => const AdvertisingCard(),
+              itemBuilder: (context, index) => const AdvertisingCard(
+                imageUrl: 'assets/images/',
+              ),
             ),
           ),
         ),
@@ -57,8 +59,9 @@ class AdsFeedScreen extends StatelessWidget {
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           sliver: SliverGrid(
-            delegate: SliverChildBuilderDelegate(
-                (context, index) => const ToolCard()),
+            delegate: SliverChildBuilderDelegate((context, index) => ToolCard(
+                  imageUrl: 'assets/images/',
+                )),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,

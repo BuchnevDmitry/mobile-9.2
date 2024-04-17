@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:rentool/common/widgets/widgets.dart';
 
 class AdvertisingCard extends StatelessWidget {
-  const AdvertisingCard({
-    super.key,
-  });
+  const AdvertisingCard({super.key, required this.imageUrl});
+
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +13,7 @@ class AdvertisingCard extends StatelessWidget {
       child: BaseContainer(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.asset(
-              'assets/images/black-friday-coupon-ideas_b-625x328.png'),
+          child: Image.asset(imageUrl),
         ),
       ),
     );
