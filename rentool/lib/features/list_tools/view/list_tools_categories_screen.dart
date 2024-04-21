@@ -3,24 +3,30 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rentool/common/common.dart';
-import 'package:rentool/features/catalog/bloc/bloc.dart';
-import 'package:rentool/features/catalog/widgets/widgets.dart';
+import 'package:rentool/common/widgets/widgets.dart';
+import 'package:rentool/features/list_tools/bloc/list_tools_bloc.dart';
+import 'package:rentool/repositories/repositories.dart';
 
 @RoutePage()
-class CatalogScreen extends StatefulWidget {
-  const CatalogScreen({
-    super.key,
-  });
+class ListToolsCategoriesScreen extends StatefulWidget {
+  const ListToolsCategoriesScreen({super.key, required this.category});
+
+  final Category category;
 
   @override
-  State<CatalogScreen> createState() => _CatalogScreenState();
+  State<ListToolsCategoriesScreen> createState() =>
+      // ignore: no_logic_in_create_state
+      _ListToolsCategoriesScreenState(category: category);
 }
 
-class _CatalogScreenState extends State<CatalogScreen> {
+class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
+  _ListToolsCategoriesScreenState({required this.category});
+
+  final Category category;
+
   @override
   void initState() {
-    BlocProvider.of<CatalogBloc>(context).add(const CatalogLoadEvent());
+    BlocProvider.of<ListToolsBloc>(context).add(const ListToolsLoadEvent());
     super.initState();
   }
 
@@ -31,35 +37,40 @@ class _CatalogScreenState extends State<CatalogScreen> {
       color: theme.primaryColor,
       onRefresh: () async {
         final completer = Completer();
-        BlocProvider.of<CatalogBloc>(context)
-            .add(CatalogLoadEvent(completer: completer));
+        BlocProvider.of<ListToolsBloc>(context)
+            .add(ListToolsLoadEvent(completer: completer));
         completer.future;
       },
-      child: BlocBuilder<CatalogBloc, CatalogState>(
+      child: BlocBuilder<ListToolsBloc, ListToolsState>(
         builder: (context, state) {
-          if (state is CatalogLoadedState) {
-            final categories = state.categories.categories;
+          if (state is ListToolsLoadedState) {
+            final tools = state.tools.tools;
             return CustomScrollView(
               slivers: <Widget>[
                 // AppBar
-                const SearchAppBar(),
+                const SearchAppBar(
+                  buttonBack: true,
+                ),
+                // Separator between AppBar and Text
                 const SliverToBoxAdapter(child: SizedBox(height: 22)),
                 // Text
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Text(
-                      'Категории',
+                      category.name,
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
                 ),
+                // Separator between Text and ToolCardList
                 const SliverToBoxAdapter(child: SizedBox(height: 16)),
-                CategoryCardGrid(categories: categories),
+                // ToolsCardGrid
+                ToolsCardGrid(tools: tools),
               ],
             );
           }
-          if (state is CatalogLoadingFailureState) {
+          if (state is ListToolsLoadingFailureState) {
             return CustomScrollView(
               slivers: <Widget>[
                 // AppBar
@@ -82,8 +93,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
                           const SizedBox(height: 20),
                           TextButton(
                             onPressed: () {
-                              BlocProvider.of<CatalogBloc>(context)
-                                  .add(const CatalogLoadEvent());
+                              BlocProvider.of<ListToolsBloc>(context)
+                                  .add(const ListToolsLoadEvent());
                             },
                             child: Text(
                               'Повторить',
@@ -100,9 +111,11 @@ class _CatalogScreenState extends State<CatalogScreen> {
             );
           }
           return const CustomScrollView(
-            slivers: [
+            slivers: <Widget>[
               // AppBar
-              SearchAppBar(),
+              SearchAppBar(
+                buttonBack: true,
+              ),
               LoadingCenterProgress(),
             ],
           );

@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 class AppTheme {
   AppTheme._();
 
+  static const Color _primaryColor = Color(0xfff7c815);
+
+  // ignore: use_full_hex_values_for_flutter_colors
+  static const Color _secondaryColor = Color(0xfffaaaaaa);
+
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     fontFamily: 'Montserrat',
-    disabledColor: const Color(0xfffaaaaaa),
-    primaryColor: const Color(0xfff7c815),
+    disabledColor: _secondaryColor,
+    primaryColor: _primaryColor,
     scaffoldBackgroundColor: Colors.white,
     textTheme: const TextTheme(
-      labelMedium: TextStyle(
-        fontSize: 13,
-        color: Color(0xfffaaaaaa),
-        fontWeight: FontWeight.w500,
-      ),
       titleLarge: TextStyle(
-        fontSize: 20,
+        fontSize: 22,
         color: Colors.black,
         fontWeight: FontWeight.w700,
       ),
@@ -26,12 +26,27 @@ class AppTheme {
         color: Colors.black,
         fontWeight: FontWeight.w600,
       ),
-      bodySmall: TextStyle(
+      labelMedium: TextStyle(
+        fontSize: 12,
+        color: _secondaryColor,
+        fontWeight: FontWeight.w500,
+      ),
+      labelSmall: TextStyle(
         fontSize: 11,
+        color: _primaryColor,
+        fontWeight: FontWeight.w500,
+      ),
+      bodySmall: TextStyle(
+        fontSize: 12,
+        color: Colors.black,
+        fontWeight: FontWeight.w400,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14,
         color: Colors.black,
         fontWeight: FontWeight.w400,
       ),
     ),
-    colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xfff7c815)),
+    colorScheme: ColorScheme.fromSeed(seedColor: _primaryColor),
   );
 }

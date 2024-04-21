@@ -10,7 +10,7 @@ class AdvertisingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {},
-      child: BaseContainer(
+      child: BaseRoundContainer(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Image.asset(imageUrl),

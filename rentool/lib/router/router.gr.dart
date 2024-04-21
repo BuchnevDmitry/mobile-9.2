@@ -21,16 +21,38 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AdsFeedScreen(),
       );
     },
+    AdsFeedWrapperRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(child: const AdsFeedWrapperScreen()),
+      );
+    },
     CatalogRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const CatalogScreen(),
       );
     },
+    CatalogWrapperRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(child: const CatalogWrapperScreen()),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const HomeScreen(),
+      );
+    },
+    ListToolsCategoriesRoute.name: (routeData) {
+      final args = routeData.argsAs<ListToolsCategoriesRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ListToolsCategoriesScreen(
+          key: args.key,
+          category: args.category,
+        ),
       );
     },
     ShopRoute.name: (routeData) {
@@ -63,6 +85,20 @@ class AdsFeedRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [AdsFeedWrapperScreen]
+class AdsFeedWrapperRoute extends PageRouteInfo<void> {
+  const AdsFeedWrapperRoute({List<PageRouteInfo>? children})
+      : super(
+          AdsFeedWrapperRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AdsFeedWrapperRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [CatalogScreen]
 class CatalogRoute extends PageRouteInfo<void> {
   const CatalogRoute({List<PageRouteInfo>? children})
@@ -72,6 +108,20 @@ class CatalogRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'CatalogRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CatalogWrapperScreen]
+class CatalogWrapperRoute extends PageRouteInfo<void> {
+  const CatalogWrapperRoute({List<PageRouteInfo>? children})
+      : super(
+          CatalogWrapperRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CatalogWrapperRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -88,6 +138,45 @@ class HomeRoute extends PageRouteInfo<void> {
   static const String name = 'HomeRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ListToolsCategoriesScreen]
+class ListToolsCategoriesRoute
+    extends PageRouteInfo<ListToolsCategoriesRouteArgs> {
+  ListToolsCategoriesRoute({
+    Key? key,
+    required Category category,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ListToolsCategoriesRoute.name,
+          args: ListToolsCategoriesRouteArgs(
+            key: key,
+            category: category,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ListToolsCategoriesRoute';
+
+  static const PageInfo<ListToolsCategoriesRouteArgs> page =
+      PageInfo<ListToolsCategoriesRouteArgs>(name);
+}
+
+class ListToolsCategoriesRouteArgs {
+  const ListToolsCategoriesRouteArgs({
+    this.key,
+    required this.category,
+  });
+
+  final Key? key;
+
+  final Category category;
+
+  @override
+  String toString() {
+    return 'ListToolsCategoriesRouteArgs{key: $key, category: $category}';
+  }
 }
 
 /// generated route for
