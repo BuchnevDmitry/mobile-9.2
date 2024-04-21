@@ -9,6 +9,9 @@ class HomeScreen extends StatelessWidget {
     super.key,
   });
 
+  static const String homeIcon =
+      'assets/icons/home_FILL0_wght400_GRAD0_opsz48.svg';
+
   void _openPage(int index, TabsRouter tabsRouter) {
     tabsRouter.setActiveIndex(index);
   }
@@ -18,8 +21,8 @@ class HomeScreen extends StatelessWidget {
     final theme = Theme.of(context);
     return AutoTabsRouter(
         routes: const [
-          AdsFeedRoute(),
-          CatalogRoute(),
+          AdsFeedWrapperRoute(),
+          CatalogWrapperRoute(),
           ShopRoute(),
           UserRoute(),
         ],
@@ -38,7 +41,14 @@ class HomeScreen extends StatelessWidget {
               items: [
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    'assets/icons/home_FILL0_wght400_GRAD0_opsz48.svg',
+                    homeIcon,
+                    height: 24,
+                    width: 24,
+                    colorFilter:
+                        ColorFilter.mode(theme.disabledColor, BlendMode.srcIn),
+                  ),
+                  activeIcon: SvgPicture.asset(
+                    homeIcon,
                     height: 24,
                     width: 24,
                   ),
