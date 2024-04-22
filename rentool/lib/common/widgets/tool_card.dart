@@ -40,9 +40,23 @@ class ToolCard extends StatelessWidget {
                   Positioned(
                     top: 0,
                     right: 0,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.favorite_outline),
+                    bottom: 125,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.black,
+                      radius: 16,
+                      child: IconButton(
+                        iconSize: 16,
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.favorite,
+                          color: Colors.white,
+                        ),
+                        selectedIcon: Icon(
+                          Icons.favorite,
+                          color: theme.primaryColor,
+                        ),
+                        isSelected: false,
+                      ),
                     ),
                   ),
                 ],
