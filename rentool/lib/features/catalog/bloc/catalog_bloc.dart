@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:rentool/repositories/repositories.dart';
+import 'package:rentool/api/api.dart';
 
 part 'catalog_event.dart';
 part 'catalog_state.dart';

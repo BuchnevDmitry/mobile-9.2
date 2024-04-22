@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentool/common/widgets/widgets.dart';
 import 'package:rentool/features/list_tools/bloc/list_tools_bloc.dart';
-import 'package:rentool/repositories/repositories.dart';
+import 'package:rentool/api/api.dart';
 
 @RoutePage()
 class ListToolsCategoriesScreen extends StatefulWidget {

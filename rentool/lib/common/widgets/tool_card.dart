@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rentool/repositories/models/models.dart';
+import 'package:rentool/api/models/models.dart';
 
 import 'base_round_container.dart';
 
