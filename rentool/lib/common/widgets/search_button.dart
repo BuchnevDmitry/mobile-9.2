@@ -18,7 +18,7 @@ class SearchButton extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(60)),
       ),
       child: SizedBox(
-        height: 16,
+        height: 24,
         child: TextField(
           style: theme.textTheme.bodyMedium,
           textInputAction: TextInputAction.search,
