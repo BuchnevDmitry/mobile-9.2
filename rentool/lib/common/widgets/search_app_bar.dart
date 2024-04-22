@@ -22,13 +22,19 @@ class SearchAppBar extends StatelessWidget {
           preferredSize: const Size.fromRadius(10),
           child: Row(
             children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back_outlined),
-                onPressed: () {
-                  context.router.maybePop();
-                },
+              Padding(
+                padding: const EdgeInsets.only(left: 24),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  onPressed: () {
+                    context.router.maybePop();
+                  },
+                ),
               ),
-              const Expanded(child: SearchButton())
+              const Expanded(
+                  child: SearchButton(
+                withBackButton: true,
+              ))
             ],
           ),
         ),
