@@ -15,11 +15,25 @@ class AppTheme {
     disabledColor: _secondaryColor,
     primaryColor: _primaryColor,
     scaffoldBackgroundColor: Colors.white,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.white,
+    ),
+    textSelectionTheme: const TextSelectionThemeData(
+      cursorColor: _primaryColor,
+      selectionColor: _primaryColor,
+      selectionHandleColor: _primaryColor,
+    ),
     textTheme: const TextTheme(
       titleLarge: TextStyle(
         fontSize: 22,
         color: Colors.black,
         fontWeight: FontWeight.w700,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 18,
+        color: Colors.black,
+        fontWeight: FontWeight.w600,
       ),
       titleSmall: TextStyle(
         fontSize: 14,
@@ -32,8 +46,8 @@ class AppTheme {
         fontWeight: FontWeight.w500,
       ),
       labelSmall: TextStyle(
-        fontSize: 11,
-        color: _primaryColor,
+        fontSize: 12,
+        color: Colors.black,
         fontWeight: FontWeight.w500,
       ),
       bodySmall: TextStyle(
