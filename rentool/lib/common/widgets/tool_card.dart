@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/api/models/models.dart';
+import 'package:rentool/router/router.dart';
 
 import 'base_round_container.dart';
 
@@ -12,7 +14,9 @@ class ToolCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        context.router.push(CardProductRoute(tool: tool));
+      },
       child: BaseRoundContainer(
         decoration: BoxDecoration(
             color: Colors.white,
@@ -81,7 +85,7 @@ class ToolCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    '${tool.priceHour} р/час',
+                    '${tool.priceHour} р/день',
                     style: theme.textTheme.titleSmall,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
