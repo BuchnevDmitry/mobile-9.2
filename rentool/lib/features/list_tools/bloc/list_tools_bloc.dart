@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:rentool/repositories/api/api.dart';
-import 'package:rentool/repositories/models/models.dart';
+import 'package:rentool/api/api.dart';
 
 part 'list_tools_event.dart';
 part 'list_tools_state.dart';

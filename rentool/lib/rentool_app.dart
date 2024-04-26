@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:rentool/features/ads_feed/bloc/ads_feed_bloc.dart';
 import 'package:rentool/features/catalog/bloc/catalog_bloc.dart';
 import 'package:rentool/features/list_tools/bloc/list_tools_bloc.dart';
-import 'package:rentool/repositories/api/api.dart';
+import 'package:rentool/api/api.dart';
 import 'package:rentool/router/router.dart';
 import 'package:rentool/theme/theme.dart';
 

@@ -6,7 +6,8 @@ class CatalogRoutes {
     page: CatalogWrapperRoute.page,
     children: [
       AutoRoute(page: CatalogRoute.page, initial: true, path: 'catalog/'),
-      AutoRoute(page: ListToolsCategoriesRoute.page, path: 'list_tools'),
+      AutoRoute(page: ListToolsCategoriesRoute.page, path: 'list_tools/'),
+      AutoRoute(page: CardProductRoute.page, path: 'card_product'),
     ],
   );
 }

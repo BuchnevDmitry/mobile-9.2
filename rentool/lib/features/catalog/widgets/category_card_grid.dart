@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rentool/features/catalog/widgets/widgets.dart';
-import 'package:rentool/repositories/repositories.dart';
+import 'package:rentool/api/api.dart';
 
 class CategoryCardGrid extends StatelessWidget {
   const CategoryCardGrid({

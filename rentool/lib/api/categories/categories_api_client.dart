@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:rentool/repositories/models/models.dart';
+import 'package:rentool/api/models/models.dart';
 import 'package:retrofit/http.dart';
 
 part 'categories_api_client.g.dart';

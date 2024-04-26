@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentool/common/widgets/widgets.dart';
 import 'package:rentool/features/list_tools/bloc/list_tools_bloc.dart';
-import 'package:rentool/repositories/repositories.dart';
+import 'package:rentool/api/api.dart';
 
 @RoutePage()
 class ListToolsCategoriesScreen extends StatefulWidget {
@@ -16,13 +16,11 @@ class ListToolsCategoriesScreen extends StatefulWidget {
   @override
   State<ListToolsCategoriesScreen> createState() =>
       // ignore: no_logic_in_create_state
-      _ListToolsCategoriesScreenState(category: category);
+      _ListToolsCategoriesScreenState();
 }
 
 class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
-  _ListToolsCategoriesScreenState({required this.category});
-
-  final Category category;
+  _ListToolsCategoriesScreenState();
 
   @override
   void initState() {
@@ -58,7 +56,7 @@ class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Text(
-                      category.name,
+                      widget.category.name,
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
