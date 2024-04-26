@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/features/ads_feed/ads_feed.dart';
+import 'package:rentool/features/card_product/view/view.dart';
 import 'package:rentool/features/catalog/catalog.dart';
 import 'package:rentool/features/home/home.dart';
 import 'package:rentool/features/shop/shop.dart';

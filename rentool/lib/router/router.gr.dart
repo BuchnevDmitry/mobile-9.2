@@ -27,6 +27,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(child: const AdsFeedWrapperScreen()),
       );
     },
+    CardProductRoute.name: (routeData) {
+      final args = routeData.argsAs<CardProductRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: CardProductScreen(
+          key: args.key,
+          tool: args.tool,
+        ),
+      );
+    },
     CatalogRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -96,6 +106,44 @@ class AdsFeedWrapperRoute extends PageRouteInfo<void> {
   static const String name = 'AdsFeedWrapperRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CardProductScreen]
+class CardProductRoute extends PageRouteInfo<CardProductRouteArgs> {
+  CardProductRoute({
+    Key? key,
+    required Tool tool,
+    List<PageRouteInfo>? children,
+  }) : super(
+          CardProductRoute.name,
+          args: CardProductRouteArgs(
+            key: key,
+            tool: tool,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'CardProductRoute';
+
+  static const PageInfo<CardProductRouteArgs> page =
+      PageInfo<CardProductRouteArgs>(name);
+}
+
+class CardProductRouteArgs {
+  const CardProductRouteArgs({
+    this.key,
+    required this.tool,
+  });
+
+  final Key? key;
+
+  final Tool tool;
+
+  @override
+  String toString() {
+    return 'CardProductRouteArgs{key: $key, tool: $tool}';
+  }
 }
 
 /// generated route for
