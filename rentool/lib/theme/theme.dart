@@ -25,40 +25,81 @@ class AppTheme {
       selectionHandleColor: _primaryColor,
     ),
     textTheme: const TextTheme(
-      titleLarge: TextStyle(
-        fontSize: 22,
+      displayLarge: TextStyle(
+        fontSize: 24,
         color: Colors.black,
         fontWeight: FontWeight.w700,
       ),
-      titleMedium: TextStyle(
+      displayMedium: TextStyle(
+        fontSize: 24,
+        color: Colors.black,
+        fontWeight: FontWeight.w600,
+      ),
+      displaySmall: TextStyle(
+        fontSize: 20,
+        color: Colors.black,
+        fontWeight: FontWeight.w700,
+      ),
+      headlineLarge: TextStyle(
         fontSize: 18,
         color: Colors.black,
         fontWeight: FontWeight.w600,
       ),
-      titleSmall: TextStyle(
+      headlineMedium: TextStyle(
         fontSize: 14,
         color: Colors.black,
         fontWeight: FontWeight.w600,
       ),
+      headlineSmall: TextStyle(
+        fontSize: 11,
+        color: _secondaryColor,
+        fontWeight: FontWeight.w400,
+      ),
+      titleLarge: TextStyle(
+        fontSize: 14,
+        color: Colors.black,
+        fontWeight: FontWeight.w700,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 14,
+        color: Colors.black,
+        fontWeight: FontWeight.w500,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 11,
+        color: Colors.black,
+        fontWeight: FontWeight.w600,
+      ),
+      labelLarge: TextStyle(
+        fontSize: 8,
+        color: Colors.black,
+        fontWeight: FontWeight.w700,
+      ),
       labelMedium: TextStyle(
-        fontSize: 12,
+        fontSize: 13,
         color: _secondaryColor,
         fontWeight: FontWeight.w500,
       ),
       labelSmall: TextStyle(
         fontSize: 12,
+        color: _secondaryColor,
+        fontWeight: FontWeight.w500,
+      ),
+      bodyLarge: TextStyle(
+        fontSize: 11,
+        color: Colors.black,
+        fontWeight: FontWeight.w700,
+      ),
+      bodySmall: TextStyle(
+        fontSize: 11,
         color: Colors.black,
         fontWeight: FontWeight.w500,
       ),
-      bodySmall: TextStyle(
-        fontSize: 12,
-        color: Colors.black,
-        fontWeight: FontWeight.w400,
-      ),
       bodyMedium: TextStyle(
         fontSize: 14,
-        color: Colors.black,
-        fontWeight: FontWeight.w400,
+        // ignore: use_full_hex_values_for_flutter_colors
+        color: Color(0xfff666666),
+        fontWeight: FontWeight.w500,
       ),
     ),
     colorScheme: ColorScheme.fromSeed(seedColor: _primaryColor),
