@@ -7,9 +7,11 @@ part 'brand.g.dart';
 @JsonSerializable()
 class Brand extends Equatable {
   const Brand({
+    required this.id,
     required this.name,
   });
 
+  final String id;
   final String name;
 
   factory Brand.fromJson(Map<String, dynamic> json) => _$BrandFromJson(json);

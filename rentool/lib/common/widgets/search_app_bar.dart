@@ -16,92 +16,101 @@ class SearchAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (buttonBack && favoriteIcon) {
-      return SliverAppBar(
-        pinned: true,
-        surfaceTintColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromRadius(10),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 24),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    context.router.maybePop();
-                  },
-                ),
-              ),
-              const Expanded(
-                  child: SearchButton(
-                withBackButton: true,
-              )),
-              const SizedBox(
-                width: 17,
-              ),
-              CircleAvatar(
-                backgroundColor: Colors.black,
-                radius: 16,
-                child: IconButton(
-                  iconSize: 16,
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite,
-                    color: Colors.white,
-                  ),
-                  selectedIcon: Icon(
-                    Icons.favorite,
-                    color: theme.primaryColor,
-                  ),
-                  isSelected: false,
-                ),
-              ),
-              const SizedBox(
-                width: 24,
-              ),
-            ],
-          ),
-        ),
-      );
+      return _buildWithBackAndFavorite(context, theme);
     }
     if (buttonBack) {
-      return SliverAppBar(
-        pinned: true,
-        surfaceTintColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromRadius(10),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 24),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    context.router.maybePop();
-                  },
-                ),
-              ),
-              const Expanded(
-                  child: SearchButton(
-                withBackButton: true,
-              ))
-            ],
-          ),
-        ),
-      );
+      return _buildWithBack(context);
     } else {
-      return SliverAppBar(
-        pinned: true,
-        backgroundColor: theme.cardColor,
-        surfaceTintColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        bottom: const PreferredSize(
-          preferredSize: Size.fromRadius(10),
-          child: SearchButton(),
-        ),
-      );
+      return _buildDefault(theme);
     }
+  }
+
+  SliverAppBar _buildDefault(ThemeData theme) {
+    return SliverAppBar(
+      pinned: true,
+      backgroundColor: theme.cardColor,
+      surfaceTintColor: Colors.transparent,
+      automaticallyImplyLeading: false,
+      bottom: const PreferredSize(
+        preferredSize: Size.fromRadius(10),
+        child: SearchButton(),
+      ),
+    );
+  }
+
+  SliverAppBar _buildWithBack(BuildContext context) {
+    return SliverAppBar(
+      pinned: true,
+      surfaceTintColor: Colors.transparent,
+      automaticallyImplyLeading: false,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromRadius(10),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 24),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  context.router.maybePop();
+                },
+              ),
+            ),
+            const Expanded(
+                child: SearchButton(
+              withBackButton: true,
+            ))
+          ],
+        ),
+      ),
+    );
+  }
+
+  SliverAppBar _buildWithBackAndFavorite(
+      BuildContext context, ThemeData theme) {
+    return SliverAppBar(
+      pinned: true,
+      surfaceTintColor: Colors.transparent,
+      automaticallyImplyLeading: false,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromRadius(10),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 24),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  context.router.maybePop();
+                },
+              ),
+            ),
+            const Expanded(
+                child: SearchButton(
+              withBackButton: true,
+            )),
+            const SizedBox(
+              width: 17,
+            ),
+            IconButton(
+              iconSize: 24,
+              onPressed: () {},
+              icon: const Icon(
+                Icons.favorite_outline,
+                color: Colors.black,
+              ),
+              selectedIcon: Icon(
+                Icons.favorite,
+                color: theme.primaryColor,
+              ),
+              isSelected: false,
+            ),
+            const SizedBox(
+              width: 24,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -1,11 +1,19 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:rentool/common/common.dart';
+import 'package:rentool/router/router.dart';
 
 @RoutePage()
 class UserScreen extends StatelessWidget {
   const UserScreen({
     super.key,
   });
+
+  static const String textActiveButton = 'Активные заказы';
+  static const String textFavoriteButton = 'Избранное';
+  static const String textTapHistory = 'История заказов';
+  static const String textTapMyData = 'Мои данные';
+  static const String textExitButton = 'Выйти';
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +28,7 @@ class UserScreen extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'Васильев Василий',
-                  style: theme.textTheme.titleLarge,
+                  style: theme.textTheme.displayLarge,
                 ),
               ],
             ),
@@ -34,83 +42,27 @@ class UserScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(
-                  350,
-                  55,
-                ),
-                elevation: 0,
-                backgroundColor: theme.primaryColor,
-                foregroundColor: theme.primaryColor,
-                surfaceTintColor: theme.primaryColor,
-              ),
-              child: Text(
-                'Активные заказы',
-                style: theme.textTheme.bodyMedium,
-              ),
+            ButtonPrimary(
+              text: textActiveButton,
+              onPressed: () async =>
+                  await context.router.push(const ActiveOrdersRoute()),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(
-                  350,
-                  55,
-                ),
-                elevation: 0,
-                backgroundColor: const Color(0xffff2f3f3),
-                foregroundColor: theme.disabledColor,
-                surfaceTintColor: theme.disabledColor,
-              ),
-              child: Text(
-                'Избранное',
-                style: theme.textTheme.bodyMedium,
-              ),
-            ),
+            ButtonSecondary(
+                text: textFavoriteButton,
+                onPressed: () async =>
+                    await context.router.push(const FavoriteToolsRoute())),
             const SizedBox(height: 40),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Text(
-                    'История заказов',
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ),
-              ],
-            ),
+            Row(children: [
+              TapString(
+                  text: textTapHistory,
+                  onTap: () async =>
+                      await context.router.push(const HistoryOrdersRoute()))
+            ]),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Text(
-                    'Мои данные',
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ),
-              ],
-            ),
+            Row(children: [TapString(text: textTapMyData, onTap: () {})]),
             const Spacer(),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(
-                  350,
-                  55,
-                ),
-                elevation: 0,
-                backgroundColor: theme.primaryColor,
-                foregroundColor: theme.primaryColor,
-                surfaceTintColor: theme.primaryColor,
-              ),
-              child: Text(
-                'Выйти',
-                style: theme.textTheme.bodyMedium,
-              ),
-            ),
+            ButtonPrimary(text: textExitButton, onPressed: () {}),
             const SizedBox(height: 30),
           ],
         ),

@@ -13,7 +13,7 @@ class Tool extends Equatable {
     required this.brand,
     required this.model,
     required this.description,
-    required this.priceHour,
+    required this.priceDay,
     required this.count,
     required this.imageUrl,
   });
@@ -23,7 +23,7 @@ class Tool extends Equatable {
   final Brand brand;
   final String model;
   final String description;
-  final int priceHour;
+  final int priceDay;
   final int count;
   final String imageUrl;
 
@@ -39,7 +39,7 @@ class Tool extends Equatable {
       brand,
       model,
       description,
-      priceHour,
+      priceDay,
       count,
       imageUrl,
     ];

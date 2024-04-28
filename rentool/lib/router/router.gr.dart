@@ -15,6 +15,12 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    ActiveOrdersRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ActiveOrdersScreen(),
+      );
+    },
     AdsFeedRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -49,6 +55,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(child: const CatalogWrapperScreen()),
       );
     },
+    FavoriteToolsRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const FavoriteToolsScreen(),
+      );
+    },
+    HistoryOrdersRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const HistoryOrdersScreen(),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -65,10 +83,22 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    OrderPlaceRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const OrderPlaceScreen(),
+      );
+    },
     ShopRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const ShopScreen(),
+      );
+    },
+    ShopWrapperRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(child: const ShopWrapperScreen()),
       );
     },
     UserRoute.name: (routeData) {
@@ -77,7 +107,27 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const UserScreen(),
       );
     },
+    UserWrapperRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WrappedRoute(child: const UserWrapperScreen()),
+      );
+    },
   };
+}
+
+/// generated route for
+/// [ActiveOrdersScreen]
+class ActiveOrdersRoute extends PageRouteInfo<void> {
+  const ActiveOrdersRoute({List<PageRouteInfo>? children})
+      : super(
+          ActiveOrdersRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ActiveOrdersRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -175,6 +225,34 @@ class CatalogWrapperRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [FavoriteToolsScreen]
+class FavoriteToolsRoute extends PageRouteInfo<void> {
+  const FavoriteToolsRoute({List<PageRouteInfo>? children})
+      : super(
+          FavoriteToolsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'FavoriteToolsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [HistoryOrdersScreen]
+class HistoryOrdersRoute extends PageRouteInfo<void> {
+  const HistoryOrdersRoute({List<PageRouteInfo>? children})
+      : super(
+          HistoryOrdersRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HistoryOrdersRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [HomeScreen]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
@@ -228,6 +306,20 @@ class ListToolsCategoriesRouteArgs {
 }
 
 /// generated route for
+/// [OrderPlaceScreen]
+class OrderPlaceRoute extends PageRouteInfo<void> {
+  const OrderPlaceRoute({List<PageRouteInfo>? children})
+      : super(
+          OrderPlaceRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'OrderPlaceRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [ShopScreen]
 class ShopRoute extends PageRouteInfo<void> {
   const ShopRoute({List<PageRouteInfo>? children})
@@ -242,6 +334,20 @@ class ShopRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ShopWrapperScreen]
+class ShopWrapperRoute extends PageRouteInfo<void> {
+  const ShopWrapperRoute({List<PageRouteInfo>? children})
+      : super(
+          ShopWrapperRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ShopWrapperRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [UserScreen]
 class UserRoute extends PageRouteInfo<void> {
   const UserRoute({List<PageRouteInfo>? children})
@@ -251,6 +357,20 @@ class UserRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'UserRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [UserWrapperScreen]
+class UserWrapperRoute extends PageRouteInfo<void> {
+  const UserWrapperRoute({List<PageRouteInfo>? children})
+      : super(
+          UserWrapperRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'UserWrapperRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

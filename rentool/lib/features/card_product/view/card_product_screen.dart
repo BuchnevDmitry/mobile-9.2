@@ -21,7 +21,7 @@ class _CardProductScreenState extends State<CardProductScreen> {
   @override
   void initState() {
     showFullDescription = ValueNotifier<bool>(false);
-    counter = ValueNotifier<int>(0);
+    counter = ValueNotifier<int>(1);
     super.initState();
   }
 
@@ -36,9 +36,9 @@ class _CardProductScreenState extends State<CardProductScreen> {
           buttonBack: true,
           favoriteIcon: true,
         ),
-        const SliverToBoxAdapter(child: SizedBox(height: 19)),
+        const SliverToBoxAdapter(child: SizedBox(height: 16)),
         ImageView(tool: widget.tool),
-        const SliverToBoxAdapter(child: SizedBox(height: 13)),
+        const SliverToBoxAdapter(child: SizedBox(height: 16)),
         TitleName(tool: widget.tool),
         const SliverToBoxAdapter(child: SizedBox(height: 8)),
         SliverToBoxAdapter(
@@ -47,11 +47,7 @@ class _CardProductScreenState extends State<CardProductScreen> {
             child: _buildParametersList(lines, showFullDescription, theme),
           ),
         ),
-        const SliverToBoxAdapter(
-          child: SizedBox(
-            height: 16,
-          ),
-        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 16)),
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -68,8 +64,8 @@ class _CardProductScreenState extends State<CardProductScreen> {
                     children: <Widget>[
                       GestureDetector(
                           onTap: () => setState(() {
-                                counter.value == 0
-                                    ? debugPrint('Counter is 0!')
+                                counter.value == 1
+                                    ? debugPrint('countet >= 1!')
                                     : counter.value--;
                               }),
                           child: const Padding(
@@ -80,7 +76,10 @@ class _CardProductScreenState extends State<CardProductScreen> {
                       GestureDetector(
                           onTap: () {
                             setState(() {
-                              counter.value++;
+                              counter.value == widget.tool.count
+                                  ? debugPrint(
+                                      'countet >= ${widget.tool.count}')
+                                  : counter.value++;
                             });
                           },
                           child: const Padding(
@@ -91,23 +90,12 @@ class _CardProductScreenState extends State<CardProductScreen> {
                   ),
                 ),
                 const Spacer(),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(
-                      160,
-                      50,
-                    ),
-                    elevation: 0,
-                    backgroundColor: theme.primaryColor,
-                    foregroundColor: theme.primaryColor,
-                    surfaceTintColor: theme.primaryColor,
-                  ),
-                  child: Text(
-                    'В корзину',
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ),
+                SizedBox(
+                    width: 160,
+                    child: ButtonPrimary(
+                      text: 'В корзину',
+                      onPressed: () {},
+                    )),
               ],
             ),
           ),
@@ -139,7 +127,7 @@ class _CardProductScreenState extends State<CardProductScreen> {
                       children: [
                         Text(
                           'Свернуть параметры',
-                          style: theme.textTheme.labelSmall,
+                          style: theme.textTheme.bodySmall,
                         ),
                         const Icon(
                           Icons.expand_less_outlined,
@@ -151,7 +139,7 @@ class _CardProductScreenState extends State<CardProductScreen> {
                       children: [
                         Text(
                           'Все параметры',
-                          style: theme.textTheme.labelSmall,
+                          style: theme.textTheme.bodySmall,
                         ),
                         const Icon(
                           Icons.expand_more_outlined,

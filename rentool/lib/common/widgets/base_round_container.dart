@@ -21,8 +21,17 @@ class BaseRoundContainer extends StatelessWidget {
       width: width,
       height: height,
       margin: margin,
-      decoration:
-          decoration ?? BoxDecoration(borderRadius: BorderRadius.circular(20)),
+      decoration: decoration ??
+          BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.15),
+                blurRadius: 15,
+              ),
+            ],
+          ),
       child: child,
     );
   }

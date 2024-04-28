@@ -10,6 +10,8 @@ import 'package:rentool/features/list_tools/list_tools.dart';
 import 'package:rentool/api/api.dart';
 import 'package:rentool/router/ads_feed_routes.dart';
 import 'package:rentool/router/catalog_routes.dart';
+import 'package:rentool/router/shop_routes.dart';
+import 'package:rentool/router/user_routes.dart';
 
 part 'router.gr.dart';
 
@@ -24,8 +26,8 @@ class AppRouter extends _$AppRouter {
           children: [
             AdsFeedRoutes.routes,
             CatalogRoutes.routes,
-            AutoRoute(page: ShopRoute.page, path: 'shop'),
-            AutoRoute(page: UserRoute.page, path: 'user'),
+            ShopRoutes.routes,
+            UserRoutes.routes,
           ],
         ),
       ];
