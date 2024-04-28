@@ -12,8 +12,8 @@ Tool _$ToolFromJson(Map<String, dynamic> json) => Tool(
       brand: Brand.fromJson(json['brand'] as Map<String, dynamic>),
       model: json['model'] as String,
       description: json['description'] as String,
-      priceHour: json['priceHour'] as int,
-      count: json['count'] as int,
+      priceDay: (json['priceDay'] as num).toInt(),
+      count: (json['count'] as num).toInt(),
       imageUrl: json['imageUrl'] as String,
     );
 
@@ -23,7 +23,7 @@ Map<String, dynamic> _$ToolToJson(Tool instance) => <String, dynamic>{
       'brand': instance.brand,
       'model': instance.model,
       'description': instance.description,
-      'priceHour': instance.priceHour,
+      'priceDay': instance.priceDay,
       'count': instance.count,
       'imageUrl': instance.imageUrl,
     };
