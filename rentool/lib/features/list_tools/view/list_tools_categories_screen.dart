@@ -43,82 +43,87 @@ class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
         builder: (context, state) {
           if (state is ListToolsLoadedState) {
             final tools = state.tools.tools;
-            return CustomScrollView(
-              slivers: <Widget>[
-                // AppBar
-                const SearchAppBar(
-                  buttonBack: true,
-                ),
-                // Separator between AppBar and Text
-                const SliverToBoxAdapter(child: SizedBox(height: 22)),
-                // Text
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+            return _buildLoadedContent(theme, tools);
+          }
+          if (state is ListToolsLoadingFailureState) {
+            return _buildFailureContent(theme, context);
+          }
+          return __buildLoadingProgress();
+        },
+      ),
+    );
+  }
+
+  CustomScrollView __buildLoadingProgress() {
+    return const CustomScrollView(
+      slivers: <Widget>[
+        SearchAppBar(
+          buttonBack: true,
+        ),
+        LoadingCenterProgress(),
+      ],
+    );
+  }
+
+  CustomScrollView _buildFailureContent(ThemeData theme, BuildContext context) {
+    return CustomScrollView(
+      slivers: <Widget>[
+        const SearchAppBar(),
+        SliverFillRemaining(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 100),
+            child: Center(
+              child: Column(
+                children: [
+                  const Spacer(),
+                  Text(
+                    'Что-то пошло не так...',
+                    style: theme.textTheme.titleSmall,
+                  ),
+                  Text(
+                    'Пожалуйста, повторите попытку позже',
+                    style: theme.textTheme.labelMedium,
+                  ),
+                  const SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () {
+                      BlocProvider.of<ListToolsBloc>(context)
+                          .add(const ListToolsLoadEvent());
+                    },
                     child: Text(
-                      widget.category.name,
+                      'Повторить',
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
-                ),
-                // Separator between Text and ToolCardList
-                const SliverToBoxAdapter(child: SizedBox(height: 16)),
-                // ToolsCardGrid
-                ToolsCardGrid(tools: tools),
-              ],
-            );
-          }
-          if (state is ListToolsLoadingFailureState) {
-            return CustomScrollView(
-              slivers: <Widget>[
-                // AppBar
-                const SearchAppBar(),
-                SliverFillRemaining(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 100),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          const Spacer(),
-                          Text(
-                            'Что-то пошло не так...',
-                            style: theme.textTheme.titleSmall,
-                          ),
-                          Text(
-                            'Пожалуйста, повторите попытку позже',
-                            style: theme.textTheme.labelMedium,
-                          ),
-                          const SizedBox(height: 20),
-                          TextButton(
-                            onPressed: () {
-                              BlocProvider.of<ListToolsBloc>(context)
-                                  .add(const ListToolsLoadEvent());
-                            },
-                            child: Text(
-                              'Повторить',
-                              style: theme.textTheme.labelSmall,
-                            ),
-                          ),
-                          const Spacer(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }
-          return const CustomScrollView(
-            slivers: <Widget>[
-              // AppBar
-              SearchAppBar(
-                buttonBack: true,
+                  const Spacer(),
+                ],
               ),
-              LoadingCenterProgress(),
-            ],
-          );
-        },
-      ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  CustomScrollView _buildLoadedContent(ThemeData theme, List<Tool> tools) {
+    return CustomScrollView(
+      slivers: <Widget>[
+        const SearchAppBar(
+          buttonBack: true,
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 22)),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Text(
+              widget.category.name,
+              style: theme.textTheme.displaySmall,
+            ),
+          ),
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 16)),
+        ToolsCardGrid(tools: tools),
+      ],
     );
   }
 }
