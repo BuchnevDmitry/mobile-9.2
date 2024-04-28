@@ -14,88 +14,71 @@ class ToolCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return GestureDetector(
-      onTap: () {
-        context.router.push(CardProductRoute(tool: tool));
+      onTap: () async {
+        await context.router.push(CardProductRoute(tool: tool));
       },
-      child: BaseRoundContainer(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.25),
-                spreadRadius: 4,
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              )
-            ]),
-        child: Column(
-          children: <Widget>[
-            BaseRoundContainer(
-              child: Stack(
-                children: <Widget>[
-                  BaseRoundContainer(
-                    width: 160,
-                    height: 170,
-                    child: ClipRect(
-                      child: Image.network(tool.imageUrl),
-                    ),
+      child: _buildCard(theme),
+    );
+  }
+
+  BaseRoundContainer _buildCard(ThemeData theme) {
+    return BaseRoundContainer(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 15.0, right: 15.0),
+            child: Row(
+              children: [
+                const Spacer(),
+                IconButton(
+                  iconSize: 24,
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.favorite_outline,
+                    color: Colors.black,
                   ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    bottom: 125,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.black,
-                      radius: 16,
-                      child: IconButton(
-                        iconSize: 16,
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.white,
-                        ),
-                        selectedIcon: Icon(
-                          Icons.favorite,
-                          color: theme.primaryColor,
-                        ),
-                        isSelected: false,
-                      ),
-                    ),
+                  selectedIcon: Icon(
+                    Icons.favorite,
+                    color: theme.primaryColor,
                   ),
-                ],
-              ),
+                  isSelected: false,
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    '${tool.category.name}\n${tool.brand.name}',
-                    style: theme.textTheme.titleSmall,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    tool.model,
-                    style: theme.textTheme.bodySmall,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    '${tool.priceHour} р/день',
-                    style: theme.textTheme.titleSmall,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
+          ),
+          SizedBox(
+            width: 160,
+            height: 130,
+            child: ClipRect(
+              child: Image.network(tool.imageUrl),
             ),
-          ],
-        ),
+          ),
+          Column(
+            children: <Widget>[
+              Text(
+                '${tool.category.name}\n${tool.brand.name}',
+                style: theme.textTheme.headlineMedium,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                tool.model,
+                style: theme.textTheme.headlineSmall,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                '${tool.priceDay} р/день',
+                style: theme.textTheme.headlineMedium,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

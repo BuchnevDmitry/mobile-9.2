@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class SearchButton extends StatelessWidget {
-  const SearchButton({super.key, this.withBackButton = false});
+  const SearchButton({
+    super.key,
+    this.withBackButton = false,
+  });
 
   final bool withBackButton;
+
+  static const String hintText = 'Поиск';
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +32,8 @@ class SearchButton extends StatelessWidget {
               prefixIcon: const InkWell(
                 child: Icon(Icons.search),
               ),
-              hintText: 'Поиск',
-              hintStyle: theme.textTheme.labelMedium),
+              hintText: hintText,
+              hintStyle: theme.textTheme.labelSmall),
         ),
       ),
     );
