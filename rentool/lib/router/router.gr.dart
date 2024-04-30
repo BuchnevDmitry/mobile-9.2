@@ -73,6 +73,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const HomeScreen(),
       );
     },
+    LeaseExtensionRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const LeaseExtensionScreen(),
+      );
+    },
     ListToolsCategoriesRoute.name: (routeData) {
       final args = routeData.argsAs<ListToolsCategoriesRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -81,6 +87,18 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           category: args.category,
         ),
+      );
+    },
+    MapRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const MapScreen(),
+      );
+    },
+    OrderListRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const OrderListScreen(),
       );
     },
     OrderPlaceRoute.name: (routeData) {
@@ -99,6 +117,12 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: WrappedRoute(child: const ShopWrapperScreen()),
+      );
+    },
+    ThanksRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ThanksScreen(),
       );
     },
     UserRoute.name: (routeData) {
@@ -267,6 +291,20 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [LeaseExtensionScreen]
+class LeaseExtensionRoute extends PageRouteInfo<void> {
+  const LeaseExtensionRoute({List<PageRouteInfo>? children})
+      : super(
+          LeaseExtensionRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LeaseExtensionRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [ListToolsCategoriesScreen]
 class ListToolsCategoriesRoute
     extends PageRouteInfo<ListToolsCategoriesRouteArgs> {
@@ -303,6 +341,34 @@ class ListToolsCategoriesRouteArgs {
   String toString() {
     return 'ListToolsCategoriesRouteArgs{key: $key, category: $category}';
   }
+}
+
+/// generated route for
+/// [MapScreen]
+class MapRoute extends PageRouteInfo<void> {
+  const MapRoute({List<PageRouteInfo>? children})
+      : super(
+          MapRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MapRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [OrderListScreen]
+class OrderListRoute extends PageRouteInfo<void> {
+  const OrderListRoute({List<PageRouteInfo>? children})
+      : super(
+          OrderListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'OrderListRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -343,6 +409,20 @@ class ShopWrapperRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ShopWrapperRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ThanksScreen]
+class ThanksRoute extends PageRouteInfo<void> {
+  const ThanksRoute({List<PageRouteInfo>? children})
+      : super(
+          ThanksRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ThanksRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

@@ -6,9 +6,11 @@ abstract class UserRoutes {
     page: UserWrapperRoute.page,
     children: [
       AutoRoute(page: UserRoute.page, initial: true, path: 'user/'),
-      AutoRoute(page: ActiveOrdersRoute.page, path: 'active_orders'),
       AutoRoute(page: FavoriteToolsRoute.page, path: 'favorite_tools'),
-      AutoRoute(page: HistoryOrdersRoute.page, path: 'history_orders'),
+      AutoRoute(page: ActiveOrdersRoute.page, path: 'active_orders/'),
+      AutoRoute(page: HistoryOrdersRoute.page, path: 'history_orders/'),
+      AutoRoute(page: OrderListRoute.page, path: 'order_list'),
+      AutoRoute(page: LeaseExtensionRoute.page, path: 'lease_extention')
     ],
   );
 }
