@@ -96,9 +96,6 @@ class _SearchAppBarState extends State<SearchAppBar> {
                 child: SearchButton(
               withBackButton: true,
             )),
-            const SizedBox(
-              width: 17,
-            ),
             IconButton(
               iconSize: 24,
               onPressed: () {
