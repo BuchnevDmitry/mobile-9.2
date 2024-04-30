@@ -7,6 +7,7 @@ class ButtonSecondary extends StatelessWidget {
     required this.text,
     this.heightSize = 55,
     this.withIcon = false,
+    required this.style,
   });
 
   final String text;
@@ -16,6 +17,8 @@ class ButtonSecondary extends StatelessWidget {
   final double heightSize;
 
   final bool withIcon;
+
+  final TextStyle style;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,7 @@ class ButtonSecondary extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: theme.textTheme.titleMedium,
+        style: style,
       ),
     );
   }
@@ -65,7 +68,7 @@ class ButtonSecondary extends StatelessWidget {
         children: [
           Text(
             text,
-            style: theme.textTheme.titleMedium,
+            style: style,
           ),
           const Icon(
             Icons.arrow_forward_ios,

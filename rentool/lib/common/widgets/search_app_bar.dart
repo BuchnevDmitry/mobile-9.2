@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/common/widgets/widgets.dart';
 
-class SearchAppBar extends StatelessWidget {
+class SearchAppBar extends StatefulWidget {
   const SearchAppBar({
     super.key,
     this.buttonBack = false,
@@ -13,12 +13,19 @@ class SearchAppBar extends StatelessWidget {
   final bool buttonBack;
 
   @override
+  State<SearchAppBar> createState() => _SearchAppBarState();
+}
+
+class _SearchAppBarState extends State<SearchAppBar> {
+  bool isFavorite = false;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    if (buttonBack && favoriteIcon) {
+    if (widget.buttonBack && widget.favoriteIcon) {
       return _buildWithBackAndFavorite(context, theme);
     }
-    if (buttonBack) {
+    if (widget.buttonBack) {
       return _buildWithBack(context);
     } else {
       return _buildDefault(theme);
@@ -94,7 +101,9 @@ class SearchAppBar extends StatelessWidget {
             ),
             IconButton(
               iconSize: 24,
-              onPressed: () {},
+              onPressed: () {
+                setState(() => isFavorite = !isFavorite);
+              },
               icon: const Icon(
                 Icons.favorite_outline,
                 color: Colors.black,
@@ -103,7 +112,7 @@ class SearchAppBar extends StatelessWidget {
                 Icons.favorite,
                 color: theme.primaryColor,
               ),
-              isSelected: false,
+              isSelected: isFavorite,
             ),
             const SizedBox(
               width: 24,

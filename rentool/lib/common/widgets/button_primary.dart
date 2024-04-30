@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ButtonPrimary extends StatelessWidget {
-  const ButtonPrimary({
-    super.key,
-    required this.onPressed,
-    required this.text,
-    this.heightSize = 55,
-    this.withIcon = false,
-  });
+  const ButtonPrimary(
+      {super.key,
+      required this.onPressed,
+      required this.text,
+      this.heightSize = 55,
+      this.withIcon = false,
+      required this.style});
 
   final String text;
   // ignore: prefer_typing_uninitialized_variables
@@ -16,6 +16,8 @@ class ButtonPrimary extends StatelessWidget {
   final double heightSize;
 
   final bool withIcon;
+
+  final TextStyle style;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class ButtonPrimary extends StatelessWidget {
         children: [
           Text(
             text,
-            style: theme.textTheme.titleMedium,
+            style: style,
           ),
         ],
       ),

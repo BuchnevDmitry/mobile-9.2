@@ -5,17 +5,24 @@ import 'package:rentool/router/router.dart';
 
 import 'base_round_container.dart';
 
-class ToolCard extends StatelessWidget {
+class ToolCard extends StatefulWidget {
   const ToolCard({super.key, required this.tool});
 
   final Tool tool;
+
+  @override
+  State<ToolCard> createState() => _ToolCardState();
+}
+
+class _ToolCardState extends State<ToolCard> {
+  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () async {
-        await context.router.push(CardProductRoute(tool: tool));
+        await context.router.push(CardProductRoute(tool: widget.tool));
       },
       child: _buildCard(theme),
     );
@@ -26,13 +33,16 @@ class ToolCard extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top: 15.0, right: 15.0),
+            padding: const EdgeInsets.only(top: 5.0, right: 5.0),
             child: Row(
               children: [
                 const Spacer(),
                 IconButton(
                   iconSize: 24,
-                  onPressed: () {},
+                  onPressed: () {
+                    // temp for tests
+                    setState(() => isFavorite = !isFavorite);
+                  },
                   icon: const Icon(
                     Icons.favorite_outline,
                     color: Colors.black,
@@ -41,7 +51,7 @@ class ToolCard extends StatelessWidget {
                     Icons.favorite,
                     color: theme.primaryColor,
                   ),
-                  isSelected: false,
+                  isSelected: isFavorite,
                 ),
               ],
             ),
@@ -50,27 +60,27 @@ class ToolCard extends StatelessWidget {
             width: 160,
             height: 130,
             child: ClipRect(
-              child: Image.network(tool.imageUrl),
+              child: Image.network(widget.tool.imageUrl),
             ),
           ),
           Column(
             children: <Widget>[
               Text(
-                '${tool.category.name}\n${tool.brand.name}',
+                widget.tool.category.name,
                 style: theme.textTheme.headlineMedium,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 textAlign: TextAlign.center,
               ),
               Text(
-                tool.model,
+                '${widget.tool.brand.name} ${widget.tool.model}',
                 style: theme.textTheme.headlineSmall,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 textAlign: TextAlign.center,
               ),
               Text(
-                '${tool.priceDay} р/день',
+                '${widget.tool.priceDay} р/день',
                 style: theme.textTheme.headlineMedium,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
