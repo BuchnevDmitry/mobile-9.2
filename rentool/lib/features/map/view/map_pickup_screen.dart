@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 @RoutePage()
-class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+class MapPickupScreen extends StatefulWidget {
+  const MapPickupScreen({super.key});
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  State<MapPickupScreen> createState() => _MapPickupScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapPickupScreenState extends State<MapPickupScreen> {
   final mapControllerCompleter = Completer<YandexMapController>();
 
   @override
@@ -37,7 +37,7 @@ class _MapScreenState extends State<MapScreen> {
                   icon: const Icon(Icons.arrow_back_ios),
                 ),
                 Text(
-                  'Точка доставки',
+                  'Точка самовывоза',
                   style: theme.textTheme.displaySmall,
                 ),
               ],
