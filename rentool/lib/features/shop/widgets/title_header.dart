@@ -13,7 +13,7 @@ class TitleHeader extends StatelessWidget {
     final theme = Theme.of(context);
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 25),
         child: Text(
           text,
           style: theme.textTheme.headlineLarge,

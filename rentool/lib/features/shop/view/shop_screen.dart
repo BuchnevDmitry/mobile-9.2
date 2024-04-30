@@ -60,6 +60,11 @@ class _ShopScreenState extends State<ShopScreen> {
           sliver: SliverToBoxAdapter(
               child: ButtonPrimary(
             text: textButton,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
             onPressed: () async =>
                 await context.router.push(const OrderPlaceRoute()),
           )),

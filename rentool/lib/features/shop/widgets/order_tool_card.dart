@@ -23,7 +23,7 @@ class _OrderToolCardState extends State<OrderToolCard> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: BaseRoundContainer(
         child: Row(
           children: <Widget>[

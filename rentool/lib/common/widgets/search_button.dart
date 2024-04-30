@@ -40,6 +40,6 @@ class SearchButton extends StatelessWidget {
   }
 
   EdgeInsets _getMargin() => withBackButton
-      ? const EdgeInsets.symmetric(vertical: 12)
+      ? const EdgeInsets.only(top: 12, bottom: 12, right: 24)
       : const EdgeInsets.symmetric(horizontal: 24, vertical: 12);
 }

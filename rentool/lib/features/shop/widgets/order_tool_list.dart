@@ -11,7 +11,7 @@ class OrderTools extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) => const OrderToolCard(),
-        childCount: 1,
+        childCount: 4,
       ),
     );
   }

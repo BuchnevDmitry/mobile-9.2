@@ -23,8 +23,8 @@ class HomeScreen extends StatelessWidget {
         routes: const [
           AdsFeedWrapperRoute(),
           CatalogWrapperRoute(),
-          ShopRoute(),
-          UserRoute(),
+          ShopWrapperRoute(),
+          UserWrapperRoute(),
         ],
         builder: (context, child) {
           final tabsRouter = AutoTabsRouter.of(context);

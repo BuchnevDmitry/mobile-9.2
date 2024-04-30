@@ -7,6 +7,7 @@ import 'package:rentool/features/home/home.dart';
 import 'package:rentool/features/shop/shop.dart';
 import 'package:rentool/features/user/user.dart';
 import 'package:rentool/features/list_tools/list_tools.dart';
+import 'package:rentool/features/map/map.dart';
 import 'package:rentool/api/api.dart';
 import 'package:rentool/router/ads_feed_routes.dart';
 import 'package:rentool/router/catalog_routes.dart';
@@ -30,5 +31,8 @@ class AppRouter extends _$AppRouter {
             UserRoutes.routes,
           ],
         ),
+        AutoRoute(page: MapDeliveryRoute.page, path: '/map_delivery'),
+        AutoRoute(page: MapPickupRoute.page, path: '/map_pickup'),
+        AutoRoute(page: ThanksRoute.page, path: '/thanks'),
       ];
 }
