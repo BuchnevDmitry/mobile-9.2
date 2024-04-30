@@ -59,7 +59,11 @@ class HomeScreen extends StatelessWidget {
                   label: 'Категории',
                 ),
                 const BottomNavigationBarItem(
-                  icon: Icon(Icons.local_mall_outlined),
+                  icon: Badge(
+                    isLabelVisible: true,
+                    backgroundColor: Color(0xfff7c815),
+                    child: Icon(Icons.local_mall_outlined),
+                  ),
                   label: 'Корзина',
                 ),
                 const BottomNavigationBarItem(
