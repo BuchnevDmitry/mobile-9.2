@@ -15,7 +15,6 @@ dependencies:
     sdk: flutter
   
   # Utility
-  flutter_native_splash: ^2.4.0
   auto_route: ^8.1.0
   flutter_svg: ^2.0.10+1
   flutter_dotenv: ^5.1.0
@@ -29,8 +28,8 @@ dependencies:
   uuid: ^4.4.0
   table_calendar: ^3.1.1
   intl: ^0.19.0
-
-  
+  yandex_mapkit: ^4.0.2
+  geolocator: ^11.0.0
   # Icons
   cupertino_icons: ^1.0.8
 
