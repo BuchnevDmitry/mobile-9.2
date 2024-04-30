@@ -89,10 +89,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    MapRoute.name: (routeData) {
+    MapDeliveryRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const MapScreen(),
+        child: const MapDeliveryScreen(),
+      );
+    },
+    MapPickupRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const MapPickupScreen(),
       );
     },
     OrderListRoute.name: (routeData) {
@@ -344,15 +350,29 @@ class ListToolsCategoriesRouteArgs {
 }
 
 /// generated route for
-/// [MapScreen]
-class MapRoute extends PageRouteInfo<void> {
-  const MapRoute({List<PageRouteInfo>? children})
+/// [MapDeliveryScreen]
+class MapDeliveryRoute extends PageRouteInfo<void> {
+  const MapDeliveryRoute({List<PageRouteInfo>? children})
       : super(
-          MapRoute.name,
+          MapDeliveryRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'MapRoute';
+  static const String name = 'MapDeliveryRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [MapPickupScreen]
+class MapPickupRoute extends PageRouteInfo<void> {
+  const MapPickupRoute({List<PageRouteInfo>? children})
+      : super(
+          MapPickupRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MapPickupRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
