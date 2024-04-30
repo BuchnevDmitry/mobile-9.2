@@ -184,7 +184,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
                   Expanded(
                     child: ButtonPrimary(
                       onPressed: () async {
-                        await context.router.push(const MapRoute());
+                        await context.router.push(const MapDeliveryRoute());
                       },
                       text: 'Доставка',
                       withIcon: true,
@@ -199,7 +199,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
                   Expanded(
                     child: ButtonSecondary(
                       onPressed: () async {
-                        await context.router.push(const MapRoute());
+                        await context.router.push(const MapPickupRoute());
                       },
                       text: 'Самовывоз',
                       withIcon: true,
