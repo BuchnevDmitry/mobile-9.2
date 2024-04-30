@@ -16,22 +16,28 @@ dependencies:
   
   # Utility
   auto_route: ^8.1.0
-  flutter_svg: ^2.0.10+1
   flutter_dotenv: ^5.1.0
+  json_annotation: ^4.8.1
+  table_calendar: ^3.1.1
+  intl: ^0.19.0
+  # Network
   dio: ^5.4.3+1
   retrofit: ^4.1.0
-  json_annotation: ^4.8.1
+  appmetrica_plugin: ^2.0.0
+
+  # Buissnes logic
   flutter_bloc: ^8.1.5
   equatable: ^2.0.5
   meta: ^1.11.0
   bloc: ^8.1.4
-  uuid: ^4.4.0
-  table_calendar: ^3.1.1
-  intl: ^0.19.0
+
+  # Map
   yandex_mapkit: ^4.0.2
   geolocator: ^11.0.0
+
   # Icons
   cupertino_icons: ^1.0.8
+  flutter_svg: ^2.0.10+1
 
 
 #-------------------------- DEVELOPMENT PACKAGES --------------------------#
