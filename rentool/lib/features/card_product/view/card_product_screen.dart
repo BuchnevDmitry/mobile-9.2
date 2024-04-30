@@ -91,11 +91,17 @@ class _CardProductScreenState extends State<CardProductScreen> {
                 ),
                 const Spacer(),
                 SizedBox(
-                    width: 160,
-                    child: ButtonPrimary(
-                      text: 'В корзину',
-                      onPressed: () {},
-                    )),
+                  width: 160,
+                  child: ButtonPrimary(
+                    text: 'В корзину',
+                    onPressed: () {},
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
