@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rentool/api/models/models.dart';
 import 'package:rentool/router/router.dart';
 
@@ -63,30 +64,32 @@ class _ToolCardState extends State<ToolCard> {
               child: Image.network(widget.tool.imageUrl),
             ),
           ),
-          Column(
-            children: <Widget>[
-              Text(
-                widget.tool.category.name,
-                style: theme.textTheme.headlineMedium,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                '${widget.tool.brand.name} ${widget.tool.model}',
-                style: theme.textTheme.headlineSmall,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                '${widget.tool.priceDay} р/день',
-                style: theme.textTheme.headlineMedium,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                textAlign: TextAlign.center,
-              ),
-            ],
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  widget.tool.category.name,
+                  style: theme.textTheme.headlineMedium,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  '${widget.tool.brand.name} ${widget.tool.model}',
+                  style: theme.textTheme.headlineSmall,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  '${widget.tool.priceDay} р/день',
+                  style: theme.textTheme.headlineMedium,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ],
       ),

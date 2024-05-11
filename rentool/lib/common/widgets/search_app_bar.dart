@@ -38,6 +38,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
       backgroundColor: theme.cardColor,
       surfaceTintColor: Colors.transparent,
       automaticallyImplyLeading: false,
+      elevation: 0,
       bottom: const PreferredSize(
         preferredSize: Size.fromRadius(10),
         child: SearchButton(),
@@ -50,6 +51,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
       pinned: true,
       surfaceTintColor: Colors.transparent,
       automaticallyImplyLeading: false,
+      elevation: 0,
       bottom: PreferredSize(
         preferredSize: const Size.fromRadius(10),
         child: Row(
@@ -79,6 +81,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
       pinned: true,
       surfaceTintColor: Colors.transparent,
       automaticallyImplyLeading: false,
+      elevation: 0,
       bottom: PreferredSize(
         preferredSize: const Size.fromRadius(10),
         child: Row(

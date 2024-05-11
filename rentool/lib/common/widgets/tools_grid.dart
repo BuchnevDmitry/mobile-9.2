@@ -22,7 +22,7 @@ class ToolsCardGrid extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            childAspectRatio: 0.67),
+            childAspectRatio: 0.55),
       ),
     );
   }
