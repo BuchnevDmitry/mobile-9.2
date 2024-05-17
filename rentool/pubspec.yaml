@@ -1,21 +1,21 @@
+---
 #-------------------------- BASE INFORMATION --------------------------#
 name: rentool
 description: "Mobile application for searching and renting equipment and tools for home repair and construction."
 
-publish_to: 'none' 
+publish_to: "none"
 version: 0.0.0+1
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
-
+  sdk: ">=3.3.0 <4.0.0"
 
 #-------------------------- PRODUCTION PACKAGES --------------------------#
 dependencies:
   flutter:
     sdk: flutter
-  
+
   # Utility
-  auto_route: ^8.1.0
+  auto_route: ^8.1.3
   flutter_dotenv: ^5.1.0
   json_annotation: ^4.8.1
   table_calendar: ^3.1.1
@@ -30,6 +30,7 @@ dependencies:
   equatable: ^2.0.5
   meta: ^1.11.0
   bloc: ^8.1.4
+  realm: ^2.2.1
 
   # Map
   yandex_mapkit: ^4.0.2
@@ -38,7 +39,6 @@ dependencies:
   # Icons
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.10+1
-
 
 #-------------------------- DEVELOPMENT PACKAGES --------------------------#
 dev_dependencies:
@@ -51,18 +51,17 @@ dev_dependencies:
   retrofit_generator: ^8.1.0
   json_serializable: ^6.7.1
 
-
 flutter:
   uses-material-design: true
 
-#-------------------------- LOCAL ASSETS --------------------------#
+  #-------------------------- LOCAL ASSETS --------------------------#
   assets:
     - assets/logos/
     - assets/images/
     - assets/icons/
     - assets/tests/
     - .env
-#-------------------------- LOCAL FONTS --------------------------#
+  #-------------------------- LOCAL FONTS --------------------------#
   fonts:
     - family: Montserrat
       fonts:
