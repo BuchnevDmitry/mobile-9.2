@@ -15,9 +15,7 @@ class LeaseExtensionScreen extends StatefulWidget {
 
 class _LeaseExtensionScreenState extends State<LeaseExtensionScreen> {
   final DateTime _today = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
   @override
@@ -114,11 +112,11 @@ class _LeaseExtensionScreenState extends State<LeaseExtensionScreen> {
               ),
             ),
             availableGestures: AvailableGestures.all,
-            focusedDay: _focusedDay,
+            focusedDay: _today,
             firstDay: _today,
-            lastDay: DateTime.utc(2030, 1, 1),
+            lastDay: _today.add(const Duration(days: 8)),
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-            rangeStartDay: _rangeStart,
+            rangeStartDay: _today,
             rangeEndDay: _rangeEnd,
             rangeSelectionMode: RangeSelectionMode.toggledOn,
             onRangeSelected: _onRangeSelected,
@@ -130,9 +128,7 @@ class _LeaseExtensionScreenState extends State<LeaseExtensionScreen> {
       DateTime? startDay, DateTime? endDay, DateTime focusedDay) {
     setState(() {
       _selectedDay = null;
-      _focusedDay = focusedDay;
-      _rangeStart = startDay;
-      _rangeEnd = endDay;
+      _rangeEnd = focusedDay;
     });
   }
 }

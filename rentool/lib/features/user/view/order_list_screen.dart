@@ -12,11 +12,13 @@ class OrderListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScrollView(
-      slivers: <Widget>[
-        TitleAppBar(title: title),
-        OrderList(),
-      ],
+    return const Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          TitleAppBar(title: title),
+          OrderList(),
+        ],
+      ),
     );
   }
 }
