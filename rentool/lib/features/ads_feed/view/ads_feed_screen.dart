@@ -7,6 +7,10 @@ import 'package:rentool/api/models/tool.dart';
 import 'package:rentool/common/common.dart';
 import 'package:rentool/features/ads_feed/bloc/bloc.dart';
 import 'package:rentool/features/ads_feed/widgets/widgets.dart';
+import 'package:rentool/features/card_product/bloc/bloc.dart';
+import 'package:rentool/features/card_product/card_product.dart';
+import 'package:rentool/features/list_tools/list_tools.dart';
+import 'package:rentool/features/user/user.dart';
 
 @RoutePage()
 class AdsFeedScreen extends StatefulWidget {
@@ -51,7 +55,52 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
         builder: (context, state) {
           if (state is AdsFeedLoadedState) {
             final tools = state.tools.tools;
-            return buidlLoadedContent(theme, tools);
+            return CustomScrollView(
+              slivers: <Widget>[
+                const SearchAppBar(),
+                const SliverToBoxAdapter(child: SizedBox(height: 18)),
+                const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 160,
+                    child: AdvertisingListCard(
+                        advertisingCardResources: advertisingCardResources),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24)
+                        .copyWith(top: 25),
+                    child: Text(
+                      headLine,
+                      style: theme.textTheme.displaySmall,
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  sliver: SliverGrid(
+                    delegate: SliverChildBuilderDelegate(
+                        childCount: tools.length, (context, index) {
+                      final tool = tools[index];
+                      final bool isFavorite = state.isFavorite(tool.id);
+                      return ToolCard(
+                        isFavorite: isFavorite,
+                        tool: tool,
+                        onTap: () =>
+                            _toggleFavorite(context, tools, state, index),
+                      );
+                    }),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 0.55),
+                  ),
+                ),
+              ],
+            );
           }
           if (state is AdsFeedLoadingFailureState) {
             return _buildFailureContent(theme, context);
@@ -60,6 +109,26 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
         },
       ),
     );
+  }
+
+  Future<void> _toggleFavorite(BuildContext context, List<Tool> tools,
+      AdsFeedLoadedState state, int index) async {
+    final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
+    final favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
+    final listToolsBloc = BlocProvider.of<ListToolsBloc>(context);
+    final cardProductBloc = BlocProvider.of<CardProductBloc>(context);
+
+    final completer = Completer();
+
+    adsFeedBloc.add(AdsFeedToggleFavoriteToolEvent(
+      tool: tools[index],
+      completer: completer,
+    ));
+
+    await completer.future;
+    favoritesBloc.add(FavoritesLoadEvent());
+    cardProductBloc.add(CardProductLoadEvent(tool: tools[index]));
+    listToolsBloc.add(const ListToolsLoadEvent());
   }
 
   CustomScrollView _buildLoadingProgress() {
@@ -104,34 +173,6 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  CustomScrollView buidlLoadedContent(ThemeData theme, List<Tool> tools) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        const SearchAppBar(),
-        const SliverToBoxAdapter(child: SizedBox(height: 18)),
-        const SliverToBoxAdapter(
-          child: SizedBox(
-            height: 160,
-            child: AdvertisingListCard(
-                advertisingCardResources: advertisingCardResources),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 24).copyWith(top: 25),
-            child: Text(
-              headLine,
-              style: theme.textTheme.displaySmall,
-            ),
-          ),
-        ),
-        const SliverToBoxAdapter(child: SizedBox(height: 16)),
-        ToolsCardGrid(tools: tools),
       ],
     );
   }
