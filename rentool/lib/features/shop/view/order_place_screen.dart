@@ -26,20 +26,22 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return CustomScrollView(
-      slivers: <Widget>[
-        _buildButtonAppBar(),
-        const TitleHeader(text: 'Выбор даты'),
-        _buildCalendar(),
-        const TitleHeader(text: 'Выбор времени'),
-        _buildClockPicker(),
-        const TitleHeader(text: 'Способ оплаты'),
-        _buildChoicePayMethod(theme),
-        _buildFinalResult(theme),
-        _buildButtonOrder(),
-        _buildButtonBack(context),
-        const SliverToBoxAdapter(child: SizedBox(height: 16)),
-      ],
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          _buildButtonAppBar(),
+          const TitleHeader(text: 'Выбор даты'),
+          _buildCalendar(),
+          const TitleHeader(text: 'Выбор времени'),
+          _buildClockPicker(),
+          const TitleHeader(text: 'Способ оплаты'),
+          _buildChoicePayMethod(theme),
+          _buildFinalResult(theme),
+          _buildButtonOrder(),
+          _buildButtonBack(context),
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+        ],
+      ),
     );
   }
 
@@ -163,7 +165,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
               availableGestures: AvailableGestures.all,
               focusedDay: _focusedDay,
               firstDay: _today,
-              lastDay: DateTime.utc(2030, 1, 1),
+              lastDay: _today.add(const Duration(days: 31)),
               selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
               rangeStartDay: _rangeStart,
               rangeEndDay: _rangeEnd,
