@@ -1,35 +1,37 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:rentool/api/models/models.dart';
 import 'package:rentool/router/router.dart';
 
 import 'base_round_container.dart';
 
-class ToolCard extends StatefulWidget {
-  const ToolCard({super.key, required this.tool});
+class ToolCard extends StatelessWidget {
+  const ToolCard({
+    super.key,
+    this.isFavorite = false,
+    required this.tool,
+    required this.onTap,
+  });
 
+  final bool isFavorite;
   final Tool tool;
-
-  @override
-  State<ToolCard> createState() => _ToolCardState();
-}
-
-class _ToolCardState extends State<ToolCard> {
-  bool isFavorite = false;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () async {
-        await context.router.push(CardProductRoute(tool: widget.tool));
+        await context.router.push(CardProductRoute(tool: tool));
       },
       child: _buildCard(theme),
     );
   }
 
   BaseRoundContainer _buildCard(ThemeData theme) {
+    final nameWithModel = tool.model.split(' ');
     return BaseRoundContainer(
       child: Column(
         children: <Widget>[
@@ -40,10 +42,7 @@ class _ToolCardState extends State<ToolCard> {
                 const Spacer(),
                 IconButton(
                   iconSize: 24,
-                  onPressed: () {
-                    // temp for tests
-                    setState(() => isFavorite = !isFavorite);
-                  },
+                  onPressed: onTap,
                   icon: const Icon(
                     Icons.favorite_outline,
                     color: Colors.black,
@@ -61,28 +60,28 @@ class _ToolCardState extends State<ToolCard> {
             width: 160,
             height: 130,
             child: ClipRect(
-              child: Image.network(widget.tool.imageUrl),
+              child: Image.network(tool.imageUrl),
             ),
           ),
           Expanded(
             child: Column(
               children: <Widget>[
                 Text(
-                  widget.tool.category.name,
+                  nameWithModel[0],
                   style: theme.textTheme.headlineMedium,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  '${widget.tool.brand.name} ${widget.tool.model}',
+                  '${tool.brand.name} ${nameWithModel[1]}',
                   style: theme.textTheme.headlineSmall,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  '${widget.tool.priceDay} р/день',
+                  '${tool.priceDay} р/день',
                   style: theme.textTheme.headlineMedium,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,

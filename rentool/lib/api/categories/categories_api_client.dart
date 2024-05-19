@@ -16,6 +16,6 @@ abstract class CategoriesApiClient {
     return CategoriesApiClient(dio);
   }
 
-  @GET('/categories')
+  @GET('/api/v1/categories/')
   Future<Categories> getCategories();
 }

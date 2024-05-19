@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:rentool/features/ads_feed/bloc/ads_feed_bloc.dart';
-import 'package:rentool/features/catalog/bloc/catalog_bloc.dart';
-import 'package:rentool/features/list_tools/bloc/list_tools_bloc.dart';
+
+import 'package:realm/realm.dart';
+
+import 'package:rentool/features/ads_feed/ads_feed.dart';
+import 'package:rentool/features/card_product/card_product.dart';
+import 'package:rentool/features/catalog/catalog.dart';
+import 'package:rentool/features/home/home.dart';
+import 'package:rentool/features/list_tools/list_tools.dart';
 import 'package:rentool/api/api.dart';
+import 'package:rentool/features/shop/shop.dart';
+import 'package:rentool/features/user/user.dart';
+import 'package:rentool/repositories/repositories.dart';
 import 'package:rentool/router/router.dart';
 import 'package:rentool/theme/theme.dart';
 
 class RenToolApp extends StatefulWidget {
   const RenToolApp({
     super.key,
+    required this.realm,
   });
+
+  final Realm realm;
 
   @override
   State<RenToolApp> createState() => _RenToolAppState();
@@ -25,11 +36,19 @@ class _RenToolAppState extends State<RenToolApp> {
 
   @override
   Widget build(BuildContext context) {
+    final orderRepository = OrderRepository(realm: widget.realm);
+    final favoriteRepository = FavoriteRepository(realm: widget.realm);
     return MultiBlocProvider(
       providers: [
         BlocProvider<AdsFeedBloc>(
           create: (context) => AdsFeedBloc(
             toolApiClient: _toolsApiClient,
+            repository: favoriteRepository,
+          ),
+        ),
+        BlocProvider<CardProductBloc>(
+          create: (context) => CardProductBloc(
+            repository: favoriteRepository,
           ),
         ),
         BlocProvider<CatalogBloc>(
@@ -37,13 +56,30 @@ class _RenToolAppState extends State<RenToolApp> {
             categoriesApiClient: _categoriesApiClient,
           ),
         ),
+        BlocProvider<HomeBloc>(
+          create: (context) => HomeBloc(
+            repository: orderRepository,
+          ),
+        ),
         BlocProvider<ListToolsBloc>(
           create: (context) => ListToolsBloc(
             toolsApiClient: _toolsApiClient,
+            repository: favoriteRepository,
+          ),
+        ),
+        BlocProvider<OrderBloc>(
+          create: (context) => OrderBloc(
+            repository: orderRepository,
+          ),
+        ),
+        BlocProvider<FavoritesBloc>(
+          create: (context) => FavoritesBloc(
+            repository: favoriteRepository,
           ),
         ),
       ],
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         title: 'Rentool',
         theme: AppTheme.lightTheme,
         routerDelegate: _router.delegate(),

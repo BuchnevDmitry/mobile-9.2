@@ -2,6 +2,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:rentool/api/models/models.dart';
+import 'package:rentool/repositories/repositories.dart';
 
 part 'tool.g.dart';
 
@@ -44,4 +45,39 @@ class Tool extends Equatable {
       imageUrl,
     ];
   }
+
+  ToolOrder toToolOrder(int userCount) => ToolOrder(
+        id,
+        model,
+        description,
+        priceDay,
+        count,
+        userCount,
+        imageUrl,
+        category: CategoryOrder(
+          category.id,
+          category.name,
+        ),
+        brand: BrandOrder(
+          brand.id,
+          brand.name,
+        ),
+      );
+
+  ToolFavorite toToolFavorite() => ToolFavorite(
+        id,
+        model,
+        description,
+        priceDay,
+        count,
+        imageUrl,
+        category: CategoryFavorite(
+          category.id,
+          category.name,
+        ),
+        brand: BrandFavorite(
+          brand.id,
+          brand.name,
+        ),
+      );
 }

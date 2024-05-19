@@ -12,14 +12,16 @@ class HistoryOrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScrollView(
-      slivers: <Widget>[
-        TitleAppBar(title: title),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
-          sliver: HistoryOrderListCard(),
-        ),
-      ],
+    return const Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          TitleAppBar(title: title),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            sliver: HistoryOrderListCard(),
+          ),
+        ],
+      ),
     );
   }
 }

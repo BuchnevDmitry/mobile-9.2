@@ -4,7 +4,7 @@ part of 'list_tools_bloc.dart';
 sealed class ListToolsEvent extends Equatable {
   const ListToolsEvent();
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ListToolsLoadEvent extends ListToolsEvent {
@@ -12,4 +12,20 @@ class ListToolsLoadEvent extends ListToolsEvent {
     this.completer,
   });
   final Completer? completer;
+
+  @override
+  List<Object?> get props => super.props..add(completer);
+}
+
+class ListToolsToggleFavoriteToolEvent extends ListToolsEvent {
+  const ListToolsToggleFavoriteToolEvent({
+    required this.tool,
+    this.completer,
+  });
+
+  final Tool tool;
+  final Completer? completer;
+
+  @override
+  List<Object?> get props => super.props..add(tool);
 }

@@ -15,6 +15,8 @@ class TitleName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final nameWithModel = tool.model.split(' ');
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -23,7 +25,7 @@ class TitleName extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  tool.category.name,
+                  nameWithModel[0],
                   style: theme.textTheme.headlineLarge,
                 ),
               ],
@@ -31,7 +33,7 @@ class TitleName extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  '${tool.brand.name}\t${tool.model}',
+                  '${tool.brand.name}\t${nameWithModel[1]}',
                   style: theme.textTheme.headlineLarge,
                 ),
               ],

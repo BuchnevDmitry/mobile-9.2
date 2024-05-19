@@ -1,10 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:rentool/features/home/bloc/home_bloc.dart';
+import 'package:rentool/features/home/home.dart';
 import 'package:rentool/router/router.dart';
 
 @RoutePage()
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
   });
@@ -12,14 +15,23 @@ class HomeScreen extends StatelessWidget {
   static const String homeIcon =
       'assets/icons/home_FILL0_wght400_GRAD0_opsz48.svg';
 
-  void _openPage(int index, TabsRouter tabsRouter) {
-    tabsRouter.setActiveIndex(index);
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    BlocProvider.of<HomeBloc>(context).add(HomeBadgeOrderEvent());
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return AutoTabsRouter(
+        lazyLoad: false,
+        duration: const Duration(milliseconds: 0),
         routes: const [
           AdsFeedWrapperRoute(),
           CatalogWrapperRoute(),
@@ -41,14 +53,14 @@ class HomeScreen extends StatelessWidget {
               items: [
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    homeIcon,
+                    HomeScreen.homeIcon,
                     height: 24,
                     width: 24,
                     colorFilter:
                         ColorFilter.mode(theme.disabledColor, BlendMode.srcIn),
                   ),
                   activeIcon: SvgPicture.asset(
-                    homeIcon,
+                    HomeScreen.homeIcon,
                     height: 24,
                     width: 24,
                   ),
@@ -58,11 +70,21 @@ class HomeScreen extends StatelessWidget {
                   icon: Icon(Icons.manage_search_outlined),
                   label: 'Категории',
                 ),
-                const BottomNavigationBarItem(
-                  icon: Badge(
-                    isLabelVisible: true,
-                    backgroundColor: Color(0xfff7c815),
-                    child: Icon(Icons.local_mall_outlined),
+                BottomNavigationBarItem(
+                  icon: BlocBuilder<HomeBloc, HomeState>(
+                    builder: (context, state) {
+                      if (state is HomeOrderLoadedState) {
+                        final int count = state.count;
+                        return Badge(
+                          label: Text('$count'),
+                          largeSize: 14,
+                          textStyle: const TextStyle(fontSize: 12),
+                          backgroundColor: const Color(0xfff7c815),
+                          child: const Icon(Icons.local_mall_outlined),
+                        );
+                      }
+                      return const Icon(Icons.local_mall_outlined);
+                    },
                   ),
                   label: 'Корзина',
                 ),
@@ -74,5 +96,9 @@ class HomeScreen extends StatelessWidget {
             ),
           );
         });
+  }
+
+  void _openPage(int index, TabsRouter tabsRouter) {
+    tabsRouter.setActiveIndex(index);
   }
 }

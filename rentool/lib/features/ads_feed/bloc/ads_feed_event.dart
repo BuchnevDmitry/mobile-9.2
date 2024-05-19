@@ -6,7 +6,7 @@ sealed class AdsFeedEvent extends Equatable {
   const AdsFeedEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class AdsFeedLoadEvent extends AdsFeedEvent {
@@ -14,4 +14,20 @@ class AdsFeedLoadEvent extends AdsFeedEvent {
     this.completer,
   });
   final Completer? completer;
+
+  @override
+  List<Object?> get props => super.props..add(completer);
+}
+
+class AdsFeedToggleFavoriteToolEvent extends AdsFeedEvent {
+  const AdsFeedToggleFavoriteToolEvent({
+    required this.tool,
+    this.completer,
+  });
+
+  final Tool tool;
+  final Completer? completer;
+
+  @override
+  List<Object?> get props => super.props..addAll([tool, completer]);
 }

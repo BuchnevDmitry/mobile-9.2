@@ -11,7 +11,7 @@ class Brand extends Equatable {
     required this.name,
   });
 
-  final String id;
+  final int id;
   final String name;
 
   factory Brand.fromJson(Map<String, dynamic> json) => _$BrandFromJson(json);

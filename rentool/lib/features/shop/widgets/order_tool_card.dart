@@ -1,10 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentool/common/common.dart';
+import 'package:rentool/features/shop/bloc/bloc.dart';
+import 'package:rentool/features/shop/bloc/order_bloc.dart';
+import 'package:rentool/features/shop/shop.dart';
+import 'package:rentool/repositories/repositories.dart';
 
 class OrderToolCard extends StatefulWidget {
   const OrderToolCard({
     super.key,
+    required this.tool,
   });
+
+  final ToolOrder tool;
 
   @override
   State<OrderToolCard> createState() => _OrderToolCardState();
@@ -15,13 +25,15 @@ class _OrderToolCardState extends State<OrderToolCard> {
 
   @override
   void initState() {
-    counter = ValueNotifier<int>(1);
+    counter = ValueNotifier<int>(widget.tool.userCount);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final nameWithModel = widget.tool.model.split(' ');
+    log('$nameWithModel[0]');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: BaseRoundContainer(
@@ -33,8 +45,7 @@ class _OrderToolCardState extends State<OrderToolCard> {
                 width: 84,
                 height: 84,
                 child: ClipRect(
-                  child: Image.network(
-                      'https://cdn.vseinstrumenti.ru/images/goods/stroite…inki-shlifmashinki/11706644/204x184/152946974.jpg'),
+                  child: Image.network(widget.tool.imageUrl),
                 ),
               ),
             ),
@@ -44,7 +55,7 @@ class _OrderToolCardState extends State<OrderToolCard> {
                   Row(
                     children: [
                       Text(
-                        'Угловая шлифмашинка\nAEG WS13-125XE',
+                        '${nameWithModel[0]}\n${widget.tool.brand!.name} ${nameWithModel[1]}',
                         style: theme.textTheme.titleSmall,
                       ),
                     ],
@@ -52,7 +63,7 @@ class _OrderToolCardState extends State<OrderToolCard> {
                   Row(
                     children: [
                       Text(
-                        '450 р/день',
+                        '${widget.tool.priceDay} р/день',
                         style: theme.textTheme.titleLarge,
                       ),
                       const Spacer(),
@@ -70,9 +81,11 @@ class _OrderToolCardState extends State<OrderToolCard> {
                               GestureDetector(
                                 onTap: () => setState(
                                   () {
-                                    counter.value == 1
-                                        ? debugPrint('countet >= 1!')
-                                        : counter.value--;
+                                    if (counter.value <= 1) {
+                                      _removeTool(context);
+                                    } else {
+                                      _updateRemoveCount(context);
+                                    }
                                   },
                                 ),
                                 child: const Padding(
@@ -80,14 +93,16 @@ class _OrderToolCardState extends State<OrderToolCard> {
                                   child: Icon(Icons.remove),
                                 ),
                               ),
-                              Text('${counter.value}'),
+                              Text('${widget.tool.userCount}'),
                               GestureDetector(
                                 onTap: () {
                                   setState(
                                     () {
-                                      counter.value == 10
-                                          ? debugPrint('countet >= ${10}')
-                                          : counter.value++;
+                                      if (counter.value == widget.tool.count) {
+                                        log('countet >= ${widget.tool.count}');
+                                      } else {
+                                        _updateAddCount(context);
+                                      }
                                     },
                                   );
                                 },
@@ -109,5 +124,23 @@ class _OrderToolCardState extends State<OrderToolCard> {
         ),
       ),
     );
+  }
+
+  void _updateAddCount(BuildContext context) {
+    counter.value++;
+    BlocProvider.of<OrderBloc>(context)
+        .add(OrderAddEvent(tool: widget.tool.toTool(), count: counter.value));
+  }
+
+  void _updateRemoveCount(BuildContext context) {
+    counter.value--;
+    BlocProvider.of<OrderBloc>(context)
+        .add(OrderAddEvent(tool: widget.tool.toTool(), count: counter.value));
+  }
+
+  void _removeTool(BuildContext context) {
+    log('counter: ${counter.value}');
+    return BlocProvider.of<OrderBloc>(context)
+        .add(OrderRemoveToolEvent(tool: widget.tool));
   }
 }

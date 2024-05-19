@@ -6,10 +6,8 @@ class SearchAppBar extends StatefulWidget {
   const SearchAppBar({
     super.key,
     this.buttonBack = false,
-    this.favoriteIcon = false,
   });
 
-  final bool favoriteIcon;
   final bool buttonBack;
 
   @override
@@ -17,14 +15,9 @@ class SearchAppBar extends StatefulWidget {
 }
 
 class _SearchAppBarState extends State<SearchAppBar> {
-  bool isFavorite = false;
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    if (widget.buttonBack && widget.favoriteIcon) {
-      return _buildWithBackAndFavorite(context, theme);
-    }
     if (widget.buttonBack) {
       return _buildWithBack(context);
     } else {
@@ -69,54 +62,6 @@ class _SearchAppBarState extends State<SearchAppBar> {
                 child: SearchButton(
               withBackButton: true,
             ))
-          ],
-        ),
-      ),
-    );
-  }
-
-  SliverAppBar _buildWithBackAndFavorite(
-      BuildContext context, ThemeData theme) {
-    return SliverAppBar(
-      pinned: true,
-      surfaceTintColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      elevation: 0,
-      bottom: PreferredSize(
-        preferredSize: const Size.fromRadius(10),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 24),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  context.router.maybePop();
-                },
-              ),
-            ),
-            const Expanded(
-                child: SearchButton(
-              withBackButton: true,
-            )),
-            IconButton(
-              iconSize: 24,
-              onPressed: () {
-                setState(() => isFavorite = !isFavorite);
-              },
-              icon: const Icon(
-                Icons.favorite_outline,
-                color: Colors.black,
-              ),
-              selectedIcon: Icon(
-                Icons.favorite,
-                color: theme.primaryColor,
-              ),
-              isSelected: isFavorite,
-            ),
-            const SizedBox(
-              width: 24,
-            ),
           ],
         ),
       ),

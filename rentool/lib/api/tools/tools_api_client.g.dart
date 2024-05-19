@@ -32,7 +32,7 @@ class _ToolsApiClient implements ToolsApiClient {
     )
             .compose(
               _dio.options,
-              '/tools',
+              '/api/v1/tools/',
               queryParameters: queryParameters,
               data: _data,
             )
