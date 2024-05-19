@@ -32,7 +32,7 @@ class _CategoriesApiClient implements CategoriesApiClient {
     )
             .compose(
               _dio.options,
-              '/categories',
+              '/api/v1/categories/',
               queryParameters: queryParameters,
               data: _data,
             )

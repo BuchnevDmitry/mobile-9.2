@@ -16,6 +16,6 @@ abstract class ToolsApiClient {
     return ToolsApiClient(dio);
   }
 
-  @GET('/tools')
+  @GET('/api/v1/tools/')
   Future<Tools> getTools();
 }

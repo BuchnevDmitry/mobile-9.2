@@ -32,6 +32,8 @@ class _OrderToolCardState extends State<OrderToolCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final nameWithModel = widget.tool.model.split(' ');
+    log('$nameWithModel[0]');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: BaseRoundContainer(
@@ -53,7 +55,7 @@ class _OrderToolCardState extends State<OrderToolCard> {
                   Row(
                     children: [
                       Text(
-                        '${widget.tool.category!.name}\n${widget.tool.brand!.name} ${widget.tool.model}',
+                        '${nameWithModel[0]}\n${widget.tool.brand!.name} ${nameWithModel[1]}',
                         style: theme.textTheme.titleSmall,
                       ),
                     ],

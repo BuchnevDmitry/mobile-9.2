@@ -116,7 +116,7 @@ class _CardProductScreenState extends State<CardProductScreen> {
                     child: Row(
                       children: <Widget>[
                         Container(
-                          width: 160,
+                          width: 150,
                           height: 50,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
@@ -155,7 +155,7 @@ class _CardProductScreenState extends State<CardProductScreen> {
                         ),
                         const Spacer(),
                         SizedBox(
-                          width: 160,
+                          width: 150,
                           child: ButtonPrimary(
                             text: 'В корзину',
                             onPressed: () => _addToolToOrder(context),
