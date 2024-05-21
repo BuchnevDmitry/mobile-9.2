@@ -22,10 +22,12 @@ class _ShopScreenState extends State<ShopScreen> {
   static const String appBarTitle = 'Корзина';
   static const String textButton = 'К оформлению';
 
+  int sum = 0;
+
   @override
   void initState() {
-    BlocProvider.of<OrderBloc>(context).add(OrderLoadEvent());
     super.initState();
+    BlocProvider.of<OrderBloc>(context).add(OrderLoadEvent());
   }
 
   @override
@@ -83,19 +85,20 @@ class _ShopScreenState extends State<ShopScreen> {
                   return const SliverToBoxAdapter(child: SizedBox());
                 }
                 if (state is OrderLoadingState) {
-                  const LoadingCenterProgress();
+                  return const LoadingCenterProgress();
                 }
                 return SliverToBoxAdapter(
                     child: ButtonPrimary(
-                  text: textButton,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  onPressed: () async =>
-                      await context.router.push(const OrderPlaceRoute()),
-                ));
+                        text: textButton,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        onPressed: () async {
+                          _calcSum(state);
+                          await context.router.push(OrderPlaceRoute(sum: sum));
+                        }));
               },
             ),
           ),
@@ -103,6 +106,14 @@ class _ShopScreenState extends State<ShopScreen> {
         ],
       ),
     );
+  }
+
+  void _calcSum(OrderLoadedState state) {
+    final tools = state.order.tools;
+    sum = 0;
+    for (var tool in tools) {
+      sum += (tool.priceDay * tool.userCount);
+    }
   }
 
   void _handleBadgeCount(BuildContext context, OrderState state) {
