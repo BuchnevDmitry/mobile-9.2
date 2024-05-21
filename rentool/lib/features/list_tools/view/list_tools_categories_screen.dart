@@ -27,8 +27,9 @@ class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
 
   @override
   void initState() {
-    BlocProvider.of<ListToolsBloc>(context).add(const ListToolsLoadEvent());
     super.initState();
+    BlocProvider.of<ListToolsBloc>(context)
+        .add(ListToolsLoadEvent(category: widget.category.name));
   }
 
   @override
@@ -115,7 +116,10 @@ class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
   Future<void> _refreshScreen(BuildContext context) async {
     final listToolsBloc = BlocProvider.of<ListToolsBloc>(context);
     final completer = Completer();
-    listToolsBloc.add(ListToolsLoadEvent(completer: completer));
+    listToolsBloc.add(ListToolsLoadEvent(
+      completer: completer,
+      category: widget.category.name,
+    ));
     await completer.future;
   }
 
@@ -133,7 +137,9 @@ class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
   CustomScrollView _buildFailureContent(ThemeData theme, BuildContext context) {
     return CustomScrollView(
       slivers: <Widget>[
-        const SearchAppBar(),
+        const SearchAppBar(
+          buttonBack: true,
+        ),
         SliverFillRemaining(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 100),
@@ -153,7 +159,9 @@ class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
                   TextButton(
                     onPressed: () {
                       BlocProvider.of<ListToolsBloc>(context)
-                          .add(const ListToolsLoadEvent());
+                          .add(ListToolsLoadEvent(
+                        category: widget.category.name,
+                      ));
                     },
                     child: Text(
                       'Повторить',

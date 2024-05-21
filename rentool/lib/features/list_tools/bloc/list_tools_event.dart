@@ -10,11 +10,13 @@ sealed class ListToolsEvent extends Equatable {
 class ListToolsLoadEvent extends ListToolsEvent {
   const ListToolsLoadEvent({
     this.completer,
+    this.category = '',
   });
+  final String category;
   final Completer? completer;
 
   @override
-  List<Object?> get props => super.props..add(completer);
+  List<Object?> get props => super.props..addAll([completer, category]);
 }
 
 class ListToolsToggleFavoriteToolEvent extends ListToolsEvent {

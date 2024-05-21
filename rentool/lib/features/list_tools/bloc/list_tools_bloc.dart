@@ -28,10 +28,10 @@ class ListToolsBloc extends Bloc<ListToolsEvent, ListToolsState> {
     Emitter<ListToolsState> emit,
   ) async {
     try {
-      if (state is! ListToolsLoadedState) {
+      if (state is ListToolsLoadedState) {
         emit(ListToolsLoadingState());
       }
-      final tools = await _toolsApiClient.getTools();
+      final tools = await _toolsApiClient.getToolsByCategory(event.category);
       final favorites = _repository.getFavorites();
 
       emit(ListToolsLoadedState(tools: tools, favorites: favorites.tools));
