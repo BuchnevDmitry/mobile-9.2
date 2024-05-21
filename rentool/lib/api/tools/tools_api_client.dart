@@ -17,5 +17,17 @@ abstract class ToolsApiClient {
   }
 
   @GET('/api/v1/tools/')
-  Future<Tools> getTools();
+  Future<Tools> getTools({
+    @Query('page') int page = 0,
+    @Query('size') int size = 5,
+    @Query('sortParam') String sortParam = 'PRICE_ASC',
+  });
+
+  @GET('/api/v1/tools/search')
+  Future<Tools> getToolsByCategory(
+    @Query('category') String category, {
+    @Query('page') int page = 0,
+    @Query('size') int size = 35,
+    @Query('sortParam') String sortParam = 'PRICE_ASC',
+  });
 }
