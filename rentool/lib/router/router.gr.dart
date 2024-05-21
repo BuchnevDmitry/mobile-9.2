@@ -108,9 +108,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     OrderPlaceRoute.name: (routeData) {
+      final args = routeData.argsAs<OrderPlaceRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const OrderPlaceScreen(),
+        child: OrderPlaceScreen(
+          key: args.key,
+          sum: args.sum,
+        ),
       );
     },
     ShopRoute.name: (routeData) {
@@ -393,16 +397,40 @@ class OrderListRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [OrderPlaceScreen]
-class OrderPlaceRoute extends PageRouteInfo<void> {
-  const OrderPlaceRoute({List<PageRouteInfo>? children})
-      : super(
+class OrderPlaceRoute extends PageRouteInfo<OrderPlaceRouteArgs> {
+  OrderPlaceRoute({
+    Key? key,
+    required int sum,
+    List<PageRouteInfo>? children,
+  }) : super(
           OrderPlaceRoute.name,
+          args: OrderPlaceRouteArgs(
+            key: key,
+            sum: sum,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'OrderPlaceRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<OrderPlaceRouteArgs> page =
+      PageInfo<OrderPlaceRouteArgs>(name);
+}
+
+class OrderPlaceRouteArgs {
+  const OrderPlaceRouteArgs({
+    this.key,
+    required this.sum,
+  });
+
+  final Key? key;
+
+  final int sum;
+
+  @override
+  String toString() {
+    return 'OrderPlaceRouteArgs{key: $key, sum: $sum}';
+  }
 }
 
 /// generated route for
