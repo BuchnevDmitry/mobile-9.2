@@ -89,6 +89,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    ListToolsSearchRoute.name: (routeData) {
+      final args = routeData.argsAs<ListToolsSearchRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ListToolsSearchScreen(
+          key: args.key,
+          searchText: args.searchText,
+        ),
+      );
+    },
     MapDeliveryRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -350,6 +360,44 @@ class ListToolsCategoriesRouteArgs {
   @override
   String toString() {
     return 'ListToolsCategoriesRouteArgs{key: $key, category: $category}';
+  }
+}
+
+/// generated route for
+/// [ListToolsSearchScreen]
+class ListToolsSearchRoute extends PageRouteInfo<ListToolsSearchRouteArgs> {
+  ListToolsSearchRoute({
+    Key? key,
+    required String searchText,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ListToolsSearchRoute.name,
+          args: ListToolsSearchRouteArgs(
+            key: key,
+            searchText: searchText,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ListToolsSearchRoute';
+
+  static const PageInfo<ListToolsSearchRouteArgs> page =
+      PageInfo<ListToolsSearchRouteArgs>(name);
+}
+
+class ListToolsSearchRouteArgs {
+  const ListToolsSearchRouteArgs({
+    this.key,
+    required this.searchText,
+  });
+
+  final Key? key;
+
+  final String searchText;
+
+  @override
+  String toString() {
+    return 'ListToolsSearchRouteArgs{key: $key, searchText: $searchText}';
   }
 }
 

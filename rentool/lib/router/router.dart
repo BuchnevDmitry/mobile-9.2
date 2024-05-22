@@ -34,5 +34,6 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: MapDeliveryRoute.page, path: '/map_delivery'),
         AutoRoute(page: MapPickupRoute.page, path: '/map_pickup'),
         AutoRoute(page: ThanksRoute.page, path: '/thanks'),
+        AutoRoute(page: OrderPlaceRoute.page, path: '/order_place'),
       ];
 }

@@ -6,7 +6,8 @@ abstract class AdsFeedRoutes {
     page: AdsFeedWrapperRoute.page,
     children: [
       AutoRoute(page: AdsFeedRoute.page, initial: true, path: 'ads_feed/'),
-      AutoRoute(page: CardProductRoute.page, path: 'card_product'),
+      AutoRoute(page: CardProductRoute.page, path: 'card_product/'),
+      AutoRoute(page: ListToolsSearchRoute.page, path: 'search_tools/'),
     ],
   );
 }
