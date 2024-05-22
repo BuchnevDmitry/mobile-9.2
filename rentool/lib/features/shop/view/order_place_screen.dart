@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentool/common/common.dart';
+import 'package:rentool/features/map/map.dart';
 import 'package:rentool/features/shop/shop.dart';
 import 'package:rentool/features/shop/widgets/widgets.dart';
 import 'package:rentool/router/router.dart';
@@ -38,6 +39,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<OrderBloc>(context).add(OrderLoadEvent());
+    BlocProvider.of<MapBloc>(context).add(MapLoadAddressEvent());
     finalSum = widget.sum;
   }
 
@@ -50,7 +52,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
           _buildButtonAppBar(),
           const TitleHeader(text: 'Выбор даты'),
           _buildCalendar(),
-          const TitleHeader(text: 'Выбор времени'),
+          const TitleHeader(text: 'Время доставки'),
           _buildClockOptions(theme),
           const TitleHeader(text: 'Способ оплаты'),
           _buildChoicePayMethod(theme),
@@ -159,7 +161,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
                   controlAffinity: ListTileControlAffinity.trailing,
                   activeColor: Colors.black,
                   title: Text(
-                    '13:00-15:00',
+                    '13:00-18:00',
                     style: theme.textTheme.titleMedium,
                   ),
                   value: dateOptions[1],

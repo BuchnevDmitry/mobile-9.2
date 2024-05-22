@@ -10,11 +10,13 @@ import 'package:rentool/features/catalog/catalog.dart';
 import 'package:rentool/features/home/home.dart';
 import 'package:rentool/features/list_tools/list_tools.dart';
 import 'package:rentool/api/api.dart';
+import 'package:rentool/features/map/map.dart';
 import 'package:rentool/features/shop/shop.dart';
 import 'package:rentool/features/user/user.dart';
 import 'package:rentool/repositories/repositories.dart';
 import 'package:rentool/router/router.dart';
 import 'package:rentool/theme/theme.dart';
+import 'package:yandex_geocoder/yandex_geocoder.dart';
 
 class RenToolApp extends StatefulWidget {
   const RenToolApp({
@@ -33,10 +35,12 @@ class _RenToolAppState extends State<RenToolApp> {
   final _toolsApiClient = ToolsApiClient.create(apiUrl: dotenv.env['API_URL']);
   final _categoriesApiClient =
       CategoriesApiClient.create(apiUrl: dotenv.env['API_URL']);
+  final _geocoder = YandexGeocoder(apiKey: dotenv.env['GEOCODER_KEY']!);
 
   @override
   Widget build(BuildContext context) {
     final orderRepository = OrderRepository(realm: widget.realm);
+    final orderAddressRepository = OrderAddressRepository(realm: widget.realm);
     final favoriteRepository = FavoriteRepository(realm: widget.realm);
     return MultiBlocProvider(
       providers: [
@@ -67,9 +71,15 @@ class _RenToolAppState extends State<RenToolApp> {
             repository: favoriteRepository,
           ),
         ),
+        BlocProvider<MapBloc>(
+          create: (context) => MapBloc(
+            geocoder: _geocoder,
+            repository: orderAddressRepository,
+          ),
+        ),
         BlocProvider<OrderBloc>(
           create: (context) => OrderBloc(
-            repository: orderRepository,
+            orderRepository: orderRepository,
           ),
         ),
         BlocProvider<FavoritesBloc>(

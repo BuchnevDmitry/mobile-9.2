@@ -10,8 +10,8 @@ part 'order_event.dart';
 part 'order_state.dart';
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
-  OrderBloc({required OrderRepositoryInterface repository})
-      : _repository = repository,
+  OrderBloc({required OrderRepositoryInterface orderRepository})
+      : _orderRepository = orderRepository,
         super(OrderInitialState()) {
     on<OrderLoadEvent>(_onLoad);
     on<OrderClearEvent>(_clearOrder);
@@ -19,15 +19,14 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<OrderRemoveToolEvent>(_removeFromOrder);
   }
 
-  final OrderRepositoryInterface _repository;
-
+  final OrderRepositoryInterface _orderRepository;
   FutureOr<void> _onLoad(
     OrderLoadEvent event,
     Emitter<OrderState> emit,
   ) async {
     try {
       emit(OrderLoadingState());
-      final order = _repository.getOrder();
+      final order = _orderRepository.getOrder();
       order.tools.isEmpty
           ? emit(OrderEmptyState())
           : emit(OrderLoadedState(order: order));
@@ -41,7 +40,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     Emitter<OrderState> emit,
   ) async {
     try {
-      await _repository.clearOrder();
+      await _orderRepository.clearOrder();
       add(OrderLoadEvent());
     } catch (error) {
       log(error.toString());
@@ -54,7 +53,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   ) async {
     try {
       emit(OrderLoadingState());
-      await _repository.addToOrder(event.tool.toToolOrder(event.count));
+      await _orderRepository.addToOrder(event.tool.toToolOrder(event.count));
       add(OrderLoadEvent());
     } catch (error) {
       log(error.toString());
@@ -66,7 +65,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     Emitter<OrderState> emit,
   ) async {
     try {
-      await _repository.removeFromOrder(event.tool);
+      await _orderRepository.removeFromOrder(event.tool);
       add(OrderLoadEvent());
     } catch (error) {
       log(error.toString());
