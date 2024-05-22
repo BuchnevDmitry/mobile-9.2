@@ -19,9 +19,15 @@ class _CategoriesApiClient implements CategoriesApiClient {
   String? baseUrl;
 
   @override
-  Future<Categories> getCategories() async {
+  Future<Categories> getCategories({
+    int page = 0,
+    int size = 20,
+  }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'size': size,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio

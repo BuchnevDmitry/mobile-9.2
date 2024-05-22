@@ -23,7 +23,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) {
     try {
       final count = _repository.getOrder().tools.length;
-      log(count.toString());
       count > 0
           ? emit(HomeOrderLoadedState(count: count))
           : emit(HomeOrderEmptyState());

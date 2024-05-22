@@ -11,25 +11,29 @@ import 'package:rentool/api/api.dart';
 import 'package:rentool/features/user/user.dart';
 
 @RoutePage()
-class ListToolsCategoriesScreen extends StatefulWidget {
-  const ListToolsCategoriesScreen({super.key, required this.category});
+class ListToolsSearchScreen extends StatefulWidget {
+  const ListToolsSearchScreen({super.key, required this.searchText});
 
-  final Category category;
+  final String searchText;
 
   @override
-  State<ListToolsCategoriesScreen> createState() =>
+  State<ListToolsSearchScreen> createState() =>
       // ignore: no_logic_in_create_state
-      _ListToolsCategoriesScreenState();
+      _ListToolsSearchScreenState();
 }
 
-class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
-  _ListToolsCategoriesScreenState();
+class _ListToolsSearchScreenState extends State<ListToolsSearchScreen> {
+  _ListToolsSearchScreenState();
+
+  String currentTextSearch = '';
 
   @override
   void initState() {
     super.initState();
+    currentTextSearch = widget.searchText;
+
     BlocProvider.of<ListToolsBloc>(context)
-        .add(ListToolsLoadEvent(category: widget.category.name));
+        .add(ListToolsLoadEvent(category: widget.searchText));
   }
 
   @override
@@ -47,20 +51,58 @@ class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
               final tools = state.tools.tools;
               return CustomScrollView(
                 slivers: <Widget>[
-                  const SearchAppBar(
-                    buttonBack: true,
-                  ),
-                  const SliverToBoxAdapter(child: SizedBox(height: 22)),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Text(
-                        widget.category.name,
-                        style: theme.textTheme.displaySmall,
+                  SliverAppBar(
+                    pinned: true,
+                    surfaceTintColor: Colors.transparent,
+                    automaticallyImplyLeading: false,
+                    elevation: 0,
+                    bottom: PreferredSize(
+                      preferredSize: const Size.fromRadius(10),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 24),
+                            child: IconButton(
+                              icon: const Icon(Icons.arrow_back_ios),
+                              onPressed: () {
+                                context.router.maybePop();
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(
+                                  top: 12, bottom: 12, right: 24),
+                              padding: const EdgeInsets.all(12),
+                              decoration: const BoxDecoration(
+                                // ignore: use_full_hex_values_for_flutter_colors
+                                color: Color(0xffff3f4f5),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(60)),
+                              ),
+                              child: SizedBox(
+                                height: 24,
+                                child: TextField(
+                                  onSubmitted: _onLoad,
+                                  style: theme.textTheme.bodyMedium,
+                                  textInputAction: TextInputAction.search,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      prefixIcon: const InkWell(
+                                        child: Icon(Icons.search),
+                                      ),
+                                      hintText: currentTextSearch,
+                                      hintStyle: theme.textTheme.labelSmall),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
-                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 22)),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     sliver: SliverGrid(
@@ -118,7 +160,7 @@ class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
     final completer = Completer();
     listToolsBloc.add(ListToolsLoadEvent(
       completer: completer,
-      category: widget.category.name,
+      category: currentTextSearch,
     ));
     await completer.future;
   }
@@ -160,7 +202,7 @@ class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
                     onPressed: () {
                       BlocProvider.of<ListToolsBloc>(context)
                           .add(ListToolsLoadEvent(
-                        category: widget.category.name,
+                        category: currentTextSearch,
                       ));
                     },
                     child: Text(
@@ -176,5 +218,17 @@ class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
         ),
       ],
     );
+  }
+
+  Future<void> _onLoad(String searchText) async {
+    currentTextSearch = searchText;
+    final listToolsBloc = BlocProvider.of<ListToolsBloc>(context);
+
+    final completer = Completer();
+    listToolsBloc.add(ListToolsLoadEvent(
+      completer: completer,
+      category: currentTextSearch,
+    ));
+    await completer.future;
   }
 }

@@ -33,11 +33,11 @@ class _CardProductScreenState extends State<CardProductScreen> {
 
   @override
   void initState() {
+    super.initState();
     BlocProvider.of<CardProductBloc>(context)
         .add(CardProductLoadEvent(tool: widget.tool));
     showFullDescription = ValueNotifier<bool>(false);
     counter = ValueNotifier<int>(1);
-    super.initState();
   }
 
   @override
@@ -222,7 +222,7 @@ class _CardProductScreenState extends State<CardProductScreen> {
     return Column(
       children: [
         for (final line
-            in lines.sublist(0, showFullDescription.value ? lines.length : 6))
+            in lines.sublist(0, showFullDescription.value ? lines.length : 4))
           _parseDataLine(line, theme),
         const SizedBox(
           height: 8,

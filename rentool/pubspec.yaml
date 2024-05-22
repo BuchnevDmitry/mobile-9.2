@@ -35,6 +35,7 @@ dependencies:
   # Map
   yandex_mapkit: ^4.0.2
   geolocator: ^11.0.0
+  yandex_geocoder: ^2.3.1
 
   # Icons
   cupertino_icons: ^1.0.8
@@ -51,10 +52,9 @@ dev_dependencies:
   retrofit_generator: ^8.1.0
   json_serializable: ^6.7.1
 
+#-------------------------- LOCAL ASSETS --------------------------#
 flutter:
   uses-material-design: true
-
-  #-------------------------- LOCAL ASSETS --------------------------#
   assets:
     - assets/logos/
     - assets/images/

@@ -19,9 +19,17 @@ class _ToolsApiClient implements ToolsApiClient {
   String? baseUrl;
 
   @override
-  Future<Tools> getTools() async {
+  Future<Tools> getTools({
+    int page = 0,
+    int size = 5,
+    String sortParam = 'PRICE_ASC',
+  }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'size': size,
+      r'sortParam': sortParam,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result =
@@ -33,6 +41,43 @@ class _ToolsApiClient implements ToolsApiClient {
             .compose(
               _dio.options,
               '/api/v1/tools/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = Tools.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<Tools> getToolsByCategory(
+    String category, {
+    int page = 0,
+    int size = 35,
+    String sortParam = 'PRICE_ASC',
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'category': category,
+      r'page': page,
+      r'size': size,
+      r'sortParam': sortParam,
+    };
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Tools>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/api/v1/tools/search',
               queryParameters: queryParameters,
               data: _data,
             )

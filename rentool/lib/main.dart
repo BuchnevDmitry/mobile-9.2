@@ -20,6 +20,7 @@ Future<void> main() async {
     ToolFavorite.schema,
     BrandFavorite.schema,
     CategoryFavorite.schema,
+    OrderAddress.schema,
   ]);
   final realm = Realm(realmConfig);
 

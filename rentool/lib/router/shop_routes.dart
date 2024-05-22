@@ -6,7 +6,6 @@ abstract class ShopRoutes {
     page: ShopWrapperRoute.page,
     children: [
       AutoRoute(page: ShopRoute.page, initial: true, path: 'shop/'),
-      AutoRoute(page: OrderPlaceRoute.page, path: 'order_place/'),
     ],
   );
 }

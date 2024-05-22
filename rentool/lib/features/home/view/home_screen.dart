@@ -22,8 +22,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    BlocProvider.of<HomeBloc>(context).add(HomeBadgeOrderEvent());
     super.initState();
+    BlocProvider.of<HomeBloc>(context).add(HomeBadgeOrderEvent());
   }
 
   @override

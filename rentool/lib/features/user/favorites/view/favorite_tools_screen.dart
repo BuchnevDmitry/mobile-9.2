@@ -26,8 +26,8 @@ class FavoriteToolsScreen extends StatefulWidget {
 class _FavoriteToolsScreenState extends State<FavoriteToolsScreen> {
   @override
   void initState() {
-    BlocProvider.of<FavoritesBloc>(context).add(FavoritesLoadEvent());
     super.initState();
+    BlocProvider.of<FavoritesBloc>(context).add(FavoritesLoadEvent());
   }
 
   @override
@@ -84,7 +84,8 @@ class _FavoriteToolsScreenState extends State<FavoriteToolsScreen> {
         ToggleFavoriteToolEvent(tool: favorites[index], completer: completer));
     await completer.future;
     adsFeedBloc.add(const AdsFeedLoadEvent());
-    listToolsBloc.add(const ListToolsLoadEvent());
+    listToolsBloc
+        .add(ListToolsLoadEvent(category: favorites[index].category.name));
     cardProductBloc.add(CardProductLoadEvent(tool: favorites[index]));
   }
 }

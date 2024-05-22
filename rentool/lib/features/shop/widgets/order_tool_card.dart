@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentool/common/common.dart';
@@ -33,7 +31,6 @@ class _OrderToolCardState extends State<OrderToolCard> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final nameWithModel = widget.tool.model.split(' ');
-    log('$nameWithModel[0]');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: BaseRoundContainer(
@@ -98,9 +95,7 @@ class _OrderToolCardState extends State<OrderToolCard> {
                                 onTap: () {
                                   setState(
                                     () {
-                                      if (counter.value == widget.tool.count) {
-                                        log('countet >= ${widget.tool.count}');
-                                      } else {
+                                      if (counter.value < 3) {
                                         _updateAddCount(context);
                                       }
                                     },
@@ -139,7 +134,6 @@ class _OrderToolCardState extends State<OrderToolCard> {
   }
 
   void _removeTool(BuildContext context) {
-    log('counter: ${counter.value}');
     return BlocProvider.of<OrderBloc>(context)
         .add(OrderRemoveToolEvent(tool: widget.tool));
   }

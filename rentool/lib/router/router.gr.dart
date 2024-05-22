@@ -89,6 +89,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    ListToolsSearchRoute.name: (routeData) {
+      final args = routeData.argsAs<ListToolsSearchRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ListToolsSearchScreen(
+          key: args.key,
+          searchText: args.searchText,
+        ),
+      );
+    },
     MapDeliveryRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -108,9 +118,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     OrderPlaceRoute.name: (routeData) {
+      final args = routeData.argsAs<OrderPlaceRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const OrderPlaceScreen(),
+        child: OrderPlaceScreen(
+          key: args.key,
+          sum: args.sum,
+        ),
       );
     },
     ShopRoute.name: (routeData) {
@@ -350,6 +364,44 @@ class ListToolsCategoriesRouteArgs {
 }
 
 /// generated route for
+/// [ListToolsSearchScreen]
+class ListToolsSearchRoute extends PageRouteInfo<ListToolsSearchRouteArgs> {
+  ListToolsSearchRoute({
+    Key? key,
+    required String searchText,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ListToolsSearchRoute.name,
+          args: ListToolsSearchRouteArgs(
+            key: key,
+            searchText: searchText,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ListToolsSearchRoute';
+
+  static const PageInfo<ListToolsSearchRouteArgs> page =
+      PageInfo<ListToolsSearchRouteArgs>(name);
+}
+
+class ListToolsSearchRouteArgs {
+  const ListToolsSearchRouteArgs({
+    this.key,
+    required this.searchText,
+  });
+
+  final Key? key;
+
+  final String searchText;
+
+  @override
+  String toString() {
+    return 'ListToolsSearchRouteArgs{key: $key, searchText: $searchText}';
+  }
+}
+
+/// generated route for
 /// [MapDeliveryScreen]
 class MapDeliveryRoute extends PageRouteInfo<void> {
   const MapDeliveryRoute({List<PageRouteInfo>? children})
@@ -393,16 +445,40 @@ class OrderListRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [OrderPlaceScreen]
-class OrderPlaceRoute extends PageRouteInfo<void> {
-  const OrderPlaceRoute({List<PageRouteInfo>? children})
-      : super(
+class OrderPlaceRoute extends PageRouteInfo<OrderPlaceRouteArgs> {
+  OrderPlaceRoute({
+    Key? key,
+    required int sum,
+    List<PageRouteInfo>? children,
+  }) : super(
           OrderPlaceRoute.name,
+          args: OrderPlaceRouteArgs(
+            key: key,
+            sum: sum,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'OrderPlaceRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<OrderPlaceRouteArgs> page =
+      PageInfo<OrderPlaceRouteArgs>(name);
+}
+
+class OrderPlaceRouteArgs {
+  const OrderPlaceRouteArgs({
+    this.key,
+    required this.sum,
+  });
+
+  final Key? key;
+
+  final int sum;
+
+  @override
+  String toString() {
+    return 'OrderPlaceRouteArgs{key: $key, sum: $sum}';
+  }
 }
 
 /// generated route for

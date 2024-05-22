@@ -26,8 +26,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
   @override
   void initState() {
-    BlocProvider.of<CatalogBloc>(context).add(const CatalogLoadEvent());
     super.initState();
+    BlocProvider.of<CatalogBloc>(context).add(const CatalogLoadEvent());
   }
 
   @override

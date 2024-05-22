@@ -27,10 +27,8 @@ class OrderRepository implements OrderRepositoryInterface {
 
       toolExisting != null
           ? realm.write(() {
-              log('Объект на удаление: $toolExisting');
               realm.delete<ToolOrder>(toolExisting);
               final order = getOrder();
-              log('Объект на обновление: $tool');
               order.tools.add(tool);
             })
           : realm.write(() {

@@ -17,5 +17,8 @@ abstract class CategoriesApiClient {
   }
 
   @GET('/api/v1/categories/')
-  Future<Categories> getCategories();
+  Future<Categories> getCategories({
+    @Query('page') int page = 0,
+    @Query('size') int size = 20,
+  });
 }
