@@ -14,9 +14,21 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
         super(FavoritesInitialState()) {
     on<FavoritesLoadEvent>(_onLoad);
     on<ToggleFavoriteToolEvent>(_onToggleFavorite);
+    on<FavoritesClearEvent>(_onClear);
   }
 
   final FavoriteRepositoryInterface _repository;
+
+  FutureOr<void> _onClear(
+    FavoritesClearEvent event,
+    Emitter<FavoritesState> emit,
+  ) async {
+    try {
+      await _repository.clearFavorites();
+    } catch (error) {
+      emit(FavoritesLoadingFailureState(error: error));
+    }
+  }
 
   FutureOr<void> _onLoad(
     FavoritesLoadEvent event,

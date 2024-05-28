@@ -10,6 +10,8 @@ sealed class FavoritesEvent extends Equatable {
 
 final class FavoritesLoadEvent extends FavoritesEvent {}
 
+final class FavoritesClearEvent extends FavoritesEvent {}
+
 class ToggleFavoriteToolEvent extends FavoritesEvent {
   const ToggleFavoriteToolEvent({
     required this.tool,

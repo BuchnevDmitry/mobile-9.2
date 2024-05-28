@@ -1,10 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rentool/api/models/user.dart';
 import 'package:rentool/common/common.dart';
+import 'package:rentool/features/ads_feed/ads_feed.dart';
+import 'package:rentool/features/auth/auth.dart';
+import 'package:rentool/features/card_product/card_product.dart';
+import 'package:rentool/features/list_tools/list_tools.dart';
+import 'package:rentool/features/shop/shop.dart';
+import 'package:rentool/features/user/user.dart';
 import 'package:rentool/router/router.dart';
 
 @RoutePage()
-class UserScreen extends StatelessWidget {
+class UserScreen extends StatefulWidget {
   const UserScreen({
     super.key,
   });
@@ -15,8 +25,38 @@ class UserScreen extends StatelessWidget {
   static const String textExitButton = 'Выйти';
 
   @override
+  State<UserScreen> createState() => _UserScreenState();
+}
+
+class _UserScreenState extends State<UserScreen> {
+  @override
+  void initState() {
+    BlocProvider.of<UserBloc>(context).add(const UserLoadEvent());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    return BlocListener<UserBloc, UserState>(
+      listener: (context, state) {
+        if (state is UserLoadingFailureState) {
+          _refreshToken(context);
+        }
+      },
+      child: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+          if (state is UserLoadedState) {
+            final user = state.user;
+            return _buildContent(user, theme, context);
+          }
+          return _buildLoading(theme);
+        },
+      ),
+    );
+  }
+
+  Scaffold _buildContent(User user, ThemeData theme, BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -26,7 +66,7 @@ class UserScreen extends StatelessWidget {
             Row(
               children: <Widget>[
                 Text(
-                  'Васильев Василий',
+                  '${user.firstName} ${user.lastName}',
                   style: theme.textTheme.displayLarge,
                 ),
               ],
@@ -35,14 +75,14 @@ class UserScreen extends StatelessWidget {
             Row(
               children: <Widget>[
                 Text(
-                  '+7 999 999-99-99',
+                  '${user.phone}',
                   style: theme.textTheme.labelMedium,
                 ),
               ],
             ),
             const SizedBox(height: 40),
             ButtonPrimary(
-              text: textActiveButton,
+              text: UserScreen.textActiveButton,
               style: const TextStyle(
                 fontSize: 14,
                 color: Colors.black,
@@ -53,7 +93,7 @@ class UserScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             ButtonSecondary(
-                text: textFavoriteButton,
+                text: UserScreen.textFavoriteButton,
                 style: const TextStyle(
                   fontSize: 14,
                   color: Colors.black,
@@ -64,15 +104,23 @@ class UserScreen extends StatelessWidget {
             const SizedBox(height: 40),
             Row(children: [
               TapString(
-                  text: textTapHistory,
+                  text: UserScreen.textTapHistory,
                   onTap: () async =>
                       await context.router.push(const HistoryOrdersRoute()))
             ]),
             const SizedBox(height: 16),
             const Spacer(),
             ButtonPrimary(
-              text: textExitButton,
+              text: UserScreen.textExitButton,
               onPressed: () async {
+                final authBloc = BlocProvider.of<AuthBloc>(context);
+                final orderBloc = BlocProvider.of<OrderBloc>(context);
+                final favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
+
+                authBloc.add(AuthLogoutEvent());
+                orderBloc.add(OrderClearEvent());
+                favoritesBloc.add(FavoritesClearEvent());
+
                 await context.router.pushAndPopUntil(const HomeRoute(),
                     predicate: (_) => false);
               },
@@ -87,5 +135,22 @@ class UserScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Scaffold _buildLoading(ThemeData theme) {
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(
+          color: theme.primaryColor,
+        ),
+      ),
+    );
+  }
+
+  void _refreshToken(BuildContext context) {
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+    final userBloc = BlocProvider.of<UserBloc>(context);
+    authBloc.add(AuthRefreshEvent());
+    userBloc.add(const UserLoadEvent());
   }
 }
