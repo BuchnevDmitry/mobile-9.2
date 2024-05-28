@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/features/ads_feed/ads_feed.dart';
+import 'package:rentool/features/auth/auth.dart';
 import 'package:rentool/features/card_product/view/view.dart';
 import 'package:rentool/features/catalog/catalog.dart';
 import 'package:rentool/features/home/home.dart';
@@ -31,9 +32,24 @@ class AppRouter extends _$AppRouter {
             UserRoutes.routes,
           ],
         ),
-        AutoRoute(page: MapDeliveryRoute.page, path: '/map_delivery'),
+        AutoRoute(
+          page: MapDeliveryRoute.page,
+          path: '/map_delivery',
+          guards: [AuthGuard()],
+        ),
         AutoRoute(page: MapPickupRoute.page, path: '/map_pickup'),
-        AutoRoute(page: ThanksRoute.page, path: '/thanks'),
-        AutoRoute(page: OrderPlaceRoute.page, path: '/order_place'),
+        AutoRoute(
+          page: ThanksRoute.page,
+          path: '/thanks',
+          guards: [AuthGuard()],
+        ),
+        AutoRoute(
+          page: OrderPlaceRoute.page,
+          path: '/order_place',
+          guards: [AuthGuard()],
+        ),
+        AutoRoute(page: GuardRoute.page, path: '/guard'),
+        AutoRoute(page: AuthRoute.page, path: '/auth'),
+        AutoRoute(page: RegisterRoute.page, path: '/reg'),
       ];
 }

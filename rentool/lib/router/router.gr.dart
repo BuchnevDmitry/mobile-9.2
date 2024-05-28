@@ -33,6 +33,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(child: const AdsFeedWrapperScreen()),
       );
     },
+    AuthRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const AuthScreen(),
+      );
+    },
     CardProductRoute.name: (routeData) {
       final args = routeData.argsAs<CardProductRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -59,6 +65,12 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const FavoriteToolsScreen(),
+      );
+    },
+    GuardRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const GuardScreen(),
       );
     },
     HistoryOrdersRoute.name: (routeData) {
@@ -125,6 +137,12 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           sum: args.sum,
         ),
+      );
+    },
+    RegisterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const RegisterScreen(),
       );
     },
     ShopRoute.name: (routeData) {
@@ -198,6 +216,20 @@ class AdsFeedWrapperRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'AdsFeedWrapperRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [AuthScreen]
+class AuthRoute extends PageRouteInfo<void> {
+  const AuthRoute({List<PageRouteInfo>? children})
+      : super(
+          AuthRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AuthRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -278,6 +310,20 @@ class FavoriteToolsRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'FavoriteToolsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [GuardScreen]
+class GuardRoute extends PageRouteInfo<void> {
+  const GuardRoute({List<PageRouteInfo>? children})
+      : super(
+          GuardRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'GuardRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -479,6 +525,20 @@ class OrderPlaceRouteArgs {
   String toString() {
     return 'OrderPlaceRouteArgs{key: $key, sum: $sum}';
   }
+}
+
+/// generated route for
+/// [RegisterScreen]
+class RegisterRoute extends PageRouteInfo<void> {
+  const RegisterRoute({List<PageRouteInfo>? children})
+      : super(
+          RegisterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RegisterRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
