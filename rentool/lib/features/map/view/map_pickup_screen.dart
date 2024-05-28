@@ -124,31 +124,43 @@ class _ModalBodyViewState extends State<_ModalBodyView> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Text(
-                'Пункт самовывоза',
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                ),
+              const Row(
+                children: [
+                  Text(
+                    'Пункт самовывоза',
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Адрес',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Color(0xfffaaaaaa),
-                  fontWeight: FontWeight.w400,
-                ),
+              const Row(
+                children: [
+                  Text(
+                    'Адрес',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xfffaaaaaa),
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
-              Text(
-                widget.point.address,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                ),
+              Row(
+                children: [
+                  Text(
+                    widget.point.address,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 30),
               ButtonPrimary(

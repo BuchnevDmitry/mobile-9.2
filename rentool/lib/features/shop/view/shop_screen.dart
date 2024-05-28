@@ -69,7 +69,7 @@ class _ShopScreenState extends State<ShopScreen> {
             sliver: BlocBuilder<OrderBloc, OrderState>(
               builder: (context, state) {
                 if (state is! OrderLoadedState) {
-                  return const SliverToBoxAdapter(child: SizedBox());
+                  return _buildEmty(theme);
                 }
                 final order = state.order;
                 return OrderTools(order: order);
@@ -104,6 +104,17 @@ class _ShopScreenState extends State<ShopScreen> {
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 30)),
         ],
+      ),
+    );
+  }
+
+  SliverFillRemaining _buildEmty(ThemeData theme) {
+    return SliverFillRemaining(
+      child: Center(
+        child: Text(
+          'Корзина пуста',
+          style: theme.textTheme.labelMedium,
+        ),
       ),
     );
   }

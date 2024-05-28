@@ -5,7 +5,11 @@ abstract class ShopRoutes {
   static final routes = AutoRoute(
     page: ShopWrapperRoute.page,
     children: [
-      AutoRoute(page: ShopRoute.page, initial: true, path: 'shop/'),
+      AutoRoute(
+        page: ShopRoute.page,
+        initial: true,
+        path: 'shop/',
+      ),
     ],
   );
 }

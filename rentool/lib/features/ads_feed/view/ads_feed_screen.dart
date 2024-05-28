@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +8,12 @@ import 'package:rentool/common/common.dart';
 import 'package:rentool/features/ads_feed/bloc/ads_feed_bloc.dart';
 import 'package:rentool/features/ads_feed/bloc/bloc.dart';
 import 'package:rentool/features/ads_feed/widgets/widgets.dart';
+import 'package:rentool/features/auth/auth.dart';
 import 'package:rentool/features/card_product/bloc/bloc.dart';
 import 'package:rentool/features/card_product/card_product.dart';
 import 'package:rentool/features/list_tools/list_tools.dart';
 import 'package:rentool/features/user/user.dart';
+import 'package:rentool/router/router.dart';
 
 @RoutePage()
 class AdsFeedScreen extends StatefulWidget {
@@ -38,14 +39,6 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
 
   final _scrollController = ScrollController();
 
-  final HashMap<String, Tool> _recordsMap = HashMap();
-  List<Tool> _records = [];
-
-  int currentPage = 1;
-  int pageSize = 0;
-  bool hasMore = true;
-  final int limitPage = 5;
-
   @override
   void initState() {
     super.initState();
@@ -68,21 +61,7 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
         _refresh(context);
       },
       child: BlocListener<AdsFeedBloc, AdsFeedState>(
-        listener: (context, state) {
-          if (state is AdsFeedLoadedState) {
-            for (final tool in state.tools.tools) {
-              _recordsMap.putIfAbsent(tool.id, () => tool);
-            }
-            pageSize = state.tools.size;
-            _records = _recordsMap.values.toList();
-
-            if (pageSize < limitPage) {
-              setState(() {
-                hasMore = false;
-              });
-            }
-          }
-        },
+        listener: (context, state) {},
         child: BlocBuilder<AdsFeedBloc, AdsFeedState>(
           builder: (context, state) {
             if (state is AdsFeedLoadedState) {
@@ -99,11 +78,6 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
   }
 
   Future<void> _refresh(BuildContext context) async {
-    setState(() {
-      currentPage = 0;
-      hasMore = true;
-      _recordsMap.clear();
-    });
     final completer = Completer();
     BlocProvider.of<AdsFeedBloc>(context)
         .add(AdsFeedLoadEvent(completer: completer));
@@ -112,13 +86,7 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
 
   void _onScroll() {
     if (_isBottom) {
-      if (hasMore) {
-        setState(() {
-          currentPage++;
-        });
-
-        context.read<AdsFeedBloc>().add(AdsFeedLoadEvent(page: currentPage));
-      }
+      context.read<AdsFeedBloc>().add(const AdsFeedLoadEvent());
     }
   }
 
@@ -156,9 +124,9 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           sliver: SliverGrid(
-            delegate: SliverChildBuilderDelegate(childCount: _records.length,
-                (context, index) {
-              final tool = _records[index];
+            delegate: SliverChildBuilderDelegate(
+                childCount: state.tools.tools.length, (context, index) {
+              final tool = state.tools.tools[index];
               final bool isFavorite = state.isFavorite(tool.id);
               return ToolCard(
                 isFavorite: isFavorite,
@@ -179,22 +147,26 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
 
   Future<void> _toggleFavorite(BuildContext context, Tool tool,
       AdsFeedLoadedState state, int index) async {
-    final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
-    final favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
-    final listToolsBloc = BlocProvider.of<ListToolsBloc>(context);
-    final cardProductBloc = BlocProvider.of<CardProductBloc>(context);
-
     final completer = Completer();
 
-    adsFeedBloc.add(AdsFeedToggleFavoriteToolEvent(
-      tool: tool,
-      completer: completer,
-    ));
+    if (isAuthorized) {
+      final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
+      final favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
+      final listToolsBloc = BlocProvider.of<ListToolsBloc>(context);
+      final cardProductBloc = BlocProvider.of<CardProductBloc>(context);
 
-    await completer.future;
-    favoritesBloc.add(FavoritesLoadEvent());
-    cardProductBloc.add(CardProductLoadEvent(tool: tool));
-    listToolsBloc.add(const ListToolsLoadEvent());
+      adsFeedBloc.add(AdsFeedToggleFavoriteToolEvent(
+        tool: tool,
+        completer: completer,
+      ));
+
+      await completer.future;
+      favoritesBloc.add(FavoritesLoadEvent());
+      cardProductBloc.add(CardProductLoadEvent(tool: tool));
+      listToolsBloc.add(const ListToolsLoadEvent());
+    } else {
+      context.router.push(const GuardRoute());
+    }
   }
 
   CustomScrollView _buildLoadingProgress() {

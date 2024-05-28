@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:realm/realm.dart';
 
 import 'package:rentool/features/ads_feed/ads_feed.dart';
+import 'package:rentool/features/auth/auth.dart';
 import 'package:rentool/features/card_product/card_product.dart';
 import 'package:rentool/features/catalog/catalog.dart';
 import 'package:rentool/features/home/home.dart';
@@ -31,11 +33,26 @@ class RenToolApp extends StatefulWidget {
 }
 
 class _RenToolAppState extends State<RenToolApp> {
-  final _router = AppRouter();
-  final _toolsApiClient = ToolsApiClient.create(apiUrl: dotenv.env['API_URL']);
-  final _categoriesApiClient =
-      CategoriesApiClient.create(apiUrl: dotenv.env['API_URL']);
-  final _geocoder = YandexGeocoder(apiKey: dotenv.env['GEOCODER_KEY']!);
+  late final FlutterSecureStorage storage;
+  late final ToolsApiClient _toolsApiClient;
+  late final UsersApiClient _usersApiClient;
+  late final AuthClient _authClient;
+  late final CategoriesApiClient _categoriesApiClient;
+  late final YandexGeocoder _geocoder;
+  late final AppRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    storage = const FlutterSecureStorage();
+    _toolsApiClient = ToolsApiClient.create(apiUrl: dotenv.env['API_URL']);
+    _usersApiClient = UsersApiClient.create(apiUrl: dotenv.env['API_URL']);
+    _authClient = AuthClient.create(apiUrl: dotenv.env['AUTH_URL']);
+    _categoriesApiClient =
+        CategoriesApiClient.create(apiUrl: dotenv.env['API_URL']);
+    _geocoder = YandexGeocoder(apiKey: dotenv.env['GEOCODER_KEY']!);
+    _router = AppRouter();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +65,16 @@ class _RenToolAppState extends State<RenToolApp> {
           create: (context) => AdsFeedBloc(
             toolApiClient: _toolsApiClient,
             repository: favoriteRepository,
+          ),
+        ),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(
+            storage: storage,
+            usersApiClient: _usersApiClient,
+            authClient: _authClient,
+            clientId: dotenv.env['CLIENT_ID'],
+            clientSecret: dotenv.env['CLIENT_SECRET'],
+            grantType: dotenv.env['GRANT_TYPE'],
           ),
         ),
         BlocProvider<CardProductBloc>(
@@ -85,6 +112,12 @@ class _RenToolAppState extends State<RenToolApp> {
         BlocProvider<FavoritesBloc>(
           create: (context) => FavoritesBloc(
             repository: favoriteRepository,
+          ),
+        ),
+        BlocProvider<UserBloc>(
+          create: (context) => UserBloc(
+            usersApiClient: _usersApiClient,
+            storage: storage,
           ),
         ),
       ],

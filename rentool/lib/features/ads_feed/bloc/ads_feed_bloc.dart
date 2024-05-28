@@ -31,7 +31,7 @@ class AdsFeedBloc extends Bloc<AdsFeedEvent, AdsFeedState> {
       if (state is! AdsFeedLoadedState) {
         emit(AdsFeedLoadingState());
       }
-      final tools = await _toolApiClient.getTools(page: event.page);
+      final tools = await _toolApiClient.getTools();
       final favorites = _repository.getFavorites();
       emit(AdsFeedLoadedState(
         tools: tools,

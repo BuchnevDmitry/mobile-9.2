@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentool/api/api.dart';
 import 'package:rentool/common/common.dart';
 import 'package:rentool/features/ads_feed/ads_feed.dart';
+import 'package:rentool/features/auth/auth.dart';
 import 'package:rentool/features/card_product/card_product.dart';
 import 'package:rentool/features/card_product/widgets/widgets.dart';
 import 'package:rentool/features/home/home.dart';
@@ -16,6 +17,7 @@ import 'package:rentool/features/shop/bloc/bloc.dart';
 import 'package:rentool/features/shop/bloc/order_bloc.dart';
 import 'package:rentool/features/shop/shop.dart';
 import 'package:rentool/features/user/favorites/favorites.dart';
+import 'package:rentool/router/router.dart';
 
 @RoutePage()
 class CardProductScreen extends StatefulWidget {
@@ -184,22 +186,25 @@ class _CardProductScreenState extends State<CardProductScreen> {
     BuildContext context,
     Tool tool,
   ) async {
-    final cardProductBloc = BlocProvider.of<CardProductBloc>(context);
-    final listToolsBloc = BlocProvider.of<ListToolsBloc>(context);
-    final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
-    final favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
-
     final completer = Completer();
+    if (isAuthorized) {
+      final cardProductBloc = BlocProvider.of<CardProductBloc>(context);
+      final listToolsBloc = BlocProvider.of<ListToolsBloc>(context);
+      final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
+      final favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
 
-    cardProductBloc.add(CardProductToggleFavoriteToolEvent(
-      tool: tool,
-      completer: completer,
-    ));
+      cardProductBloc.add(CardProductToggleFavoriteToolEvent(
+        tool: tool,
+        completer: completer,
+      ));
 
-    await completer.future;
-    favoritesBloc.add(FavoritesLoadEvent());
-    listToolsBloc.add(const ListToolsLoadEvent());
-    adsFeedBloc.add(const AdsFeedLoadEvent());
+      await completer.future;
+      favoritesBloc.add(FavoritesLoadEvent());
+      listToolsBloc.add(const ListToolsLoadEvent());
+      adsFeedBloc.add(const AdsFeedLoadEvent());
+    } else {
+      context.router.push(const GuardRoute());
+    }
   }
 
   CustomScrollView _buildLoadingProgress() {
