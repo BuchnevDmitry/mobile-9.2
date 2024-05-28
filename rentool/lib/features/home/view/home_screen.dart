@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:rentool/features/auth/auth.dart';
+import 'package:rentool/features/auth/bloc/auth_bloc.dart';
 import 'package:rentool/features/home/bloc/home_bloc.dart';
 import 'package:rentool/features/home/home.dart';
 import 'package:rentool/router/router.dart';
@@ -24,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<HomeBloc>(context).add(HomeBadgeOrderEvent());
+    BlocProvider.of<AuthBloc>(context).add(AuthCheckLoginInAppEvent());
   }
 
   @override
@@ -99,6 +102,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _openPage(int index, TabsRouter tabsRouter) {
-    tabsRouter.setActiveIndex(index);
+    if (index == 3) {
+      if (isAuthorized) {
+        tabsRouter.setActiveIndex(index);
+      } else {
+        context.router.push(const GuardRoute());
+      }
+    } else {
+      tabsRouter.setActiveIndex(index);
+    }
   }
 }
