@@ -124,9 +124,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     OrderListRoute.name: (routeData) {
+      final args = routeData.argsAs<OrderListRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const OrderListScreen(),
+        child: OrderListScreen(
+          key: args.key,
+          rent: args.rent,
+        ),
       );
     },
     OrderPlaceRoute.name: (routeData) {
@@ -477,16 +481,40 @@ class MapPickupRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [OrderListScreen]
-class OrderListRoute extends PageRouteInfo<void> {
-  const OrderListRoute({List<PageRouteInfo>? children})
-      : super(
+class OrderListRoute extends PageRouteInfo<OrderListRouteArgs> {
+  OrderListRoute({
+    Key? key,
+    required Rent rent,
+    List<PageRouteInfo>? children,
+  }) : super(
           OrderListRoute.name,
+          args: OrderListRouteArgs(
+            key: key,
+            rent: rent,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'OrderListRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<OrderListRouteArgs> page =
+      PageInfo<OrderListRouteArgs>(name);
+}
+
+class OrderListRouteArgs {
+  const OrderListRouteArgs({
+    this.key,
+    required this.rent,
+  });
+
+  final Key? key;
+
+  final Rent rent;
+
+  @override
+  String toString() {
+    return 'OrderListRouteArgs{key: $key, rent: $rent}';
+  }
 }
 
 /// generated route for
