@@ -20,7 +20,7 @@ class MapPoint extends Equatable {
   @override
   List<Object?> get props => [address, latitude, longitude];
 
-  OrderAddress toOrderAddress(String type) => OrderAddress(
+  OrderAddress toOrderAddress(int type) => OrderAddress(
         '0',
         type,
         address,

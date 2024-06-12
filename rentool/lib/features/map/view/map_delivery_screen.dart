@@ -72,13 +72,12 @@ class _MapDeliveryScreenState extends State<MapDeliveryScreen> {
               },
               mapObjects: mapObjects,
             );
-          } else {
-            return YandexMap(
-              onMapCreated: (controller) {
-                _mapControllerCompleter.complete(controller);
-              },
-            );
           }
+          return YandexMap(
+            onMapCreated: (controller) {
+              _mapControllerCompleter.complete(controller);
+            },
+          );
         },
       ),
     );
@@ -204,7 +203,7 @@ class _ModalBodyViewState extends State<_ModalBodyView> {
 
     mapBloc.add(MapAddAddressEvent(
       point: widget.point,
-      type: 'Доставка',
+      type: 1,
       completer: completer,
     ));
     await completer.future;
