@@ -7,7 +7,7 @@ class _OrderAddress {
   @PrimaryKey()
   late String id;
 
-  late String type;
+  late int type;
 
   late String address;
 
