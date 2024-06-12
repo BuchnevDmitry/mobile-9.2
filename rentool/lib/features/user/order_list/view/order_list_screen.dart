@@ -1,30 +1,27 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rentool/api/api.dart';
 import 'package:rentool/common/common.dart';
 import 'package:rentool/features/user/user.dart';
 
 @RoutePage()
-class ActiveOrdersScreen extends StatefulWidget {
-  const ActiveOrdersScreen({
-    super.key,
-  });
+class OrderListScreen extends StatefulWidget {
+  const OrderListScreen({super.key, required Rent rent}) : _rent = rent;
 
-  static const String title = 'Активные заказы';
-  static const String errorMessage = 'Что-то пошло не так...';
-  static const String answerMessage = 'Пожалуйста, повторите попытку позже';
-  static const String textButtonMessage = 'Повторить';
+  final Rent _rent;
+  static const String title = 'Состав заказа';
 
   @override
-  State<ActiveOrdersScreen> createState() => _ActiveOrdersScreenState();
+  State<OrderListScreen> createState() => _OrderListScreenState();
 }
 
-class _ActiveOrdersScreenState extends State<ActiveOrdersScreen> {
+class _OrderListScreenState extends State<OrderListScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ActiveOrdersBloc>(context)
-        .add(const ActiveOrdersLoadEvent());
+    BlocProvider.of<OrderListBloc>(context)
+        .add(OrderListLoadEvent(rent: widget._rent));
   }
 
   @override
@@ -33,21 +30,21 @@ class _ActiveOrdersScreenState extends State<ActiveOrdersScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          const TitleAppBar(title: ActiveOrdersScreen.title),
-          BlocBuilder<ActiveOrdersBloc, ActiveOrdersState>(
-              builder: (context, state) {
-            if (state is ActiveOrdersLoadedState) {
-              final rents = state.rents;
-              return SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                sliver: ActiveOrderListCard(rents: rents),
-              );
-            }
-            if (state is ActiveOrdersLoadingFailureState) {
-              return _buildFailureContent(theme, context);
-            }
-            return const LoadingCenterProgress();
-          }),
+          const TitleAppBar(title: OrderListScreen.title),
+          BlocBuilder<OrderListBloc, OrderListState>(
+            builder: (context, state) {
+              if (state is OrderListLoadedState) {
+                return OrderList(
+                  tools: state.tools,
+                  rentTools: state.rentTools,
+                );
+              }
+              if (state is OrderListLoadingFailureState) {
+                return _buildFailureContent(theme, context);
+              }
+              return const LoadingCenterProgress();
+            },
+          ),
         ],
       ),
     );
@@ -73,8 +70,8 @@ class _ActiveOrdersScreenState extends State<ActiveOrdersScreen> {
               const SizedBox(height: 20),
               TextButton(
                 onPressed: () {
-                  BlocProvider.of<ActiveOrdersBloc>(context)
-                      .add(const ActiveOrdersLoadEvent());
+                  BlocProvider.of<OrderListBloc>(context)
+                      .add(OrderListLoadEvent(rent: widget._rent));
                 },
                 child: Text(
                   ActiveOrdersScreen.textButtonMessage,
