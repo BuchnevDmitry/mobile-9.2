@@ -23,6 +23,11 @@ abstract class ToolsApiClient {
     @Query('sortParam') String sortParam = 'PRICE_ASC',
   });
 
+  @GET('/api/v1/tools/{id}')
+  Future<Tool> getToolById(
+    @Path('id') String id,
+  );
+
   @GET('/api/v1/tools/search')
   Future<Tools> getToolsByCategory(
     @Query('category') String category, {

@@ -31,9 +31,9 @@ final class MapAddAddressEvent extends MapEvent {
   });
 
   final MapPoint point;
-  final String type;
+  final int type;
   final Completer? completer;
 
   @override
-  List<Object?> get props => super.props..addAll([point, completer]);
+  List<Object?> get props => super.props..addAll([point, type, completer]);
 }

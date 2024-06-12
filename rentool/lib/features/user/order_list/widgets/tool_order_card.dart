@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:rentool/api/api.dart';
 import 'package:rentool/common/common.dart';
 
 class ToolOrderCard extends StatelessWidget {
   const ToolOrderCard({
     super.key,
-  });
+    required Tool tool,
+    required int count,
+  })  : _tool = tool,
+        _count = count;
+
+  final Tool _tool;
+  final int _count;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final nameWithModel = _tool.model.split(' ');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: BaseRoundContainer(
@@ -20,8 +28,7 @@ class ToolOrderCard extends StatelessWidget {
                 width: 84,
                 height: 84,
                 child: ClipRect(
-                  child: Image.network(
-                      'https://cdn.vseinstrumenti.ru/images/goods/stroite…inki-shlifmashinki/11706644/204x184/152946974.jpg'),
+                  child: Image.network(_tool.imageUrl),
                 ),
               ),
             ),
@@ -31,7 +38,7 @@ class ToolOrderCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        'Угловая шлифмашинка\nAEG WS13-125XE',
+                        '${nameWithModel[0]}\n${nameWithModel[1]}',
                         style: theme.textTheme.titleSmall,
                       ),
                     ],
@@ -40,7 +47,7 @@ class ToolOrderCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '450 р/день',
+                        '${_tool.priceDay} р/день',
                         style: theme.textTheme.titleLarge,
                       ),
                       const Spacer(),
@@ -49,7 +56,7 @@ class ToolOrderCard extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 14,
                           backgroundColor: theme.primaryColor,
-                          child: const Text('1'),
+                          child: Text(_count.toString()),
                         ),
                       )
                     ],

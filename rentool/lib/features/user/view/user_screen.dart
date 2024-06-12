@@ -1,14 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentool/api/models/user.dart';
 import 'package:rentool/common/common.dart';
-import 'package:rentool/features/ads_feed/ads_feed.dart';
 import 'package:rentool/features/auth/auth.dart';
-import 'package:rentool/features/card_product/card_product.dart';
-import 'package:rentool/features/list_tools/list_tools.dart';
+
 import 'package:rentool/features/shop/shop.dart';
 import 'package:rentool/features/user/user.dart';
 import 'package:rentool/router/router.dart';

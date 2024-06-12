@@ -186,7 +186,7 @@ class _ModalBodyViewState extends State<_ModalBodyView> {
 
     mapBloc.add(MapAddAddressEvent(
       point: widget.point,
-      type: 'Самовывоз',
+      type: 2,
       completer: completer,
     ));
     await completer.future;

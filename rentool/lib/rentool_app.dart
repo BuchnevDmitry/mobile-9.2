@@ -35,6 +35,7 @@ class RenToolApp extends StatefulWidget {
 class _RenToolAppState extends State<RenToolApp> {
   late final FlutterSecureStorage storage;
   late final ToolsApiClient _toolsApiClient;
+  late final RentsApiClient _rentsApiClient;
   late final UsersApiClient _usersApiClient;
   late final AuthClient _authClient;
   late final CategoriesApiClient _categoriesApiClient;
@@ -46,6 +47,7 @@ class _RenToolAppState extends State<RenToolApp> {
     super.initState();
     storage = const FlutterSecureStorage();
     _toolsApiClient = ToolsApiClient.create(apiUrl: dotenv.env['API_URL']);
+    _rentsApiClient = RentsApiClient.create(apiUrl: dotenv.env['API_URL']);
     _usersApiClient = UsersApiClient.create(apiUrl: dotenv.env['API_URL']);
     _authClient = AuthClient.create(apiUrl: dotenv.env['AUTH_URL']);
     _categoriesApiClient =
@@ -77,6 +79,12 @@ class _RenToolAppState extends State<RenToolApp> {
             grantType: dotenv.env['GRANT_TYPE'],
           ),
         ),
+        BlocProvider<ActiveOrdersBloc>(
+          create: (context) => ActiveOrdersBloc(
+            rentsApiClient: _rentsApiClient,
+            storage: storage,
+          ),
+        ),
         BlocProvider<CardProductBloc>(
           create: (context) => CardProductBloc(
             repository: favoriteRepository,
@@ -90,6 +98,12 @@ class _RenToolAppState extends State<RenToolApp> {
         BlocProvider<HomeBloc>(
           create: (context) => HomeBloc(
             repository: orderRepository,
+          ),
+        ),
+        BlocProvider<HistoryOrdersBloc>(
+          create: (context) => HistoryOrdersBloc(
+            rentsApiClient: _rentsApiClient,
+            storage: storage,
           ),
         ),
         BlocProvider<ListToolsBloc>(
@@ -107,6 +121,13 @@ class _RenToolAppState extends State<RenToolApp> {
         BlocProvider<OrderBloc>(
           create: (context) => OrderBloc(
             orderRepository: orderRepository,
+            rentsApiClient: _rentsApiClient,
+            storage: storage,
+          ),
+        ),
+        BlocProvider<OrderListBloc>(
+          create: (context) => OrderListBloc(
+            toolsApiClient: _toolsApiClient,
           ),
         ),
         BlocProvider<FavoritesBloc>(

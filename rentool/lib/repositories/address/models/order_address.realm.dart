@@ -11,7 +11,7 @@ class OrderAddress extends _OrderAddress
     with RealmEntity, RealmObjectBase, RealmObject {
   OrderAddress(
     String id,
-    String type,
+    int type,
     String address,
   ) {
     RealmObjectBase.set(this, 'id', id);
@@ -27,9 +27,9 @@ class OrderAddress extends _OrderAddress
   set id(String value) => RealmObjectBase.set(this, 'id', value);
 
   @override
-  String get type => RealmObjectBase.get<String>(this, 'type') as String;
+  int get type => RealmObjectBase.get<int>(this, 'type') as int;
   @override
-  set type(String value) => RealmObjectBase.set(this, 'type', value);
+  set type(int value) => RealmObjectBase.set(this, 'type', value);
 
   @override
   String get address => RealmObjectBase.get<String>(this, 'address') as String;
@@ -78,7 +78,7 @@ class OrderAddress extends _OrderAddress
     register(_toEJson, _fromEJson);
     return SchemaObject(ObjectType.realmObject, OrderAddress, 'OrderAddress', [
       SchemaProperty('id', RealmPropertyType.string, primaryKey: true),
-      SchemaProperty('type', RealmPropertyType.string),
+      SchemaProperty('type', RealmPropertyType.int),
       SchemaProperty('address', RealmPropertyType.string),
     ]);
   }();

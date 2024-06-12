@@ -5,7 +5,7 @@ sealed class CatalogEvent extends Equatable {
   const CatalogEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class CatalogLoadEvent extends CatalogEvent {
@@ -13,4 +13,7 @@ class CatalogLoadEvent extends CatalogEvent {
     this.completer,
   });
   final Completer? completer;
+
+  @override
+  List<Object?> get props => super.props..add(completer);
 }

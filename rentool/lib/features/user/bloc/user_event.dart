@@ -15,5 +15,5 @@ class UserLoadEvent extends UserEvent {
   final Completer? completer;
 
   @override
-  List<Object?> get props => super.props..addAll([completer]);
+  List<Object?> get props => super.props..add(completer);
 }

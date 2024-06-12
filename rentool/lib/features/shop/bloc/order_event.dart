@@ -35,3 +35,35 @@ final class OrderRemoveToolEvent extends OrderEvent {
   @override
   List<Object> get props => super.props..add(tool);
 }
+
+final class OrderSendRentEvent extends OrderEvent {
+  const OrderSendRentEvent({
+    required this.startDate,
+    required this.endDate,
+    required this.price,
+    required this.receivingMethodId,
+    required this.timeReceivingId,
+    required this.address,
+    required this.completer,
+  });
+
+  final String startDate;
+  final String endDate;
+  final int price;
+  final int receivingMethodId;
+  final int timeReceivingId;
+  final String address;
+  final Completer completer;
+
+  @override
+  List<Object> get props => super.props
+    ..addAll([
+      startDate,
+      endDate,
+      price,
+      receivingMethodId,
+      timeReceivingId,
+      address,
+      completer,
+    ]);
+}

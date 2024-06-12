@@ -16,7 +16,7 @@ class AdsFeedLoadEvent extends AdsFeedEvent {
   final Completer? completer;
 
   @override
-  List<Object?> get props => super.props..addAll([completer]);
+  List<Object?> get props => super.props..add(completer);
 }
 
 class AdsFeedToggleFavoriteToolEvent extends AdsFeedEvent {
