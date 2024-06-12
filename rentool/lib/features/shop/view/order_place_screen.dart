@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentool/common/common.dart';
+import 'package:rentool/features/home/home.dart';
 import 'package:rentool/features/map/map.dart';
 import 'package:rentool/features/shop/shop.dart';
 import 'package:rentool/features/shop/widgets/widgets.dart';
@@ -21,8 +25,8 @@ class OrderPlaceScreen extends StatefulWidget {
   State<OrderPlaceScreen> createState() => _OrderPlaceScreenState();
 }
 
-List<int> dateOptions = [0, 1];
-List<String> paymentOptions = ['При получении'];
+List<int> dateOptions = [1, 2];
+List<int> paymentOptions = [1];
 
 class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
   final DateTime _today = DateTime.now();
@@ -33,7 +37,9 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
 
   int finalSum = 0;
   int currentDateOption = dateOptions[0];
-  String currentPaymentOption = paymentOptions[0];
+  int currentPaymentOption = paymentOptions[0];
+  String address = '';
+  int type = 0;
 
   @override
   void initState() {
@@ -47,20 +53,28 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          _buildButtonAppBar(),
-          const TitleHeader(text: 'Выбор даты'),
-          _buildCalendar(),
-          const TitleHeader(text: 'Время доставки'),
-          _buildClockOptions(theme),
-          const TitleHeader(text: 'Способ оплаты'),
-          _buildChoicePayMethod(theme),
-          _buildFinalResult(theme),
-          _buildButtonOrder(),
-          _buildButtonBack(context),
-          const SliverToBoxAdapter(child: SizedBox(height: 16)),
-        ],
+      body: BlocListener<MapBloc, MapState>(
+        listener: (context, state) {
+          if (state is MapLoadedAddressState) {
+            address = state.orderAdress.address;
+            type = state.orderAdress.type;
+          }
+        },
+        child: CustomScrollView(
+          slivers: <Widget>[
+            _buildButtonAppBar(),
+            const TitleHeader(text: 'Выбор даты'),
+            _buildCalendar(),
+            const TitleHeader(text: 'Время доставки'),
+            _buildClockOptions(theme),
+            const TitleHeader(text: 'Способ оплаты'),
+            _buildChoicePayMethod(theme),
+            _buildFinalResult(theme),
+            _buildButtonOrder(),
+            _buildButtonBack(context),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+          ],
+        ),
       ),
     );
   }
@@ -88,7 +102,24 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: ButtonPrimary(
             onPressed: () async {
-              await context.router.push(const ThanksRoute());
+              final orderBloc = BlocProvider.of<OrderBloc>(context);
+              final homeBloc = BlocProvider.of<HomeBloc>(context);
+
+              final completer = Completer();
+              final router = context.router;
+
+              orderBloc.add(OrderSendRentEvent(
+                startDate: _rangeStart!.toIso8601String(),
+                endDate: _rangeEnd!.toIso8601String(),
+                price: finalSum,
+                receivingMethodId: type,
+                timeReceivingId: currentDateOption,
+                address: address,
+                completer: completer,
+              ));
+              completer.future;
+              await router.push(const ThanksRoute());
+              homeBloc.add(HomeBadgeOrderEvent());
             },
             text: 'Заказать',
             style: const TextStyle(
@@ -199,7 +230,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
               ),
               value: paymentOptions[0],
               groupValue: currentPaymentOption,
-              onChanged: (String? value) {
+              onChanged: (int? value) {
                 setState(() {});
               },
             ),
