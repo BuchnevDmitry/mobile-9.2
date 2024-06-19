@@ -87,23 +87,35 @@ class _ShopScreenState extends State<ShopScreen> {
                 if (state is OrderLoadingState) {
                   return const LoadingCenterProgress();
                 }
-                return SliverToBoxAdapter(
-                    child: ButtonPrimary(
-                        text: textButton,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        onPressed: () async {
-                          _calcSum(state);
-                          await context.router.push(OrderPlaceRoute(sum: sum));
-                        }));
+                return const SliverToBoxAdapter(child: SizedBox());
               },
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 30)),
         ],
+      ),
+      bottomNavigationBar: BlocConsumer<OrderBloc, OrderState>(
+        listener: _handleBadgeCount,
+        builder: (context, state) {
+          if (state is OrderLoadedState && state is! OrderLoadingState) {
+            return Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: ButtonPrimary(
+                text: textButton,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+                onPressed: () async {
+                  _calcSum(state);
+                  await context.router.push(OrderPlaceRoute(sum: sum));
+                },
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
@@ -113,7 +125,7 @@ class _ShopScreenState extends State<ShopScreen> {
       child: Center(
         child: Text(
           'Корзина пуста',
-          style: theme.textTheme.labelMedium,
+          style: theme.textTheme.bodyMedium,
         ),
       ),
     );

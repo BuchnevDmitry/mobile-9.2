@@ -46,7 +46,8 @@ class ThanksScreen extends StatelessWidget {
             const Spacer(),
             ButtonPrimary(
               onPressed: () async {
-                await context.router.pushAndPopUntil(const HomeRoute(),
+                final route = context.router;
+                await route.pushAndPopUntil(const HomeRoute(),
                     predicate: (_) => false);
               },
               text: 'Вернуться на главную',

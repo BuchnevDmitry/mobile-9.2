@@ -47,7 +47,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         final order = OrderModel(
           startDate: event.startDate,
           endDate: event.endDate,
-          price: event.price,
           timeReceivingId: event.timeReceivingId,
           receivingMethodId: event.receivingMethodId,
           address: event.address,

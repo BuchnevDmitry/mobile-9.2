@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +24,6 @@ class OrderPlaceScreen extends StatefulWidget {
   State<OrderPlaceScreen> createState() => _OrderPlaceScreenState();
 }
 
-List<int> dateOptions = [1, 2];
-List<int> paymentOptions = [1];
-
 class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
   final DateTime _today = DateTime.now();
   DateTime _focusedDay = DateTime.now();
@@ -35,18 +31,20 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
-  int finalSum = 0;
-  int currentDateOption = dateOptions[0];
-  int currentPaymentOption = paymentOptions[0];
-  String address = '';
-  int type = 0;
+  int _finalSum = 0;
+
+  int _currentTimeReceving = TimeReceivings.morning.value;
+  final int _currentPayment = Payment.cash.value;
+
+  String _address = '';
+  int _method = ReceivingMethods.selfPickup.value;
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<OrderBloc>(context).add(OrderLoadEvent());
     BlocProvider.of<MapBloc>(context).add(MapLoadAddressEvent());
-    finalSum = widget.sum;
+    _finalSum = widget.sum;
   }
 
   @override
@@ -56,24 +54,44 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
       body: BlocListener<MapBloc, MapState>(
         listener: (context, state) {
           if (state is MapLoadedAddressState) {
-            address = state.orderAdress.address;
-            type = state.orderAdress.type;
+            _address = state.orderAdress.address;
+            _method = state.orderAdress.type;
           }
         },
-        child: CustomScrollView(
-          slivers: <Widget>[
-            _buildButtonAppBar(),
-            const TitleHeader(text: 'Выбор даты'),
-            _buildCalendar(),
-            const TitleHeader(text: 'Время доставки'),
-            _buildClockOptions(theme),
-            const TitleHeader(text: 'Способ оплаты'),
-            _buildChoicePayMethod(theme),
-            _buildFinalResult(theme),
-            _buildButtonOrder(),
-            _buildButtonBack(context),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
-          ],
+        child: BlocListener<OrderBloc, OrderState>(
+          listener: (context, state) {
+            if (state is OrderLoadingFailureState) {
+              const snackdemo = SnackBar(
+                content: Text('Ошибка!'),
+                backgroundColor: Colors.red,
+                elevation: 10,
+                behavior: SnackBarBehavior.floating,
+                margin: EdgeInsets.all(12),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackdemo);
+            }
+            if (state is OrderEmptyState) {
+              final homeBloc = BlocProvider.of<HomeBloc>(context);
+              homeBloc.add(HomeBadgeOrderEvent());
+
+              context.router.push(const ThanksRoute());
+            }
+          },
+          child: CustomScrollView(
+            slivers: <Widget>[
+              _buildButtonAppBar(),
+              const TitleHeader(text: 'Выбор даты'),
+              _buildCalendar(),
+              const TitleHeader(text: 'Время доставки'),
+              _buildClockOptions(theme),
+              const TitleHeader(text: 'Способ оплаты'),
+              _buildChoicePayMethod(theme),
+              _buildFinalResult(theme),
+              _buildButtonOrder(theme),
+              _buildButtonBack(context),
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            ],
+          ),
         ),
       ),
     );
@@ -97,36 +115,42 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
         ),
       );
 
-  SliverToBoxAdapter _buildButtonOrder() => SliverToBoxAdapter(
+  SliverToBoxAdapter _buildButtonOrder(ThemeData theme) => SliverToBoxAdapter(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: ButtonPrimary(
-            onPressed: () async {
-              final orderBloc = BlocProvider.of<OrderBloc>(context);
-              final homeBloc = BlocProvider.of<HomeBloc>(context);
+          child: BlocBuilder<OrderBloc, OrderState>(
+            builder: (context, state) {
+              if (state is OrderLoadingState) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: theme.primaryColor,
+                  ),
+                );
+              }
+              return ButtonPrimary(
+                onPressed: () async {
+                  final orderBloc = BlocProvider.of<OrderBloc>(context);
+                  final completer = Completer();
 
-              final completer = Completer();
-              final router = context.router;
+                  orderBloc.add(OrderSendRentEvent(
+                    startDate: _rangeStart!.toIso8601String(),
+                    endDate: _rangeEnd!.toIso8601String(),
+                    receivingMethodId: _method,
+                    timeReceivingId: _currentTimeReceving,
+                    address: _address,
+                    completer: completer,
+                  ));
 
-              orderBloc.add(OrderSendRentEvent(
-                startDate: _rangeStart!.toIso8601String(),
-                endDate: _rangeEnd!.toIso8601String(),
-                price: finalSum,
-                receivingMethodId: type,
-                timeReceivingId: currentDateOption,
-                address: address,
-                completer: completer,
-              ));
-              completer.future;
-              await router.push(const ThanksRoute());
-              homeBloc.add(HomeBadgeOrderEvent());
+                  await completer.future;
+                },
+                text: 'Заказать',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              );
             },
-            text: 'Заказать',
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-            ),
           ),
         ),
       );
@@ -142,7 +166,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
               ),
               const Spacer(),
               Text(
-                '$finalSum р.',
+                '$_finalSum р.',
                 style: theme.textTheme.headlineLarge,
               ),
             ],
@@ -170,11 +194,11 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
                     '9:00-12:00',
                     style: theme.textTheme.titleMedium,
                   ),
-                  value: dateOptions[0],
-                  groupValue: currentDateOption,
+                  value: TimeReceivings.morning.value,
+                  groupValue: _currentTimeReceving,
                   onChanged: (int? value) {
                     setState(() {
-                      currentDateOption = value!;
+                      _currentTimeReceving = value!;
                     });
                   },
                 ),
@@ -195,11 +219,11 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
                     '13:00-18:00',
                     style: theme.textTheme.titleMedium,
                   ),
-                  value: dateOptions[1],
-                  groupValue: currentDateOption,
+                  value: TimeReceivings.afternoon.value,
+                  groupValue: _currentTimeReceving,
                   onChanged: (int? value) {
                     setState(() {
-                      currentDateOption = value!;
+                      _currentTimeReceving = value!;
                     });
                   },
                 ),
@@ -228,8 +252,8 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
                 'При получении',
                 style: theme.textTheme.titleMedium,
               ),
-              value: paymentOptions[0],
-              groupValue: currentPaymentOption,
+              value: Payment.cash.value,
+              groupValue: _currentPayment,
               onChanged: (int? value) {
                 setState(() {});
               },
@@ -325,8 +349,8 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
 
   void _calculateFinalSum() {
     setState(() {
-      finalSum = widget.sum;
-      finalSum *= _daysBetween(_rangeStart!, _rangeEnd!);
+      _finalSum = widget.sum;
+      _finalSum *= _daysBetween(_rangeStart!, _rangeEnd!);
     });
   }
 
