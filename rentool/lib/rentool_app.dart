@@ -66,6 +66,7 @@ class _RenToolAppState extends State<RenToolApp> {
         BlocProvider<AdsFeedBloc>(
           create: (context) => AdsFeedBloc(
             toolApiClient: _toolsApiClient,
+            rentslApiClient: _rentsApiClient,
             repository: favoriteRepository,
           ),
         ),
