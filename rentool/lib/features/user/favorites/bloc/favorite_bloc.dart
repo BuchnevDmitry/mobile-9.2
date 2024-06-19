@@ -25,6 +25,12 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   ) async {
     try {
       await _repository.clearFavorites();
+      final List<Tool> tools = [];
+
+      _repository.getFavorites().tools.forEach((element) {
+        tools.add(element.toTool());
+      });
+      emit((state as FavoritesLoadedState).copyWith(favorites: tools));
     } catch (error) {
       emit(FavoritesLoadingFailureState(error: error));
     }

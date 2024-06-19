@@ -9,7 +9,6 @@ import 'package:rentool/features/ads_feed/ads_feed.dart';
 import 'package:rentool/features/card_product/card_product.dart';
 import 'package:rentool/features/list_tools/list_tools.dart';
 import 'package:rentool/features/user/user.dart';
-import 'package:rentool/features/user/widgets/widgets.dart';
 
 @RoutePage()
 class FavoriteToolsScreen extends StatefulWidget {
