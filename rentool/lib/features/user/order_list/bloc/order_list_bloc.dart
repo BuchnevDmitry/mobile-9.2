@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -22,13 +23,15 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
   ) async {
     try {
       emit(OrderListLoadingState());
-      List<Tool> tools = [];
-      for (var rentTool in event.rent.tools) {
-        final tool = await _toolsApiClient.getToolById(rentTool.toolId);
-        tools.add(tool);
+      List<String> ids = [];
+
+      for (var tool in event.rent.tools) {
+        ids.add(tool.toolId);
       }
+      Tools tools = await _toolsApiClient.getToolsByIds(ids);
       emit(OrderListLoadedState(tools: tools, rentTools: event.rent.tools));
     } catch (error) {
+      log(error.toString());
       emit(OrderListLoadingFailureState(error: error));
     } finally {
       event.completer?.complete();

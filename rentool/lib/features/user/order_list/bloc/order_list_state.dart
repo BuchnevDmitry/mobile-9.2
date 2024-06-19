@@ -15,7 +15,7 @@ final class OrderListLoadingState extends OrderListState {}
 final class OrderListLoadedState extends OrderListState {
   const OrderListLoadedState({required this.tools, required this.rentTools});
 
-  final List<Tool> tools;
+  final Tools tools;
   final List<RentTool> rentTools;
 
   @override
