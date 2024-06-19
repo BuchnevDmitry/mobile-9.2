@@ -43,3 +43,23 @@ class ActiveOrdersReturnEvent extends ActiveOrdersEvent {
   @override
   List<Object?> get props => super.props..addAll([completer, id]);
 }
+
+class ActiveOrdersExtendEvent extends ActiveOrdersEvent {
+  const ActiveOrdersExtendEvent({
+    this.completer,
+    required this.id,
+    required this.endDate,
+  });
+
+  final String id;
+  final String endDate;
+  final Completer? completer;
+
+  @override
+  List<Object?> get props => super.props
+    ..addAll([
+      completer,
+      id,
+      endDate,
+    ]);
+}

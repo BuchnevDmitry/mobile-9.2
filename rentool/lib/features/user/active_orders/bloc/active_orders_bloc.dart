@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:rentool/api/api.dart';
+import 'package:rentool/common/common.dart';
 
 part 'active_orders_event.dart';
 part 'active_orders_state.dart';
@@ -19,6 +20,7 @@ class ActiveOrdersBloc extends Bloc<ActiveOrdersEvent, ActiveOrdersState> {
     on<ActiveOrdersLoadEvent>(_onLoad);
     on<ActiveOrdersReturnEvent>(_onReturn);
     on<ActiveOrdersCancelEvent>(_onCancel);
+    on<ActiveOrdersExtendEvent>(_onExtend);
   }
 
   final RentsApiClient _rentsApiClient;
@@ -31,16 +33,26 @@ class ActiveOrdersBloc extends Bloc<ActiveOrdersEvent, ActiveOrdersState> {
     try {
       emit(ActiveOrdersLoadingState());
       final accessToken = await _storage.read(key: 'acess_token');
-      if (accessToken != null) {
-        final rents = await _rentsApiClient.getRents('Bearer $accessToken');
-        List<Rent> filtered = [];
+      List<Rent> filtered = [];
 
-        for (var rent in rents.rents) {
-          if (rent.status.id == 4 || rent.status.id == 5) continue;
-          filtered.add(rent);
+      if (accessToken != null) {
+        int page = 0;
+        int size = 10;
+
+        while (size == 10) {
+          final rents =
+              await _rentsApiClient.getRents('Bearer $accessToken', page: page);
+          size = rents.size;
+
+          for (var rent in rents.rents) {
+            if (rent.status.id == Statuses.completed.value ||
+                rent.status.id == Statuses.canceled.value) continue;
+            filtered.add(rent);
+          }
+          page += 1;
         }
-        emit(ActiveOrdersLoadedState(rents: filtered));
       }
+      emit(ActiveOrdersLoadedState(rents: filtered));
     } catch (error) {
       emit(ActiveOrdersLoadingFailureState(error: error));
     } finally {
@@ -56,6 +68,28 @@ class ActiveOrdersBloc extends Bloc<ActiveOrdersEvent, ActiveOrdersState> {
       final accessToken = await _storage.read(key: 'acess_token');
       if (accessToken != null) {
         await _rentsApiClient.returnRent(event.id, 'Bearer $accessToken');
+      }
+      add(const ActiveOrdersLoadEvent());
+    } catch (error) {
+      emit(ActiveOrdersLoadingFailureState(error: error));
+    } finally {
+      event.completer?.complete();
+    }
+  }
+
+  FutureOr<void> _onExtend(
+    ActiveOrdersExtendEvent event,
+    Emitter<ActiveOrdersState> emit,
+  ) async {
+    try {
+      final accessToken = await _storage.read(key: 'acess_token');
+      if (accessToken != null) {
+        final extend = Extend(endDate: event.endDate);
+        await _rentsApiClient.extendRent(
+          event.id,
+          'Bearer $accessToken',
+          extend,
+        );
       }
       add(const ActiveOrdersLoadEvent());
     } catch (error) {
