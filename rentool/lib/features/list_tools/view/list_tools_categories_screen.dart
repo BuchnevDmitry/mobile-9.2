@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:rentool/common/widgets/widgets.dart';
 import 'package:rentool/features/ads_feed/ads_feed.dart';
 import 'package:rentool/features/auth/auth.dart';
@@ -26,6 +27,8 @@ class ListToolsCategoriesScreen extends StatefulWidget {
 
 class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
   _ListToolsCategoriesScreenState();
+
+  String emptyIcon = 'assets/icons/location_searching.svg';
 
   @override
   void initState() {
@@ -81,9 +84,22 @@ class _ListToolsCategoriesScreenState extends State<ListToolsCategoriesScreen> {
         const SliverToBoxAdapter(child: SizedBox(height: 16)),
         SliverFillRemaining(
           child: Center(
-            child: Text(
-              'Ничего не найдено по запросу "${widget.category.name}"',
-              style: theme.textTheme.labelMedium,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  emptyIcon,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Ничего не найдено',
+                  style: theme.textTheme.labelMedium,
+                ),
+                Text(
+                  'Попробуйте изменить запрос',
+                  style: theme.textTheme.labelMedium,
+                ),
+              ],
             ),
           ),
         ),

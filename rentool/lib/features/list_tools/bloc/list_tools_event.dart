@@ -11,12 +11,19 @@ class ListToolsLoadEvent extends ListToolsEvent {
   const ListToolsLoadEvent({
     this.completer,
     this.category = '',
+    this.sortMethod = 'По возрастанию',
   });
+  final String sortMethod;
   final String category;
   final Completer? completer;
 
   @override
-  List<Object?> get props => super.props..addAll([completer, category]);
+  List<Object?> get props => super.props
+    ..addAll([
+      completer,
+      category,
+      sortMethod,
+    ]);
 }
 
 class ListToolsToggleFavoriteToolEvent extends ListToolsEvent {
