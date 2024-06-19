@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:rentool/api/api.dart';
+import 'package:rentool/common/common.dart';
 
 part 'history_orders_event.dart';
 part 'history_orders_state.dart';
@@ -30,11 +31,21 @@ class HistoryOrdersBloc extends Bloc<HistoryOrdersEvent, HistoryOrdersState> {
       final accessToken = await _storage.read(key: 'acess_token');
       List<Rent> filtered = [];
       if (accessToken != null) {
-        final rents = await _rentsApiClient.getRents('Bearer $accessToken');
-        for (var rent in rents.rents) {
-          if (rent.status.id == 4 || rent.status.id == 5) {
-            filtered.add(rent);
+        int page = 0;
+        int size = 10;
+
+        while (size == 10) {
+          final rents =
+              await _rentsApiClient.getRents('Bearer $accessToken', page: page);
+          size = rents.size;
+
+          for (var rent in rents.rents) {
+            if (rent.status.id == Statuses.completed.value ||
+                rent.status.id == Statuses.canceled.value) {
+              filtered.add(rent);
+            }
           }
+          page += 1;
         }
       }
       emit(HistoryOrdersLoadedState(rents: filtered));

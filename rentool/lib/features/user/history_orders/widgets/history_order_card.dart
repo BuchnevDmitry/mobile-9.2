@@ -128,7 +128,6 @@ class HistoryOrderCard extends StatelessWidget {
     }
     final parseDate = DateTime.parse(raw);
     final dayDate = DateFormat.MMMMd('RU').format(parseDate);
-    final time = DateFormat('hh:mm').format(parseDate);
-    return '$dayDate, $time';
+    return dayDate;
   }
 }
