@@ -28,11 +28,16 @@ abstract class ToolsApiClient {
     @Path('id') String id,
   );
 
+  @GET('/api/v1/tools/by-ids')
+  Future<Tools> getToolsByIds(
+    @Query('listIds') List<String> array,
+  );
+
   @GET('/api/v1/tools/search')
   Future<Tools> getToolsByCategory(
     @Query('category') String category, {
     @Query('page') int page = 0,
-    @Query('size') int size = 35,
+    @Query('size') int size = 50,
     @Query('sortParam') String sortParam = 'PRICE_ASC',
   });
 }
