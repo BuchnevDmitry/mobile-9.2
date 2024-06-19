@@ -8,9 +8,10 @@ import 'package:rentool/api/models/user.dart';
 import 'package:rentool/common/common.dart';
 import 'package:rentool/features/ads_feed/ads_feed.dart';
 import 'package:rentool/features/auth/auth.dart';
+import 'package:rentool/features/card_product/card_product.dart';
+import 'package:rentool/features/list_tools/list_tools.dart';
 
 import 'package:rentool/features/shop/shop.dart';
-import 'package:rentool/features/user/bloc/bloc.dart';
 import 'package:rentool/features/user/user.dart';
 import 'package:rentool/router/router.dart';
 
@@ -37,6 +38,8 @@ class _UserScreenState extends State<UserScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<UserBloc>(context).add(const UserLoadEvent());
+    BlocProvider.of<FavoritesBloc>(context).add(FavoritesLoadEvent());
+
     _controllerNewPassword = TextEditingController(text: '');
   }
 
@@ -135,28 +138,55 @@ class _UserScreenState extends State<UserScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            ButtonPrimary(
-              text: UserScreen.textExitButton,
-              onPressed: () async {
-                final authBloc = BlocProvider.of<AuthBloc>(context);
-                final orderBloc = BlocProvider.of<OrderBloc>(context);
-                final favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
-                final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
+            BlocBuilder<FavoritesBloc, FavoritesState>(
+              builder: (context, state) {
+                if (state is FavoritesLoadedState) {
+                  final tools = state.favorites;
+                  return ButtonPrimary(
+                    text: UserScreen.textExitButton,
+                    onPressed: () async {
+                      final authBloc = BlocProvider.of<AuthBloc>(context);
+                      final orderBloc = BlocProvider.of<OrderBloc>(context);
+                      final favoritesBloc =
+                          BlocProvider.of<FavoritesBloc>(context);
+                      final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
+                      final cardProductBloc =
+                          BlocProvider.of<CardProductBloc>(context);
+                      final listToolsBloc =
+                          BlocProvider.of<ListToolsBloc>(context);
 
-                favoritesBloc.add(FavoritesClearEvent());
-                orderBloc.add(OrderClearEvent());
-                adsFeedBloc.add(const AdsFeedLoadEvent());
+                      favoritesBloc.add(FavoritesClearEvent());
+                      orderBloc.add(OrderClearEvent());
+                      adsFeedBloc.add(const AdsFeedLoadEvent());
 
-                authBloc.add(AuthLogoutEvent());
+                      for (var tool in tools) {
+                        listToolsBloc.add(
+                            ListToolsLoadEvent(category: tool.category.name));
+                        cardProductBloc.add(CardProductLoadEvent(tool: tool));
+                      }
 
-                await context.router.pushAndPopUntil(const HomeRoute(),
-                    predicate: (_) => false);
+                      authBloc.add(AuthLogoutEvent());
+
+                      await context.router.pushAndPopUntil(const HomeRoute(),
+                          predicate: (_) => false);
+                    },
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  );
+                }
+                return ButtonPrimary(
+                  text: UserScreen.textExitButton,
+                  onPressed: () async {},
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                );
               },
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
             ),
           ],
         ),
@@ -233,12 +263,14 @@ class _UserScreenState extends State<UserScreen> {
                       final userBloc = BlocProvider.of<UserBloc>(context);
                       final authBloc = BlocProvider.of<AuthBloc>(context);
                       final orderBloc = BlocProvider.of<OrderBloc>(context);
+
                       final favoritesBloc =
                           BlocProvider.of<FavoritesBloc>(context);
                       final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
 
                       favoritesBloc.add(FavoritesClearEvent());
                       orderBloc.add(OrderClearEvent());
+
                       adsFeedBloc.add(const AdsFeedLoadEvent());
 
                       userBloc.add(UserChangePasswordEvent(

@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,6 +50,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
@@ -59,7 +62,7 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
           }
         },
         child: BlocListener<OrderBloc, OrderState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is OrderLoadingFailureState) {
               const snackdemo = SnackBar(
                 content: Text('Ошибка!'),
@@ -74,24 +77,29 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
               final homeBloc = BlocProvider.of<HomeBloc>(context);
               homeBloc.add(HomeBadgeOrderEvent());
 
-              context.router.push(const ThanksRoute());
+              await context.router.push(const ThanksRoute());
             }
           },
-          child: CustomScrollView(
-            slivers: <Widget>[
-              _buildButtonAppBar(),
-              const TitleHeader(text: 'Выбор даты'),
-              _buildCalendar(),
-              TitleHeader(
-                  text: _method == 1 ? 'Время доставки' : 'Время получения'),
-              _buildClockOptions(theme),
-              const TitleHeader(text: 'Способ оплаты'),
-              _buildChoicePayMethod(theme),
-              _buildFinalResult(theme),
-              _buildButtonOrder(theme),
-              _buildButtonBack(context),
-              const SliverToBoxAdapter(child: SizedBox(height: 16)),
-            ],
+          child: BlocBuilder<MapBloc, MapState>(
+            builder: (context, state) {
+              return CustomScrollView(
+                slivers: <Widget>[
+                  _buildButtonAppBar(),
+                  const TitleHeader(text: 'Выбор даты'),
+                  _buildCalendar(),
+                  TitleHeader(
+                      text:
+                          _method == 1 ? 'Время доставки' : 'Время получения'),
+                  _buildClockOptions(theme),
+                  const TitleHeader(text: 'Способ оплаты'),
+                  _buildChoicePayMethod(theme),
+                  _buildFinalResult(theme),
+                  _buildButtonOrder(theme),
+                  _buildButtonBack(context),
+                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                ],
+              );
+            },
           ),
         ),
       ),

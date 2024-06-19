@@ -93,7 +93,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   ) async {
     try {
       emit(OrderLoadingState());
-      await _orderRepository.addToOrder(event.tool.toToolOrder(event.count));
+      await _orderRepository.addToOrder(event.tool.toToolOrder(event.quantity));
       add(OrderLoadEvent());
     } catch (error) {
       log(error.toString());

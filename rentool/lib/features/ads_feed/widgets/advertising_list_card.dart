@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rentool/api/api.dart';
-import 'package:rentool/features/ads_feed/widgets/widgets.dart';
+import 'package:rentool/features/ads_feed/ads_feed.dart';
 
 class AdvertisingListCard extends StatelessWidget {
   const AdvertisingListCard({

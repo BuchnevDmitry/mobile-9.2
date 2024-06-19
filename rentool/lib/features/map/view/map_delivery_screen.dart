@@ -54,49 +54,55 @@ class _MapDeliveryScreenState extends State<MapDeliveryScreen> {
           ),
         ),
       ),
-      body: BlocBuilder<MapBloc, MapState>(
-        builder: (context, state) {
+      body: BlocListener<MapBloc, MapState>(
+        listener: (context, state) {
           if (state is MapLoadedDeliveryState) {
-            _moveToCurrentLocation(state.point);
-            final mapObjects = [_getPlacemarkObject(context, state.point)];
+            showModalBottomSheet(
+              context: context,
+              builder: (context) => ModalBodyView(
+                point: state.point,
+                mainText: 'Укажите адрес доставки',
+                buttonText: 'Сохранить адрес',
+                receivingMethod: ReceivingMethods.delivery.value,
+              ),
+            );
+          }
+        },
+        child: BlocBuilder<MapBloc, MapState>(
+          builder: (context, state) {
+            if (state is MapLoadedDeliveryState) {
+              _moveToCurrentLocation(state.point);
+              final mapObjects = [_getPlacemarkObject(context, state.point)];
+              return YandexMap(
+                onMapCreated: (controller) {
+                  _mapControllerCompleter.complete(controller);
+                },
+                onMapTap: (point) async {
+                  final mapBloc = BlocProvider.of<MapBloc>(context);
+                  final completer = Completer();
+
+                  mapBloc.add(
+                    MapUpdatePointEvent(
+                      point: MapPoint(
+                          address: 'Неизвестный адрес',
+                          latitude: point.latitude,
+                          longitude: point.longitude),
+                      completer: completer,
+                    ),
+                  );
+
+                  await completer.future;
+                },
+                mapObjects: mapObjects,
+              );
+            }
             return YandexMap(
               onMapCreated: (controller) {
                 _mapControllerCompleter.complete(controller);
               },
-              onMapTap: (point) async {
-                final mapBloc = BlocProvider.of<MapBloc>(context);
-                final completer = Completer();
-
-                mapBloc.add(MapUpdatePointEvent(
-                  point: MapPoint(
-                      address: 'Неизвестный адресс',
-                      latitude: point.latitude,
-                      longitude: point.longitude),
-                  completer: completer,
-                ));
-
-                await completer.future;
-
-                showModalBottomSheet(
-                  // ignore: use_build_context_synchronously
-                  context: context,
-                  builder: (context) => ModalBodyView(
-                    point: state.point,
-                    mainText: 'Укажите адрес доставки',
-                    buttonText: 'Сохранить адрес',
-                    receivingMethod: ReceivingMethods.delivery.value,
-                  ),
-                );
-              },
-              mapObjects: mapObjects,
             );
-          }
-          return YandexMap(
-            onMapCreated: (controller) {
-              _mapControllerCompleter.complete(controller);
-            },
-          );
-        },
+          },
+        ),
       ),
     );
   }

@@ -11,8 +11,8 @@ import 'package:rentool/features/auth/auth.dart';
 import 'package:rentool/features/card_product/card_product.dart';
 import 'package:rentool/features/card_product/widgets/widgets.dart';
 import 'package:rentool/features/home/home.dart';
-import 'package:rentool/features/list_tools/bloc/bloc.dart';
 import 'package:rentool/features/list_tools/list_tools.dart';
+import 'package:rentool/features/metric/metric.dart';
 import 'package:rentool/features/shop/bloc/bloc.dart';
 import 'package:rentool/features/shop/bloc/order_bloc.dart';
 import 'package:rentool/features/shop/shop.dart';
@@ -31,7 +31,7 @@ class CardProductScreen extends StatefulWidget {
 
 class _CardProductScreenState extends State<CardProductScreen> {
   late ValueNotifier<bool> showFullDescription;
-  late ValueNotifier<int> counter;
+  late ValueNotifier<int> quantity;
 
   static const String errorMessage = 'Что-то пошло не так...';
   static const String answerMessage = 'Пожалуйста, повторите попытку позже';
@@ -40,10 +40,61 @@ class _CardProductScreenState extends State<CardProductScreen> {
   @override
   void initState() {
     super.initState();
+
+    BlocProvider.of<YandexMetricsBloc>(context)
+        .add(YandexMetricsViewProductScreenEvent(
+      screenName: 'Страница инструмента',
+      priceDay: widget.tool.priceDay,
+      category: widget.tool.category.name,
+      model: widget.tool.model,
+      id: widget.tool.id,
+    ));
+
     BlocProvider.of<CardProductBloc>(context)
         .add(CardProductLoadEvent(tool: widget.tool));
     showFullDescription = ValueNotifier<bool>(false);
-    counter = ValueNotifier<int>(1);
+    quantity = ValueNotifier<int>(1);
+  }
+
+  void _addToolToOrder(BuildContext context) {
+    BlocProvider.of<YandexMetricsBloc>(context)
+        .add(YandexMetricsAddProductToOrderEvent(
+      screenName: 'Страница инструмента',
+      priceDay: widget.tool.priceDay,
+      category: widget.tool.category.name,
+      model: widget.tool.model,
+      id: widget.tool.id,
+      quantity: quantity.value,
+    ));
+
+    BlocProvider.of<OrderBloc>(context)
+        .add(OrderAddEvent(tool: widget.tool, quantity: quantity.value));
+    BlocProvider.of<HomeBloc>(context).add(HomeBadgeOrderEvent());
+  }
+
+  Future<void> _toggleFavorite(
+    BuildContext context,
+    Tool tool,
+  ) async {
+    final completer = Completer();
+    if (isAuthorized) {
+      final cardProductBloc = BlocProvider.of<CardProductBloc>(context);
+      final listToolsBloc = BlocProvider.of<ListToolsBloc>(context);
+      final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
+      final favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
+
+      cardProductBloc.add(CardProductToggleFavoriteToolEvent(
+        tool: tool,
+        completer: completer,
+      ));
+
+      await completer.future;
+      favoritesBloc.add(FavoritesLoadEvent());
+      listToolsBloc.add(const ListToolsLoadEvent());
+      adsFeedBloc.add(const AdsFeedLoadEvent());
+    } else {
+      context.router.push(const GuardRoute());
+    }
   }
 
   @override
@@ -132,24 +183,24 @@ class _CardProductScreenState extends State<CardProductScreen> {
                             children: <Widget>[
                               GestureDetector(
                                   onTap: () => setState(() {
-                                        counter.value == 1
+                                        quantity.value == 1
                                             ? log('countet >= 1!')
-                                            : counter.value--;
+                                            : quantity.value--;
                                       }),
                                   child: const Padding(
                                     padding: EdgeInsets.only(left: 18.5),
                                     child: Icon(Icons.remove),
                                   )),
-                              Text('${counter.value}'),
+                              Text('${quantity.value}'),
                               GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      counter.value >=
+                                      quantity.value >=
                                               (widget.tool.count >= 3
                                                   ? 3
                                                   : widget.tool.count)
                                           ? log('countet >= 3')
-                                          : counter.value++;
+                                          : quantity.value++;
                                     });
                                   },
                                   child: const Padding(
@@ -226,31 +277,6 @@ class _CardProductScreenState extends State<CardProductScreen> {
     );
   }
 
-  Future<void> _toggleFavorite(
-    BuildContext context,
-    Tool tool,
-  ) async {
-    final completer = Completer();
-    if (isAuthorized) {
-      final cardProductBloc = BlocProvider.of<CardProductBloc>(context);
-      final listToolsBloc = BlocProvider.of<ListToolsBloc>(context);
-      final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
-      final favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
-
-      cardProductBloc.add(CardProductToggleFavoriteToolEvent(
-        tool: tool,
-        completer: completer,
-      ));
-
-      await completer.future;
-      favoritesBloc.add(FavoritesLoadEvent());
-      listToolsBloc.add(const ListToolsLoadEvent());
-      adsFeedBloc.add(const AdsFeedLoadEvent());
-    } else {
-      context.router.push(const GuardRoute());
-    }
-  }
-
   CustomScrollView _buildLoadingProgress() {
     return const CustomScrollView(
       slivers: [
@@ -258,12 +284,6 @@ class _CardProductScreenState extends State<CardProductScreen> {
         LoadingCenterProgress(),
       ],
     );
-  }
-
-  void _addToolToOrder(BuildContext context) {
-    BlocProvider.of<OrderBloc>(context)
-        .add(OrderAddEvent(tool: widget.tool, count: counter.value));
-    BlocProvider.of<HomeBloc>(context).add(HomeBadgeOrderEvent());
   }
 
   Widget _buildParametersList(List<String> lines,

@@ -65,12 +65,17 @@ class _ModalBodyViewState extends State<ModalBodyView> {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  Text(
-                    widget.point.address,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
+                  Expanded(
+                    child: Text(
+                      widget.point.address,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      softWrap: true,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

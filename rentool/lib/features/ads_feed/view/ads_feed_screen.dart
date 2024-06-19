@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rentool/api/models/tool.dart';
+
+import 'package:rentool/api/api.dart';
 import 'package:rentool/common/common.dart';
-import 'package:rentool/features/ads_feed/bloc/ads_feed_bloc.dart';
-import 'package:rentool/features/ads_feed/bloc/bloc.dart';
-import 'package:rentool/features/ads_feed/widgets/widgets.dart';
+import 'package:rentool/features/ads_feed/ads_feed.dart';
 import 'package:rentool/features/auth/auth.dart';
-import 'package:rentool/features/card_product/bloc/bloc.dart';
 import 'package:rentool/features/card_product/card_product.dart';
 import 'package:rentool/features/list_tools/list_tools.dart';
+import 'package:rentool/features/metric/metric.dart';
 import 'package:rentool/features/user/user.dart';
 import 'package:rentool/router/router.dart';
 
@@ -40,6 +40,10 @@ class _AdsFeedScreenState extends State<AdsFeedScreen> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<YandexMetricsBloc>(context)
+        .add(const YandexMetricsOpenScreenEvent(
+      screenName: 'Лента объявлений',
+    ));
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
 

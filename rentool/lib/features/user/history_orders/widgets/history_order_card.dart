@@ -62,11 +62,16 @@ class HistoryOrderCard extends StatelessWidget {
 
   Row _buildAddress(ThemeData theme) {
     return Row(
-      children: <Widget>[
-        Text(
-          'Адресс:\n${_rent.address}',
-          style: theme.textTheme.bodySmall,
-        )
+      children: [
+        Expanded(
+          child: Text(
+            'Адресс:\n${_rent.address}',
+            style: theme.textTheme.bodySmall,
+            softWrap: true,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }

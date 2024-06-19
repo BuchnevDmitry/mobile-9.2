@@ -109,14 +109,14 @@ class OrderToolCard extends StatelessWidget {
     int count = _tool.userCount;
     count += 1;
     BlocProvider.of<OrderBloc>(context)
-        .add(OrderAddEvent(tool: _tool.toTool(), count: count));
+        .add(OrderAddEvent(tool: _tool.toTool(), quantity: count));
   }
 
   void _updateRemoveCount(BuildContext context) {
     int count = _tool.userCount;
     count -= 1;
     BlocProvider.of<OrderBloc>(context)
-        .add(OrderAddEvent(tool: _tool.toTool(), count: count));
+        .add(OrderAddEvent(tool: _tool.toTool(), quantity: count));
   }
 
   void _removeTool(BuildContext context) {
