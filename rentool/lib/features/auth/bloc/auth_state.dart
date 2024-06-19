@@ -24,3 +24,12 @@ final class AuthFailedAuthorizedState extends AuthState {
   @override
   List<Object> get props => super.props..add(error!);
 }
+
+final class AuthFailedRegistratedState extends AuthState {
+  const AuthFailedRegistratedState({required this.error});
+
+  final Object? error;
+
+  @override
+  List<Object> get props => super.props..add(error!);
+}

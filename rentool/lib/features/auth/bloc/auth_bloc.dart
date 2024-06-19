@@ -136,9 +136,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
+      emit(AuthRequestState());
       await _usersApiClient.registerUser(event.user);
+      emit(AuthUnAuthorizedState());
     } catch (error) {
-      emit(AuthFailedAuthorizedState(error: error));
+      emit(AuthFailedRegistratedState(error: error));
     } finally {
       event.completer?.complete();
     }
