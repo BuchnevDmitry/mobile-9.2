@@ -82,7 +82,8 @@ class _OrderPlaceScreenState extends State<OrderPlaceScreen> {
               _buildButtonAppBar(),
               const TitleHeader(text: 'Выбор даты'),
               _buildCalendar(),
-              const TitleHeader(text: 'Время доставки'),
+              TitleHeader(
+                  text: _method == 1 ? 'Время доставки' : 'Время получения'),
               _buildClockOptions(theme),
               const TitleHeader(text: 'Способ оплаты'),
               _buildChoicePayMethod(theme),
