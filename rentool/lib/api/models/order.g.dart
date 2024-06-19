@@ -9,7 +9,6 @@ part of 'order.dart';
 OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
       startDate: json['startDate'] as String,
       endDate: json['endDate'] as String,
-      price: (json['price'] as num).toInt(),
       receivingMethodId: (json['receivingMethodId'] as num).toInt(),
       timeReceivingId: (json['timeReceivingId'] as num).toInt(),
       address: json['address'] as String,
@@ -22,7 +21,6 @@ Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
     <String, dynamic>{
       'startDate': instance.startDate,
       'endDate': instance.endDate,
-      'price': instance.price,
       'timeReceivingId': instance.timeReceivingId,
       'receivingMethodId': instance.receivingMethodId,
       'address': instance.address,

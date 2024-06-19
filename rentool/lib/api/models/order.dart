@@ -10,7 +10,6 @@ class OrderModel extends Equatable {
   const OrderModel({
     required this.startDate,
     required this.endDate,
-    required this.price,
     required this.receivingMethodId,
     required this.timeReceivingId,
     required this.address,
@@ -19,7 +18,6 @@ class OrderModel extends Equatable {
 
   final String startDate;
   final String endDate;
-  final int price;
   final int timeReceivingId;
   final int receivingMethodId;
   final String address;
@@ -35,7 +33,6 @@ class OrderModel extends Equatable {
     return [
       startDate,
       endDate,
-      price,
       address,
       receivingMethodId,
       timeReceivingId,
