@@ -13,7 +13,7 @@ class AdvertisingCard extends StatelessWidget {
       child: BaseRoundContainer(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.asset(imageUrl),
+          child: Image.network(imageUrl),
         ),
       ),
     );

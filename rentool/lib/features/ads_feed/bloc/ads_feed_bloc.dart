@@ -12,8 +12,10 @@ part 'ads_feed_state.dart';
 class AdsFeedBloc extends Bloc<AdsFeedEvent, AdsFeedState> {
   AdsFeedBloc({
     required ToolsApiClient toolApiClient,
+    required RentsApiClient rentslApiClient,
     required FavoriteRepositoryInterface repository,
   })  : _toolApiClient = toolApiClient,
+        _rentspiClient = rentslApiClient,
         _repository = repository,
         super(AdsFeedInitialState()) {
     on<AdsFeedLoadEvent>(_onLoad);
@@ -21,6 +23,8 @@ class AdsFeedBloc extends Bloc<AdsFeedEvent, AdsFeedState> {
   }
 
   final ToolsApiClient _toolApiClient;
+  final RentsApiClient _rentspiClient;
+
   final FavoriteRepositoryInterface _repository;
 
   Future<void> _onLoad(
@@ -31,11 +35,18 @@ class AdsFeedBloc extends Bloc<AdsFeedEvent, AdsFeedState> {
       if (state is! AdsFeedLoadedState) {
         emit(AdsFeedLoadingState());
       }
-      final tools = await _toolApiClient.getTools();
+
+      final tools = await _toolApiClient.getTools(page: event.page);
+      final advertisings = await _rentspiClient.getAdvertisings();
+
       final favorites = _repository.getFavorites();
+      final bool hasMore = tools.size == 0 ? false : true;
+
       emit(AdsFeedLoadedState(
         tools: tools,
+        advertisings: advertisings,
         favorites: favorites.tools,
+        hasMore: hasMore,
       ));
     } catch (error) {
       emit(AdsFeedLoadingFailureState(error: error));
