@@ -101,6 +101,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       }
     } catch (error) {
       emit(MapLoadingFailureState(error: error));
+    } finally {
+      event.completer?.complete();
     }
   }
 
