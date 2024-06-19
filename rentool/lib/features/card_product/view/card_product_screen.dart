@@ -33,6 +33,10 @@ class _CardProductScreenState extends State<CardProductScreen> {
   late ValueNotifier<bool> showFullDescription;
   late ValueNotifier<int> counter;
 
+  static const String errorMessage = 'Что-то пошло не так...';
+  static const String answerMessage = 'Пожалуйста, повторите попытку позже';
+  static const String textButtonMessage = 'Повторить';
+
   @override
   void initState() {
     super.initState();
@@ -176,9 +180,49 @@ class _CardProductScreenState extends State<CardProductScreen> {
               ],
             );
           }
+          if (state is CardProductLoadingFailureState) {
+            return _buildFailureContent(theme, context);
+          }
           return _buildLoadingProgress();
         },
       ),
+    );
+  }
+
+  CustomScrollView _buildFailureContent(ThemeData theme, BuildContext context) {
+    return CustomScrollView(
+      slivers: <Widget>[
+        const SearchAppBar(),
+        SliverFillRemaining(
+          child: Center(
+            child: Column(
+              children: [
+                const Spacer(),
+                Text(
+                  errorMessage,
+                  style: theme.textTheme.titleSmall,
+                ),
+                Text(
+                  answerMessage,
+                  style: theme.textTheme.labelMedium,
+                ),
+                const SizedBox(height: 20),
+                TextButton(
+                  onPressed: () {
+                    BlocProvider.of<CardProductBloc>(context)
+                        .add(CardProductLoadEvent(tool: widget.tool));
+                  },
+                  child: Text(
+                    textButtonMessage,
+                    style: theme.textTheme.titleLarge,
+                  ),
+                ),
+                const Spacer(),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
