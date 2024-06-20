@@ -34,6 +34,12 @@ class ListToolsBloc extends Bloc<ListToolsEvent, ListToolsState> {
       final tools = await _toolsApiClient.getToolsByCategory(event.category);
       final favorites = _repository.getFavorites();
 
+      if (event.sortMethod == 'По возрастанию') {
+        tools.tools.sort((a, b) => a.priceDay.compareTo(b.priceDay));
+      } else {
+        tools.tools.sort((a, b) => b.priceDay.compareTo(a.priceDay));
+      }
+
       emit(ListToolsLoadedState(tools: tools, favorites: favorites.tools));
     } catch (error) {
       emit(ListToolsLoadingFailureState(error: error));

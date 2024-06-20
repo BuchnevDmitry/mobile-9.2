@@ -47,7 +47,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         final order = OrderModel(
           startDate: event.startDate,
           endDate: event.endDate,
-          price: event.price,
           timeReceivingId: event.timeReceivingId,
           receivingMethodId: event.receivingMethodId,
           address: event.address,
@@ -94,7 +93,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   ) async {
     try {
       emit(OrderLoadingState());
-      await _orderRepository.addToOrder(event.tool.toToolOrder(event.count));
+      await _orderRepository.addToOrder(event.tool.toToolOrder(event.quantity));
       add(OrderLoadEvent());
     } catch (error) {
       log(error.toString());

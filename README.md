@@ -12,3 +12,4 @@ cd mobile-9.2
 ```
 flutter build apk [arguments]
 ```
+Для корректной работы необходим .env файл. Чтобы его получить напишите на почту remezov@cs.vsu.ru.

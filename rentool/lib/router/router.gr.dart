@@ -86,9 +86,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     LeaseExtensionRoute.name: (routeData) {
+      final args = routeData.argsAs<LeaseExtensionRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const LeaseExtensionScreen(),
+        child: LeaseExtensionScreen(
+          key: args.key,
+          rent: args.rent,
+        ),
       );
     },
     ListToolsCategoriesRoute.name: (routeData) {
@@ -362,16 +366,40 @@ class HomeRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LeaseExtensionScreen]
-class LeaseExtensionRoute extends PageRouteInfo<void> {
-  const LeaseExtensionRoute({List<PageRouteInfo>? children})
-      : super(
+class LeaseExtensionRoute extends PageRouteInfo<LeaseExtensionRouteArgs> {
+  LeaseExtensionRoute({
+    Key? key,
+    required Rent rent,
+    List<PageRouteInfo>? children,
+  }) : super(
           LeaseExtensionRoute.name,
+          args: LeaseExtensionRouteArgs(
+            key: key,
+            rent: rent,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'LeaseExtensionRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<LeaseExtensionRouteArgs> page =
+      PageInfo<LeaseExtensionRouteArgs>(name);
+}
+
+class LeaseExtensionRouteArgs {
+  const LeaseExtensionRouteArgs({
+    this.key,
+    required this.rent,
+  });
+
+  final Key? key;
+
+  final Rent rent;
+
+  @override
+  String toString() {
+    return 'LeaseExtensionRouteArgs{key: $key, rent: $rent}';
+  }
 }
 
 /// generated route for

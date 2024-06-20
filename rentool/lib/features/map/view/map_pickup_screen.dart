@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rentool/common/widgets/widgets.dart';
+import 'package:rentool/common/common.dart';
 import 'package:rentool/features/map/map.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
@@ -96,104 +94,13 @@ class _MapPickupScreenState extends State<MapPickupScreen> {
               'assets/icons/Yandex_Maps_icon_min.png'))),
       onTap: (_, __) => showModalBottomSheet(
         context: context,
-        builder: (context) => _ModalBodyView(point: point),
-      ),
-    );
-  }
-}
-
-class _ModalBodyView extends StatefulWidget {
-  const _ModalBodyView({required this.point});
-
-  final MapPoint point;
-
-  @override
-  State<_ModalBodyView> createState() => _ModalBodyViewState();
-}
-
-class _ModalBodyViewState extends State<_ModalBodyView> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 50),
-      child: SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const Row(
-                children: [
-                  Text(
-                    'Пункт самовывоза',
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              const Row(
-                children: [
-                  Text(
-                    'Адрес',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xfffaaaaaa),
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    widget.point.address,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              ButtonPrimary(
-                onPressed: _onPressed,
-                text: 'Заберу здесь',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
+        builder: (context) => ModalBodyView(
+          point: point,
+          receivingMethod: ReceivingMethods.selfPickup.value,
+          buttonText: 'Заберу здесь',
+          mainText: 'Пункт самовывоза',
         ),
       ),
     );
-  }
-
-  Future<void> _onPressed() async {
-    final rout = context.router;
-    final mapBloc = BlocProvider.of<MapBloc>(context);
-    final completer = Completer();
-
-    mapBloc.add(MapAddAddressEvent(
-      point: widget.point,
-      type: 2,
-      completer: completer,
-    ));
-    await completer.future;
-
-    mapBloc.add(MapLoadAddressEvent());
-
-    await rout.maybePop();
-    await rout.maybePop();
   }
 }

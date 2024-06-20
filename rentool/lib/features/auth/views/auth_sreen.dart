@@ -123,28 +123,37 @@ class _AuthScreenState extends State<AuthScreen> {
                     controller: _controllerPassword,
                   ),
                   const SizedBox(height: 30),
-                  ButtonPrimary(
-                    onPressed: () async {
-                      final authBloc = BlocProvider.of<AuthBloc>(context);
-                      final completer = Completer();
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      if (state is AuthRequestState) {
+                        return CircularProgressIndicator(
+                          color: theme.primaryColor,
+                        );
+                      }
+                      return ButtonPrimary(
+                        onPressed: () async {
+                          final authBloc = BlocProvider.of<AuthBloc>(context);
+                          final completer = Completer();
 
-                      final String username = _controllerLogin.text;
-                      final String password = _controllerPassword.text;
+                          final String username = _controllerLogin.text;
+                          final String password = _controllerPassword.text;
 
-                      authBloc.add(AuthAuthorizeEvent(
-                        username: username,
-                        password: password,
-                        completer: completer,
-                      ));
+                          authBloc.add(AuthAuthorizeEvent(
+                            username: username,
+                            password: password,
+                            completer: completer,
+                          ));
 
-                      await completer.future;
+                          await completer.future;
+                        },
+                        text: 'Войти',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      );
                     },
-                    text: 'Войти',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                    ),
                   ),
                 ],
               ),

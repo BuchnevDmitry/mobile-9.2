@@ -44,4 +44,18 @@ abstract class RentsApiClient {
     @Path('id') String id,
     @Header('Authorization') String token,
   );
+
+  @PATCH('/api/v1/rents/{id}/extend')
+  Future<void> extendRent(
+    @Path('id') String id,
+    @Header('Authorization') String token,
+    @Body() Extend endDate, {
+    @Header('Content-Type') String type = 'application/json',
+  });
+
+  @GET('/api/v1/advertising/')
+  Future<List<Advertising>> getAdvertisings({
+    @Query('page') int page = 0,
+    @Query('size') int size = 10,
+  });
 }

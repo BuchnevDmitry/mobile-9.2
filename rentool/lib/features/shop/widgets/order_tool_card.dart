@@ -6,31 +6,21 @@ import 'package:rentool/features/shop/bloc/order_bloc.dart';
 import 'package:rentool/features/shop/shop.dart';
 import 'package:rentool/repositories/repositories.dart';
 
-class OrderToolCard extends StatefulWidget {
+class OrderToolCard extends StatelessWidget {
   const OrderToolCard({
     super.key,
-    required this.tool,
-  });
+    required ToolOrder tool,
+  }) : _tool = tool;
 
-  final ToolOrder tool;
+  final ToolOrder _tool;
 
-  @override
-  State<OrderToolCard> createState() => _OrderToolCardState();
-}
-
-class _OrderToolCardState extends State<OrderToolCard> {
-  late ValueNotifier<int> counter;
-
-  @override
-  void initState() {
-    counter = ValueNotifier<int>(widget.tool.userCount);
-    super.initState();
-  }
+  static const int MAX_COUNT_TOOLS = 3;
+  static const int MIN_COUNT_TOOLS = 1;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final nameWithModel = widget.tool.model.split(' ');
+    final nameWithModel = _tool.model.split(' ');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: BaseRoundContainer(
@@ -42,7 +32,7 @@ class _OrderToolCardState extends State<OrderToolCard> {
                 width: 84,
                 height: 84,
                 child: ClipRect(
-                  child: Image.network(widget.tool.imageUrl),
+                  child: Image.network(_tool.imageUrl),
                 ),
               ),
             ),
@@ -52,7 +42,7 @@ class _OrderToolCardState extends State<OrderToolCard> {
                   Row(
                     children: [
                       Text(
-                        '${nameWithModel[0]}\n${widget.tool.brand!.name} ${nameWithModel[1]}',
+                        '${nameWithModel[0]}\n${_tool.brand!.name} ${nameWithModel[1]}',
                         style: theme.textTheme.titleSmall,
                       ),
                     ],
@@ -60,7 +50,7 @@ class _OrderToolCardState extends State<OrderToolCard> {
                   Row(
                     children: [
                       Text(
-                        '${widget.tool.priceDay} р/день',
+                        '${_tool.priceDay} р/день',
                         style: theme.textTheme.titleLarge,
                       ),
                       const Spacer(),
@@ -76,30 +66,24 @@ class _OrderToolCardState extends State<OrderToolCard> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               GestureDetector(
-                                onTap: () => setState(
-                                  () {
-                                    if (counter.value <= 1) {
-                                      _removeTool(context);
-                                    } else {
-                                      _updateRemoveCount(context);
-                                    }
-                                  },
-                                ),
+                                onTap: () {
+                                  if (_tool.userCount <= MIN_COUNT_TOOLS) {
+                                    _removeTool(context);
+                                  } else {
+                                    _updateRemoveCount(context);
+                                  }
+                                },
                                 child: const Padding(
                                   padding: EdgeInsets.only(left: 10.0),
                                   child: Icon(Icons.remove),
                                 ),
                               ),
-                              Text('${widget.tool.userCount}'),
+                              Text('${_tool.userCount}'),
                               GestureDetector(
                                 onTap: () {
-                                  setState(
-                                    () {
-                                      if (counter.value < 3) {
-                                        _updateAddCount(context);
-                                      }
-                                    },
-                                  );
+                                  if (_tool.userCount < MAX_COUNT_TOOLS) {
+                                    _updateAddCount(context);
+                                  }
                                 },
                                 child: const Padding(
                                   padding: EdgeInsets.only(right: 10.0),
@@ -122,19 +106,21 @@ class _OrderToolCardState extends State<OrderToolCard> {
   }
 
   void _updateAddCount(BuildContext context) {
-    counter.value++;
+    int count = _tool.userCount;
+    count += 1;
     BlocProvider.of<OrderBloc>(context)
-        .add(OrderAddEvent(tool: widget.tool.toTool(), count: counter.value));
+        .add(OrderAddEvent(tool: _tool.toTool(), quantity: count));
   }
 
   void _updateRemoveCount(BuildContext context) {
-    counter.value--;
+    int count = _tool.userCount;
+    count -= 1;
     BlocProvider.of<OrderBloc>(context)
-        .add(OrderAddEvent(tool: widget.tool.toTool(), count: counter.value));
+        .add(OrderAddEvent(tool: _tool.toTool(), quantity: count));
   }
 
   void _removeTool(BuildContext context) {
     return BlocProvider.of<OrderBloc>(context)
-        .add(OrderRemoveToolEvent(tool: widget.tool));
+        .add(OrderRemoveToolEvent(tool: _tool));
   }
 }

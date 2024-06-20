@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rentool/api/models/user.dart';
 import 'package:rentool/common/common.dart';
+import 'package:rentool/features/ads_feed/ads_feed.dart';
 import 'package:rentool/features/auth/auth.dart';
+import 'package:rentool/features/card_product/card_product.dart';
+import 'package:rentool/features/list_tools/list_tools.dart';
 
 import 'package:rentool/features/shop/shop.dart';
 import 'package:rentool/features/user/user.dart';
@@ -19,16 +24,29 @@ class UserScreen extends StatefulWidget {
   static const String textFavoriteButton = 'Избранное';
   static const String textTapHistory = 'История заказов';
   static const String textExitButton = 'Выйти';
+  static const String textChangePasswordButton = 'Изменить пароль';
 
   @override
   State<UserScreen> createState() => _UserScreenState();
 }
 
 class _UserScreenState extends State<UserScreen> {
+  late TextEditingController _controllerNewPassword;
+
   @override
   void initState() {
-    BlocProvider.of<UserBloc>(context).add(const UserLoadEvent());
     super.initState();
+    BlocProvider.of<UserBloc>(context).add(const UserLoadEvent());
+    BlocProvider.of<FavoritesBloc>(context).add(FavoritesLoadEvent());
+
+    _controllerNewPassword = TextEditingController(text: '');
+  }
+
+  void _refreshToken(BuildContext context) {
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+    final userBloc = BlocProvider.of<UserBloc>(context);
+    authBloc.add(AuthRefreshEvent());
+    userBloc.add(const UserLoadEvent());
   }
 
   @override
@@ -106,19 +124,11 @@ class _UserScreenState extends State<UserScreen> {
             ]),
             const SizedBox(height: 16),
             const Spacer(),
-            ButtonPrimary(
-              text: UserScreen.textExitButton,
+            ButtonSecondary(
+              text: UserScreen.textChangePasswordButton,
               onPressed: () async {
-                final authBloc = BlocProvider.of<AuthBloc>(context);
-                final orderBloc = BlocProvider.of<OrderBloc>(context);
-                final favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
-
-                authBloc.add(AuthLogoutEvent());
-                orderBloc.add(OrderClearEvent());
-                favoritesBloc.add(FavoritesClearEvent());
-
-                await context.router.pushAndPopUntil(const HomeRoute(),
-                    predicate: (_) => false);
+                showModalBottomSheet(
+                    context: context, builder: _buildBottomSheet);
               },
               style: const TextStyle(
                 fontSize: 14,
@@ -126,7 +136,72 @@ class _UserScreenState extends State<UserScreen> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 16),
+            BlocBuilder<FavoritesBloc, FavoritesState>(
+              builder: (context, state) {
+                if (state is FavoritesLoadedState) {
+                  final tools = state.favorites;
+                  return ButtonPrimary(
+                    text: UserScreen.textExitButton,
+                    onPressed: () async {
+                      final authBloc = BlocProvider.of<AuthBloc>(context);
+                      final orderBloc = BlocProvider.of<OrderBloc>(context);
+                      final favoritesBloc =
+                          BlocProvider.of<FavoritesBloc>(context);
+                      final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
+                      final cardProductBloc =
+                          BlocProvider.of<CardProductBloc>(context);
+                      final listToolsBloc =
+                          BlocProvider.of<ListToolsBloc>(context);
+
+                      favoritesBloc.add(FavoritesClearEvent());
+                      orderBloc.add(OrderClearEvent());
+                      adsFeedBloc.add(const AdsFeedLoadEvent());
+
+                      for (var tool in tools) {
+                        listToolsBloc.add(
+                            ListToolsLoadEvent(category: tool.category.name));
+                        cardProductBloc.add(CardProductLoadEvent(tool: tool));
+                      }
+
+                      authBloc.add(AuthLogoutEvent());
+
+                      await context.router.pushAndPopUntil(const HomeRoute(),
+                          predicate: (_) => false);
+                    },
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  );
+                }
+                return ButtonPrimary(
+                  text: UserScreen.textExitButton,
+                  onPressed: () async {
+                    final authBloc = BlocProvider.of<AuthBloc>(context);
+                    final orderBloc = BlocProvider.of<OrderBloc>(context);
+                    final favoritesBloc =
+                        BlocProvider.of<FavoritesBloc>(context);
+                    final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
+
+                    favoritesBloc.add(FavoritesClearEvent());
+                    orderBloc.add(OrderClearEvent());
+                    adsFeedBloc.add(const AdsFeedLoadEvent());
+
+                    authBloc.add(AuthLogoutEvent());
+
+                    await context.router.pushAndPopUntil(const HomeRoute(),
+                        predicate: (_) => false);
+                  },
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -143,10 +218,106 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
-  void _refreshToken(BuildContext context) {
-    final authBloc = BlocProvider.of<AuthBloc>(context);
-    final userBloc = BlocProvider.of<UserBloc>(context);
-    authBloc.add(AuthRefreshEvent());
-    userBloc.add(const UserLoadEvent());
+  Widget _buildBottomSheet(BuildContext context) {
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 24.0,
+            right: 24.0,
+            top: 24.0,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24.0,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Row(
+                  children: [
+                    Text(
+                      'Изменение пароля',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Row(
+                  children: [
+                    Text(
+                      'Введите новый пароль',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                GreyTextField(
+                  hintText: 'Новый пароль',
+                  controller: _controllerNewPassword,
+                ),
+                const SizedBox(height: 16),
+                ButtonPrimary(
+                  onPressed: () async {
+                    if (_controllerNewPassword.text.isNotEmpty) {
+                      final Completer completer = Completer();
+                      final rout = context.router;
+
+                      rout.maybePop();
+
+                      rout.pushAndPopUntil(const HomeRoute(),
+                          predicate: (_) => false);
+
+                      final userBloc = BlocProvider.of<UserBloc>(context);
+                      final authBloc = BlocProvider.of<AuthBloc>(context);
+                      final orderBloc = BlocProvider.of<OrderBloc>(context);
+
+                      final favoritesBloc =
+                          BlocProvider.of<FavoritesBloc>(context);
+                      final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
+
+                      favoritesBloc.add(FavoritesClearEvent());
+                      orderBloc.add(OrderClearEvent());
+
+                      adsFeedBloc.add(const AdsFeedLoadEvent());
+
+                      userBloc.add(UserChangePasswordEvent(
+                        completer: completer,
+                        password: _controllerNewPassword.text,
+                      ));
+
+                      await completer.future;
+
+                      authBloc.add(AuthLogoutEvent());
+                    } else {
+                      const snackdemo = SnackBar(
+                        content: Text('Поле не должно быть пустым!'),
+                        backgroundColor: Colors.red,
+                        elevation: 10,
+                        behavior: SnackBarBehavior.floating,
+                        margin: EdgeInsets.all(12),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackdemo);
+                    }
+                  },
+                  text: 'Подтвердить',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

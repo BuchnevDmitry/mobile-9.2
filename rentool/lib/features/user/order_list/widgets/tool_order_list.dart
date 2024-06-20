@@ -5,12 +5,12 @@ import 'package:rentool/features/user/user.dart';
 class OrderList extends StatelessWidget {
   const OrderList({
     super.key,
-    required List<Tool> tools,
+    required Tools tools,
     required List<RentTool> rentTools,
   })  : _tools = tools,
         _rentTools = rentTools;
 
-  final List<Tool> _tools;
+  final Tools _tools;
   final List<RentTool> _rentTools;
 
   @override
@@ -21,11 +21,11 @@ class OrderList extends StatelessWidget {
         delegate: SliverChildBuilderDelegate(
           (context, index) {
             return ToolOrderCard(
-              tool: _tools[index],
+              tool: _tools.tools[index],
               count: _rentTools[index].countTool,
             );
           },
-          childCount: _tools.length,
+          childCount: _tools.tools.length,
         ),
       ),
     );

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:rentool/api/api.dart';
-import 'package:rentool/api/models/models.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -19,11 +18,18 @@ abstract class UsersApiClient {
   }
 
   @POST('/api/v1/users/')
-  Future<User> registerUser(@Body() User user);
+  Future<void> registerUser(
+    @Body() User user, {
+    @Header('Content-Type') String type = 'application/json',
+  });
 
-  @GET('/api/v1/users/{id}')
-  Future<User> getUserById(
-    @Path('id') String id,
+  @PATCH('/api/v1/users/change-password')
+  Future<void> changeUserPassword(
     @Header('Authorization') String token,
-  );
+    @Body() Password password, {
+    @Header('Content-Type') String type = 'application/json',
+  });
+
+  @GET('/api/v1/users/profile')
+  Future<User> getUserProfile(@Header('Authorization') String token);
 }

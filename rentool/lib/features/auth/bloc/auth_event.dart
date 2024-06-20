@@ -33,16 +33,3 @@ class AuthAuthorizeEvent extends AuthEvent {
       password,
     ]);
 }
-
-class AuthRegisterEvent extends AuthEvent {
-  const AuthRegisterEvent({
-    this.completer,
-    required this.user,
-  });
-
-  final User user;
-  final Completer? completer;
-
-  @override
-  List<Object?> get props => super.props..addAll([completer, user]);
-}

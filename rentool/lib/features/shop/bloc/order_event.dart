@@ -15,14 +15,14 @@ final class OrderClearEvent extends OrderEvent {}
 final class OrderAddEvent extends OrderEvent {
   const OrderAddEvent({
     required this.tool,
-    required this.count,
+    required this.quantity,
   });
 
   final Tool tool;
-  final int count;
+  final int quantity;
 
   @override
-  List<Object> get props => super.props..addAll([tool, count]);
+  List<Object> get props => super.props..addAll([tool, quantity]);
 }
 
 final class OrderRemoveToolEvent extends OrderEvent {
@@ -40,7 +40,6 @@ final class OrderSendRentEvent extends OrderEvent {
   const OrderSendRentEvent({
     required this.startDate,
     required this.endDate,
-    required this.price,
     required this.receivingMethodId,
     required this.timeReceivingId,
     required this.address,
@@ -49,7 +48,6 @@ final class OrderSendRentEvent extends OrderEvent {
 
   final String startDate;
   final String endDate;
-  final int price;
   final int receivingMethodId;
   final int timeReceivingId;
   final String address;
@@ -60,7 +58,6 @@ final class OrderSendRentEvent extends OrderEvent {
     ..addAll([
       startDate,
       endDate,
-      price,
       receivingMethodId,
       timeReceivingId,
       address,

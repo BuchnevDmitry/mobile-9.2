@@ -81,10 +81,37 @@ class _ToolsApiClient implements ToolsApiClient {
   }
 
   @override
+  Future<Tools> getToolsByIds(List<String> array) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'listIds': array};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Tools>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/api/v1/tools/by-ids',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = Tools.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<Tools> getToolsByCategory(
     String category, {
     int page = 0,
-    int size = 35,
+    int size = 50,
     String sortParam = 'PRICE_ASC',
   }) async {
     final _extra = <String, dynamic>{};

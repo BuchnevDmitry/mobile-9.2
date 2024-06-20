@@ -19,38 +19,71 @@ class _UsersApiClient implements UsersApiClient {
   String? baseUrl;
 
   @override
-  Future<User> registerUser(User user) async {
+  Future<void> registerUser(
+    User user, {
+    String type = 'application/json',
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Content-Type': type};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(user.toJson());
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<User>(Options(
+    await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
+      contentType: type,
     )
-            .compose(
-              _dio.options,
-              '/api/v1/users/',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = User.fromJson(_result.data!);
-    return value;
+        .compose(
+          _dio.options,
+          '/api/v1/users/',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
-  Future<User> getUserById(
-    String id,
+  Future<void> changeUserPassword(
     String token,
-  ) async {
+    Password password, {
+    String type = 'application/json',
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'Authorization': token,
+      r'Content-Type': type,
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(password.toJson());
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+      contentType: type,
+    )
+        .compose(
+          _dio.options,
+          '/api/v1/users/change-password',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<User> getUserProfile(String token) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': token};
@@ -64,7 +97,7 @@ class _UsersApiClient implements UsersApiClient {
     )
             .compose(
               _dio.options,
-              '/api/v1/users/${id}',
+              '/api/v1/users/profile',
               queryParameters: queryParameters,
               data: _data,
             )

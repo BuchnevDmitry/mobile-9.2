@@ -15,12 +15,20 @@ final class MapLoadAddressEvent extends MapEvent {}
 final class MapLoadPickupsEvent extends MapEvent {}
 
 final class MapUpdatePointEvent extends MapEvent {
-  const MapUpdatePointEvent({required this.point});
+  const MapUpdatePointEvent({
+    required this.point,
+    this.completer,
+  });
 
   final MapPoint point;
+  final Completer? completer;
 
   @override
-  List<Object?> get props => super.props..add(point);
+  List<Object?> get props => super.props
+    ..addAll([
+      point,
+      completer,
+    ]);
 }
 
 final class MapAddAddressEvent extends MapEvent {

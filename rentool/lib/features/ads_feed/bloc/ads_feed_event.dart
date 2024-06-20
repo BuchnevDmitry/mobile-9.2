@@ -12,7 +12,12 @@ sealed class AdsFeedEvent extends Equatable {
 class AdsFeedLoadEvent extends AdsFeedEvent {
   const AdsFeedLoadEvent({
     this.completer,
+    this.page = 0,
+    this.size = 5,
   });
+
+  final int page;
+  final int size;
   final Completer? completer;
 
   @override

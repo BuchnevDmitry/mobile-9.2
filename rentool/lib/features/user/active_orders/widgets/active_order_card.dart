@@ -6,10 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:rentool/api/api.dart';
 import 'package:rentool/common/common.dart';
-import 'package:rentool/common/widgets/widgets.dart';
 import 'package:rentool/features/user/active_orders/active_orders.dart';
-import 'package:rentool/features/user/active_orders/bloc/active_orders_bloc.dart';
-import 'package:rentool/features/user/user.dart';
 import 'package:rentool/router/router.dart';
 
 class ActiveOrderCard extends StatelessWidget {
@@ -49,8 +46,9 @@ class ActiveOrderCard extends StatelessWidget {
                 const SizedBox(height: 6),
                 _buildStartEnd(theme),
                 const SizedBox(height: 16),
-                _buildLeaseButton(context, _rent.status),
-                SizedBox(height: _rent.status.id == 3 ? 8 : 0),
+                _buildLeaseButton(context, _rent),
+                SizedBox(
+                    height: _rent.status.id == Statuses.received.value ? 8 : 0),
                 _buildCancelButton(context, _rent.status),
               ],
             ),
@@ -61,25 +59,17 @@ class ActiveOrderCard extends StatelessWidget {
   }
 
   Widget _buildCancelButton(BuildContext context, Status status) {
-    String text = status.id == 3 ? 'Завершить аренду' : 'Отменить аренду';
+    String text = status.id == Statuses.received.value
+        ? 'Завершить аренду'
+        : 'Отменить аренду';
+    final rout = context.router;
     final completer = Completer();
 
-    return status.id != 6
+    return status.id != Statuses.awaitingReturn.value &&
+            status.id != Statuses.extended.value
         ? ButtonSecondary(
-            onPressed: () async {
-              if (status.id == 3) {
-                final activeOrderBloc =
-                    BlocProvider.of<ActiveOrdersBloc>(context);
-
-                activeOrderBloc.add(ActiveOrdersReturnEvent(id: _rent.id));
-                await completer.future;
-              } else {
-                final activeOrderBloc =
-                    BlocProvider.of<ActiveOrdersBloc>(context);
-
-                activeOrderBloc.add(ActiveOrdersCancelEvent(id: _rent.id));
-                await completer.future;
-              }
+            onPressed: () {
+              _buildConfirmBottomSheet(context, text, status, completer, rout);
             },
             text: text,
             heightSize: 40,
@@ -92,11 +82,44 @@ class ActiveOrderCard extends StatelessWidget {
         : const SizedBox();
   }
 
-  Widget _buildLeaseButton(BuildContext context, Status status) {
-    return status.id == 3
+  Future<dynamic> _buildConfirmBottomSheet(BuildContext context, String text,
+      Status status, Completer<dynamic> completer, StackRouter rout) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) => ConfirmBottomSheet(
+        buttonText: 'Подтвердить',
+        mainText: '$text?',
+        questionText: 'Вы действительно хотите ${text.toLowerCase()}?',
+        onPressed: () async {
+          if (status.id == Statuses.received.value) {
+            final activeOrderBloc = BlocProvider.of<ActiveOrdersBloc>(context);
+
+            activeOrderBloc.add(ActiveOrdersReturnEvent(
+              id: _rent.id,
+              completer: completer,
+            ));
+            await completer.future;
+            rout.maybePop();
+          } else {
+            final activeOrderBloc = BlocProvider.of<ActiveOrdersBloc>(context);
+
+            activeOrderBloc.add(ActiveOrdersCancelEvent(
+              id: _rent.id,
+              completer: completer,
+            ));
+            await completer.future;
+            rout.maybePop();
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildLeaseButton(BuildContext context, Rent rent) {
+    return rent.status.id == Statuses.received.value
         ? ButtonPrimary(
             onPressed: () async {
-              await context.router.push(const LeaseExtensionRoute());
+              await context.router.push(LeaseExtensionRoute(rent: rent));
             },
             text: 'Продлить заказ',
             heightSize: 40,
@@ -122,11 +145,16 @@ class ActiveOrderCard extends StatelessWidget {
 
   Row _buildAddress(ThemeData theme) {
     return Row(
-      children: <Widget>[
-        Text(
-          'Адресс:\n${_rent.address}',
-          style: theme.textTheme.bodySmall,
-        )
+      children: [
+        Expanded(
+          child: Text(
+            'Адресс:\n${_rent.address}',
+            style: theme.textTheme.bodySmall,
+            softWrap: true,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }
@@ -168,6 +196,9 @@ class ActiveOrderCard extends StatelessWidget {
         break;
       case 6:
         color = const Color(0xfffab815);
+        break;
+      case 7:
+        color = Colors.green;
         break;
       default:
         color = Colors.black;
@@ -222,7 +253,6 @@ class ActiveOrderCard extends StatelessWidget {
     }
     final parseDate = DateTime.parse(raw);
     final dayDate = DateFormat.MMMMd('RU').format(parseDate);
-    final time = DateFormat('hh:mm').format(parseDate);
-    return '$dayDate, $time';
+    return dayDate;
   }
 }

@@ -13,6 +13,7 @@ import 'package:rentool/features/home/home.dart';
 import 'package:rentool/features/list_tools/list_tools.dart';
 import 'package:rentool/api/api.dart';
 import 'package:rentool/features/map/map.dart';
+import 'package:rentool/features/metric/metric.dart';
 import 'package:rentool/features/shop/shop.dart';
 import 'package:rentool/features/user/user.dart';
 import 'package:rentool/repositories/repositories.dart';
@@ -42,9 +43,12 @@ class _RenToolAppState extends State<RenToolApp> {
   late final YandexGeocoder _geocoder;
   late final AppRouter _router;
 
+  late Map<String, String> payload;
+
   @override
   void initState() {
     super.initState();
+
     storage = const FlutterSecureStorage();
     _toolsApiClient = ToolsApiClient.create(apiUrl: dotenv.env['API_URL']);
     _rentsApiClient = RentsApiClient.create(apiUrl: dotenv.env['API_URL']);
@@ -54,6 +58,11 @@ class _RenToolAppState extends State<RenToolApp> {
         CategoriesApiClient.create(apiUrl: dotenv.env['API_URL']);
     _geocoder = YandexGeocoder(apiKey: dotenv.env['GEOCODER_KEY']!);
     _router = AppRouter();
+
+    payload = {
+      "configuration": "landscape",
+      "full_screen": "true",
+    };
   }
 
   @override
@@ -66,13 +75,13 @@ class _RenToolAppState extends State<RenToolApp> {
         BlocProvider<AdsFeedBloc>(
           create: (context) => AdsFeedBloc(
             toolApiClient: _toolsApiClient,
+            rentslApiClient: _rentsApiClient,
             repository: favoriteRepository,
           ),
         ),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(
             storage: storage,
-            usersApiClient: _usersApiClient,
             authClient: _authClient,
             clientId: dotenv.env['CLIENT_ID'],
             clientSecret: dotenv.env['CLIENT_SECRET'],
@@ -139,6 +148,11 @@ class _RenToolAppState extends State<RenToolApp> {
           create: (context) => UserBloc(
             usersApiClient: _usersApiClient,
             storage: storage,
+          ),
+        ),
+        BlocProvider<YandexMetricsBloc>(
+          create: (context) => YandexMetricsBloc(
+            payload: payload,
           ),
         ),
       ],
