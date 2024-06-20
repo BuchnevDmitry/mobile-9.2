@@ -18,10 +18,13 @@ abstract class UsersApiClient {
   }
 
   @POST('/api/v1/users/')
-  Future<User> registerUser(@Body() User user);
+  Future<void> registerUser(
+    @Body() User user, {
+    @Header('Content-Type') String type = 'application/json',
+  });
 
   @PATCH('/api/v1/users/change-password')
-  Future<User> changeUserPassword(
+  Future<void> changeUserPassword(
     @Header('Authorization') String token,
     @Body() Password password, {
     @Header('Content-Type') String type = 'application/json',
