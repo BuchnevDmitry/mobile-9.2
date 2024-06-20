@@ -57,6 +57,13 @@ class _UserScreenState extends State<UserScreen> {
         if (state is UserLoadingFailureState) {
           _refreshToken(context);
         }
+        if (state is UserLogoutState) {
+          final authBloc = BlocProvider.of<AuthBloc>(context);
+
+          authBloc.add(AuthLogoutEvent());
+          context.router
+              .pushAndPopUntil(const HomeRoute(), predicate: (_) => false);
+        }
       },
       child: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
@@ -275,7 +282,6 @@ class _UserScreenState extends State<UserScreen> {
                           predicate: (_) => false);
 
                       final userBloc = BlocProvider.of<UserBloc>(context);
-                      final authBloc = BlocProvider.of<AuthBloc>(context);
                       final orderBloc = BlocProvider.of<OrderBloc>(context);
 
                       final favoritesBloc =
@@ -293,8 +299,6 @@ class _UserScreenState extends State<UserScreen> {
                       ));
 
                       await completer.future;
-
-                      authBloc.add(AuthLogoutEvent());
                     } else {
                       const snackdemo = SnackBar(
                         content: Text('Поле не должно быть пустым!'),
