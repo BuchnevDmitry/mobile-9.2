@@ -12,6 +12,12 @@ final class UserInitialState extends UserState {}
 
 final class UserLoadingState extends UserState {}
 
+final class UserRequestState extends UserState {}
+
+final class UserLogoutState extends UserState {}
+
+final class UserRegisterSucsessState extends UserState {}
+
 final class UserLoadedState extends UserState {
   const UserLoadedState({
     required this.user,
@@ -24,9 +30,13 @@ final class UserLoadedState extends UserState {
 }
 
 final class UserLoadingFailureState extends UserState {
-  const UserLoadingFailureState({required this.error});
+  const UserLoadingFailureState({
+    required this.error,
+    this.message = 'Ошибка регистрации',
+  });
 
   final Object? error;
+  final String message;
 
   @override
   List<Object> get props => super.props..add(error!);

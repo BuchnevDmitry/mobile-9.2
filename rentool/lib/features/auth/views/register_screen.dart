@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
@@ -9,6 +8,7 @@ import 'package:rentool/api/api.dart';
 
 import 'package:rentool/common/common.dart';
 import 'package:rentool/features/auth/auth.dart';
+import 'package:rentool/features/user/user.dart';
 
 @RoutePage()
 class RegisterScreen extends StatefulWidget {
@@ -65,11 +65,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
       ),
-      body: BlocListener<AuthBloc, AuthState>(
+      body: BlocListener<UserBloc, UserState>(
         listener: (context, state) {
-          if (state is AuthFailedRegistratedState) {
-            const snackdemo = SnackBar(
-              content: Text('Ошибка регистрации'),
+          final route = context.router;
+          if (state is UserLoadingFailureState) {
+            final message = state.message;
+
+            final snackdemo = SnackBar(
+              content: Text(message),
               backgroundColor: Colors.red,
               elevation: 10,
               behavior: SnackBarBehavior.floating,
@@ -77,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             );
             ScaffoldMessenger.of(context).showSnackBar(snackdemo);
           }
-          if (state is AuthUnAuthorizedState) {
+          if (state is UserRegisterSucsessState) {
             const snackdemo = SnackBar(
               content: Text('Успешно'),
               backgroundColor: Colors.green,
@@ -86,7 +89,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               margin: EdgeInsets.all(12),
             );
             ScaffoldMessenger.of(context).showSnackBar(snackdemo);
-            final route = context.router;
             route.maybePop();
           }
         },
@@ -155,9 +157,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 50)),
               SliverToBoxAdapter(
-                child: BlocBuilder<AuthBloc, AuthState>(
+                child: BlocBuilder<UserBloc, UserState>(
                   builder: (context, state) {
-                    if (state is AuthRequestState) {
+                    if (state is UserRequestState) {
                       return Center(
                         child: CircularProgressIndicator(
                           color: theme.primaryColor,
@@ -166,7 +168,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     }
                     return ButtonPrimary(
                       onPressed: () async {
-                        final authBloc = BlocProvider.of<AuthBloc>(context);
+                        final userBloc = BlocProvider.of<UserBloc>(context);
                         final completer = Completer();
 
                         final String login = _controllerLogin.text;
@@ -177,14 +179,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         final String email = _controllerEmail.text;
 
                         final user = User(
-                            login: login,
-                            password: password,
-                            firstName: firstName,
-                            lastName: lastName,
-                            phone: phone,
-                            email: email);
+                          login: login,
+                          password: password,
+                          firstName: firstName,
+                          lastName: lastName,
+                          phone: phone,
+                          email: email,
+                        );
 
-                        authBloc.add(AuthRegisterEvent(
+                        userBloc.add(UserRegisterEvent(
                           user: user,
                           completer: completer,
                         ));

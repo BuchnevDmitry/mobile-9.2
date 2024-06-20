@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
@@ -179,7 +178,22 @@ class _UserScreenState extends State<UserScreen> {
                 }
                 return ButtonPrimary(
                   text: UserScreen.textExitButton,
-                  onPressed: () async {},
+                  onPressed: () async {
+                    final authBloc = BlocProvider.of<AuthBloc>(context);
+                    final orderBloc = BlocProvider.of<OrderBloc>(context);
+                    final favoritesBloc =
+                        BlocProvider.of<FavoritesBloc>(context);
+                    final adsFeedBloc = BlocProvider.of<AdsFeedBloc>(context);
+
+                    favoritesBloc.add(FavoritesClearEvent());
+                    orderBloc.add(OrderClearEvent());
+                    adsFeedBloc.add(const AdsFeedLoadEvent());
+
+                    authBloc.add(AuthLogoutEvent());
+
+                    await context.router.pushAndPopUntil(const HomeRoute(),
+                        predicate: (_) => false);
+                  },
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.black,

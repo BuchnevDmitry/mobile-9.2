@@ -82,7 +82,6 @@ class _RenToolAppState extends State<RenToolApp> {
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(
             storage: storage,
-            usersApiClient: _usersApiClient,
             authClient: _authClient,
             clientId: dotenv.env['CLIENT_ID'],
             clientSecret: dotenv.env['CLIENT_SECRET'],

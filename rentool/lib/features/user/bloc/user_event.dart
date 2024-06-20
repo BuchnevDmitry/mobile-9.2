@@ -8,6 +8,16 @@ sealed class UserEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class UserLoadEvent extends UserEvent {
+  const UserLoadEvent({
+    this.completer,
+  });
+  final Completer? completer;
+
+  @override
+  List<Object?> get props => super.props..add(completer);
+}
+
 class UserChangePasswordEvent extends UserEvent {
   const UserChangePasswordEvent({
     this.completer,
@@ -25,12 +35,15 @@ class UserChangePasswordEvent extends UserEvent {
     ]);
 }
 
-class UserLoadEvent extends UserEvent {
-  const UserLoadEvent({
+class UserRegisterEvent extends UserEvent {
+  const UserRegisterEvent({
     this.completer,
+    required this.user,
   });
+
+  final User user;
   final Completer? completer;
 
   @override
-  List<Object?> get props => super.props..add(completer);
+  List<Object?> get props => super.props..addAll([completer, user]);
 }
