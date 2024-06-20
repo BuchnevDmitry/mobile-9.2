@@ -4,7 +4,7 @@ name: rentool
 description: "Mobile application for searching and renting equipment and tools for home repair and construction."
 
 publish_to: "none"
-version: 0.0.0+1
+version: 1.0.0+1
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
